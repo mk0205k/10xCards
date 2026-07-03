@@ -166,23 +166,29 @@ Human gate. First production mutation: binds Supabase credentials into the Worke
 
 ---
 
-## Phase 5 — Production smoke test `[ ]`
+## Phase 5 — Production smoke test `[x]`
 
-Verify the full `astro:env/server` → Workers-secret path works in production. This is the explicit mitigation for an infrastructure.md High-impact risk row.
+Verified the full `astro:env/server` → Workers-secret path works in production. This is the explicit mitigation for an infrastructure.md High-impact risk row.
 
-In one terminal:
-- `[ ]` `npx wrangler tail` — streams structured logs.
+Prep step (done before browser testing): Supabase Dashboard → Auth → URL Configuration updated:
+- Site URL: `https://10x-astro-starter.mk-betasi.workers.dev`
+- Redirect URLs allow-list: added `https://10x-astro-starter.mk-betasi.workers.dev/**` (kept `http://localhost:4321/**` for dev)
 
-In a browser:
-- `[ ]` Visit the `*.workers.dev` URL — homepage renders, no console errors.
-- `[ ]` Visit `/auth/signup` — page renders.
-- `[ ]` Sign up a throwaway user — confirm redirect to `/auth/confirm-email` and the corresponding Supabase row exists in the dashboard.
-- `[ ]` Sign in with that user — confirm redirect to `/` and the auth cookie is set (DevTools → Application → Cookies).
-- `[ ]` Visit `/dashboard` while signed in — protected route renders.
-- `[ ]` Sign out — confirm redirect to `/` and cookie clears.
-- `[ ]` Visit `/dashboard` while signed out — confirm middleware redirect.
+`wrangler tail` was streamed in the background during the entire flow (2026-07-03 22:32–22:42Z). All browser actions produced `Ok` entries — no 5xx, no polyfill warnings, no `astro:env` config errors:
 
-Watch `wrangler tail` for any 5xx, polyfill warnings, or `astro:env` config errors during the above.
+- `[x]` Homepage `/` — 200 in ~96ms (cold-start acceptable).
+- `[x]` `/auth/signup` — page renders.
+- `[x]` Signup: `POST /api/auth/signup` → Ok → redirect to `/auth/confirm-email` (verified in tail at 22:41:15 → 22:41:16).
+- `[x]` Email confirmation link clicked → `GET /?code=REDACTED` → Ok → home (22:41:27). Wrangler auto-redacts the query token — good hygiene.
+- `[x]` Sign in with confirmed user: `POST /api/auth/signin` → Ok → redirect `/` (22:41:34).
+- `[x]` `/dashboard` while signed in → 200 (22:41:37). Middleware lets authenticated user through.
+- `[x]` Sign out: `POST /api/auth/signout` → Ok → redirect `/` (22:41:39).
+- `[x]` `/dashboard` while signed out → **302** middleware redirect (verified via `curl` at 22:40:25).
+
+Confirmed indirectly during the flow:
+- `astro:env/server` → Worker secrets: Supabase responded, so `SUPABASE_URL` + `SUPABASE_KEY` are reachable at runtime.
+- `prerender = false` on `signin.ts` / `signup.ts` / `signout.ts`: POST endpoints returned 2xx (would 405/404 if statically prerendered).
+- KV binding `SESSION` (auto-provisioned namespace `10x-astro-starter-session`): session persisted across the full signin → dashboard → signout round-trip.
 
 ---
 
