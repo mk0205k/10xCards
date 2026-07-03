@@ -192,13 +192,13 @@ Confirmed indirectly during the flow:
 
 ---
 
-## Phase 6 — CI/CD deploy automation `[ ]`
+## Phase 6 — CI/CD deploy automation `[x]`
 
-Push-to-master deploys via GitHub Actions, per `infrastructure.md` Getting Started step 5.
+Push-to-master deploys via GitHub Actions, per `infrastructure.md` Getting Started step 5. First CI-driven deploy: run `28682879863` on commit `08c1fdf`.
 
-- `[ ]` In Cloudflare dashboard, **create a scoped API token** (My Profile → API Tokens → Create Token → "Edit Cloudflare Workers" template, then narrow to just this Worker if possible). Scopes: Workers Scripts:Edit, Account Settings:Read, User Details:Read. Save the token value once shown.
-- `[x]` Add repo secrets in GitHub (Settings → Secrets and variables → Actions): `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`. Confirm `SUPABASE_URL` and `SUPABASE_KEY` are already present (CI build needs them).
-- `[ ]` Extend `.github/workflows/ci.yml`. Add a `deploy` job that runs only on push to `master`, depends on `ci`, and calls `wrangler deploy`:
+- `[x]` Cloudflare API token created from the "Edit Cloudflare Workers" template (Workers Scripts:Edit, Account Settings:Read, User Details:Read).
+- `[x]` GitHub repo secrets on `mk0205k/10xCards`: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` (`202105df17f5c8d8a06c0d83de11d86b`), `SUPABASE_URL`, `SUPABASE_KEY`.
+- `[x]` Extended `.github/workflows/ci.yml` with a `deploy` job that runs only on push to `master`, depends on `ci`, and calls `wrangler deploy`:
   ```yaml
   deploy:
     needs: ci
@@ -220,9 +220,9 @@ Push-to-master deploys via GitHub Actions, per `infrastructure.md` Getting Start
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
   ```
-- `[ ]` Push the workflow change on a branch, open a PR — CI build runs but deploy job is skipped (because `if:` gates on push to master). Merge.
-- `[ ]` After merge, watch the Actions run — deploy job succeeds. Hit the production URL — change is live.
-- `[ ]` Note: this is **production-on-merge**, not preview-per-PR. Adding preview previews requires a separate `wrangler deploy --env preview` job + `[env.preview]` block in `wrangler.jsonc`. Out of scope for first deploy; revisit when opening to external contributors.
+- `[~]` PR-gating test skipped — pushed workflow change directly to master (commit `08c1fdf`). Gating logic (`if: github.event_name == 'push' && github.ref == 'refs/heads/master'`) still holds; verify the SKIPPED-on-PR behaviour when the first real feature PR lands.
+- `[x]` Watched Actions run `28682879863`: `ci` (54s) + `deploy` (42s), both green. Production URL served the CI-deployed version `0dea66dd-69f2-429a-a021-4ee1d3874bdd` at HTTP 200 within seconds.
+- `[x]` Noted: this is **production-on-merge**, not preview-per-PR. Adding preview previews requires a separate `wrangler deploy --env preview` job + `[env.preview]` block in `wrangler.jsonc`. Out of scope for first deploy; revisit when opening to external contributors.
 
 **Extra support — CI deploy edge cases:**
 - "Authentication error [code: 10000]" from `wrangler-action`: token is wrong scope or expired. Regenerate with the scopes listed in Phase 2.
