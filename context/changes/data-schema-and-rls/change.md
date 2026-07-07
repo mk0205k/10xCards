@@ -1,7 +1,7 @@
 ---
 change_id: data-schema-and-rls
 title: Schemat danych + RLS + typy Database
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-07
 archived_at: null

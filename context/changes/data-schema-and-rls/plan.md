@@ -314,14 +314,14 @@ pgTAP suite w `supabase/tests/rls.test.sql` uruchamiane przez `supabase test db`
 
 #### Automated
 
-- [x] 3.1 `npm run astro sync` przechodzi
-- [x] 3.2 `npm run lint` przechodzi
-- [x] 3.3 `npm run build` przechodzi
-- [x] 3.4 `npm run db:types` regeneruje `src/db/database.types.ts` bez błędów
-- [x] 3.5 Re-run `db:types` daje pusty diff (idempotent)
+- [x] 3.1 `npm run astro sync` przechodzi — 7f618aa
+- [x] 3.2 `npm run lint` przechodzi — 7f618aa
+- [x] 3.3 `npm run build` przechodzi — 7f618aa
+- [x] 3.4 `npm run db:types` regeneruje `src/db/database.types.ts` bez błędów — 7f618aa
+- [x] 3.5 Re-run `db:types` daje pusty diff (idempotent) — 7f618aa
 
 #### Manual
 
-- [x] 3.6 Signin/signup/signout flow działa lokalnie w browser
-- [x] 3.7 Autocomplete w API endpoint pokazuje kolumny `cards` po wpisaniu `supabase.from('cards').select()`
-- [x] 3.8 Manual smoke izolacji przez Studio + browser potwierdza że JWT z cookie egzekwuje RLS
+- [x] 3.6 Signin/signup/signout flow działa lokalnie w browser — 7f618aa
+- [x] 3.7 Autocomplete w API endpoint pokazuje kolumny `cards` po wpisaniu `supabase.from('cards').select()` — 7f618aa
+- [x] 3.8 Manual smoke izolacji przez Studio + browser potwierdza że JWT z cookie egzekwuje RLS — 7f618aa
