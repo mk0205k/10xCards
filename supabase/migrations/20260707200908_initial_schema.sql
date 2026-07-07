@@ -59,6 +59,14 @@ before update on public.cards
 for each row
 execute function public.trigger_set_updated_at();
 
+-- Grants ------------------------------------------------------------------
+-- Coarse role-level access. Postgres checks GRANTs before RLS engages, so
+-- without these the policies below would never be evaluated. Anon is
+-- intentionally excluded — cards and review_history are per-user only.
+
+grant select, insert, update, delete on table public.cards, public.review_history to authenticated;
+grant select, insert, update, delete on table public.cards, public.review_history to service_role;
+
 -- Row Level Security ------------------------------------------------------
 
 alter table public.cards enable row level security;

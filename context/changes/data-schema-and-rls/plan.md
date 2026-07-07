@@ -289,26 +289,26 @@ pgTAP suite w `supabase/tests/rls.test.sql` uruchamiane przez `supabase test db`
 
 #### Automated
 
-- [x] 1.1 `supabase db reset` kończy się bez błędów
-- [x] 1.2 `supabase db lint --level warning` nie zgłasza warningów o brakującym RLS
-- [x] 1.3 `pg_extension` zawiera wiersz `pgtap`
+- [x] 1.1 `supabase db reset` kończy się bez błędów — e78e7a1
+- [x] 1.2 `supabase db lint --level warning` nie zgłasza warningów o brakującym RLS — e78e7a1
+- [x] 1.3 `pg_extension` zawiera wiersz `pgtap` — e78e7a1
 
 #### Manual
 
-- [x] 1.4 Obie tabele widoczne w Supabase Studio w schema `public`
-- [x] 1.5 8 policies widoczne w Studio z target role `authenticated` i wyrażeniem `(auth.uid() = user_id)`
-- [x] 1.6 Cross-user INSERT z Studio SQL editora odrzucony przez `with check`
+- [x] 1.4 Obie tabele widoczne w Supabase Studio w schema `public` — e78e7a1
+- [x] 1.5 8 policies widoczne w Studio z target role `authenticated` i wyrażeniem `(auth.uid() = user_id)` — e78e7a1
+- [x] 1.6 Cross-user INSERT z Studio SQL editora odrzucony przez `with check` — e78e7a1
 
 ### Phase 2: pgTAP isolation test
 
 #### Automated
 
-- [ ] 2.1 `supabase test db` zwraca exit 0
-- [ ] 2.2 Wszystkie asercje pgTAP raportowane jako `ok` (N/N)
+- [x] 2.1 `supabase test db` zwraca exit 0
+- [x] 2.2 Wszystkie asercje pgTAP raportowane jako `ok` (N/N)
 
 #### Manual
 
-- [ ] 2.3 Test file czyta się jako runbook — dodanie kolejnej asercji nie wymaga otwierania pgTAP docs
+- [x] 2.3 Test file czyta się jako runbook — dodanie kolejnej asercji nie wymaga otwierania pgTAP docs
 
 ### Phase 3: Database types + typed client integration
 
