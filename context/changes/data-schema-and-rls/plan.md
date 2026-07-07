@@ -303,25 +303,25 @@ pgTAP suite w `supabase/tests/rls.test.sql` uruchamiane przez `supabase test db`
 
 #### Automated
 
-- [x] 2.1 `supabase test db` zwraca exit 0
-- [x] 2.2 Wszystkie asercje pgTAP raportowane jako `ok` (N/N)
+- [x] 2.1 `supabase test db` zwraca exit 0 — fbf5ce6
+- [x] 2.2 Wszystkie asercje pgTAP raportowane jako `ok` (N/N) — fbf5ce6
 
 #### Manual
 
-- [x] 2.3 Test file czyta się jako runbook — dodanie kolejnej asercji nie wymaga otwierania pgTAP docs
+- [x] 2.3 Test file czyta się jako runbook — dodanie kolejnej asercji nie wymaga otwierania pgTAP docs — fbf5ce6
 
 ### Phase 3: Database types + typed client integration
 
 #### Automated
 
-- [ ] 3.1 `npm run astro sync` przechodzi
-- [ ] 3.2 `npm run lint` przechodzi
-- [ ] 3.3 `npm run build` przechodzi
-- [ ] 3.4 `npm run db:types` regeneruje `src/db/database.types.ts` bez błędów
-- [ ] 3.5 Re-run `db:types` daje pusty diff (idempotent)
+- [x] 3.1 `npm run astro sync` przechodzi
+- [x] 3.2 `npm run lint` przechodzi
+- [x] 3.3 `npm run build` przechodzi
+- [x] 3.4 `npm run db:types` regeneruje `src/db/database.types.ts` bez błędów
+- [x] 3.5 Re-run `db:types` daje pusty diff (idempotent)
 
 #### Manual
 
-- [ ] 3.6 Signin/signup/signout flow działa lokalnie w browser
-- [ ] 3.7 Autocomplete w API endpoint pokazuje kolumny `cards` po wpisaniu `supabase.from('cards').select()`
-- [ ] 3.8 Manual smoke izolacji przez Studio + browser potwierdza że JWT z cookie egzekwuje RLS
+- [x] 3.6 Signin/signup/signout flow działa lokalnie w browser
+- [x] 3.7 Autocomplete w API endpoint pokazuje kolumny `cards` po wpisaniu `supabase.from('cards').select()`
+- [x] 3.8 Manual smoke izolacji przez Studio + browser potwierdza że JWT z cookie egzekwuje RLS
