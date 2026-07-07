@@ -33,3 +33,6 @@ worker-configuration.d.ts
 
 # wrangler dry-run output
 dist-dry/
+
+# claude code local config
+.claude/
