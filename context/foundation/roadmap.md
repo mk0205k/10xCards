@@ -33,7 +33,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 
 | ID    | Change ID                     | Outcome (user can …)                                        | Prerequisites | PRD refs                                | Status   |
 | ----- | ----------------------------- | ----------------------------------------------------------- | ------------- | --------------------------------------- | -------- |
-| F-01  | data-schema-and-rls           | (foundation) schemat cards + review_history, RLS, typy Database, RLS wpięte w istniejący auth | —             | FR-001, FR-002, FR-004, NFR Privacy, Access Control | ready    |
+| F-01  | data-schema-and-rls           | (foundation) schemat cards + review_history, RLS, typy Database, RLS wpięte w istniejący auth | —             | FR-001, FR-002, FR-004, NFR Privacy, Access Control | done     |
 | S-01  | first-ai-generation-and-accept | wygenerować pierwsze fiszki AI z wklejonego tekstu i zaakceptować/edytować/odrzucić każdą propozycję | F-01          | US-01, FR-005, FR-006, FR-007          | proposed |
 | S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | blocked  |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | blocked  |
@@ -72,7 +72,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Jeśli RLS zostanie źle skonfigurowany na starcie, wypływ danych między użytkownikami jest cichą awarią bez zewnętrznego sygnału (Privacy NFR to gate na launch). Ryzyko mitiguje: enforcement RLS na poziomie DB + test integracyjny "user A nie widzi wierszy user B" przed każdym slice'em konsumującym.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -158,4 +158,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 
 ## Done
 
-_(Pusto na pierwszej generacji. `/10x-archive` dopisze wpis tutaj — i przełączy status pozycji na `done` — kiedy zmiana o pasującym `Change ID` zostanie zarchiwizowana. Nie wypełniać ręcznie.)_
+- **F-01: (foundation) tabele `cards` i `review_history` istnieją w migracji SQL, RLS jest włączone i skonfigurowane per-user-owns-own-rows, typy `Database` są wygenerowane z Supabase i importowalne z kodu; istniejące endpointy auth (signin/signup/signout) egzekwują RLS na tabelach użytkowych.** — Archived 2026-07-07 → `context/archive/2026-07-07-data-schema-and-rls/`. Lesson: —.
