@@ -13,6 +13,11 @@ export default defineConfig({
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        ignored: ["**/.vs/**", "**/node_modules/**", "**/dist/**", "**/dist-dry/**"],
+      },
+    },
   },
   adapter: cloudflare(),
   env: {

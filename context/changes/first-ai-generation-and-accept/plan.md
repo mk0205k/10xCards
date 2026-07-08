@@ -436,33 +436,33 @@ Deferred. The pgTAP RLS suite from F-01 (`supabase/tests/rls_cards_isolation.tes
 
 #### Automated
 
-- [x] 1.1 Deps install cleanly: `npm ci`
-- [x] 1.2 Type checking passes: `npm run astro sync && npx tsc --noEmit`
-- [x] 1.3 Linting passes: `npm run lint`
-- [x] 1.4 Unit tests pass: `npm test`
-- [x] 1.5 Dry-deploy passes bundle budget: `npm run deploy:dry`
+- [x] 1.1 Deps install cleanly: `npm ci` — b9c4f53
+- [x] 1.2 Type checking passes: `npm run astro sync && npx tsc --noEmit` — b9c4f53
+- [x] 1.3 Linting passes: `npm run lint` — b9c4f53
+- [x] 1.4 Unit tests pass: `npm test` — b9c4f53
+- [x] 1.5 Dry-deploy passes bundle budget: `npm run deploy:dry` — b9c4f53
 
 #### Manual
 
-- [x] 1.6 `wrangler dev` boots without missing-env errors
-- [x] 1.7 `POST /api/generate` returns 401 without cookie; returns streaming Q/A body with a valid cookie + 10k-char text
+- [x] 1.6 `wrangler dev` boots without missing-env errors — b9c4f53
+- [x] 1.7 `POST /api/generate` returns 401 without cookie; returns streaming Q/A body with a valid cookie + 10k-char text — b9c4f53
 
 ### Phase 2: `/generate` page + streaming proposals UI + reducer
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Reducer tests pass: `npm test`
-- [ ] 2.4 Dry-deploy passes bundle budget: `npm run deploy:dry`
+- [x] 2.1 Type checking passes: `npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Reducer tests pass: `npm test`
+- [x] 2.4 Dry-deploy passes bundle budget: `npm run deploy:dry`
 
 #### Manual
 
-- [ ] 2.5 Signed-in user sees `/generate`; unauthenticated user is redirected
-- [ ] 2.6 Paste + Generate: proposals stream in one-by-one within 30s
-- [ ] 2.7 Reject removes a proposal from the list
-- [ ] 2.8 Edit-then-Save updates the card body in view mode
-- [ ] 2.9 Simulated stream abort surfaces the retry banner and recovers on retry
+- [x] 2.5 Signed-in user sees `/generate`; unauthenticated user is redirected
+- [x] 2.6 Paste + Generate: proposals stream in one-by-one within 30s
+- [x] 2.7 Reject removes a proposal from the list
+- [x] 2.8 Edit-then-Save updates the card body in view mode
+- [x] 2.9 Simulated stream abort surfaces the retry banner and recovers on retry
 
 ### Phase 3: `/api/cards` insert endpoint + wire per-card accept
 
