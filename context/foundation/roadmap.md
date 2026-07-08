@@ -3,7 +3,7 @@ project: 10xCards
 version: 1
 status: draft
 created: 2026-07-07
-updated: 2026-07-07
+updated: 2026-07-08
 backlog_tracker: github-issues
 backlog_url: https://github.com/mk0205k/10xCards/milestone/1
 prd_version: 1
@@ -34,7 +34,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | ID    | Change ID                     | Outcome (user can …)                                        | Prerequisites | PRD refs                                | Status   |
 | ----- | ----------------------------- | ----------------------------------------------------------- | ------------- | --------------------------------------- | -------- |
 | F-01  | data-schema-and-rls           | (foundation) schemat cards + review_history, RLS, typy Database, RLS wpięte w istniejący auth | —             | FR-001, FR-002, FR-004, NFR Privacy, Access Control | done     |
-| S-01  | first-ai-generation-and-accept | wygenerować pierwsze fiszki AI z wklejonego tekstu i zaakceptować/edytować/odrzucić każdą propozycję | F-01          | US-01, FR-005, FR-006, FR-007          | proposed |
+| S-01  | first-ai-generation-and-accept | wygenerować pierwsze fiszki AI z wklejonego tekstu i zaakceptować/edytować/odrzucić każdą propozycję | F-01          | US-01, FR-005, FR-006, FR-007          | done     |
 | S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | blocked  |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | blocked  |
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | proposed |
@@ -87,7 +87,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Unknowns:**
   - Limit kosztów API na użytkownika (PRD Open Q2). Owner: user. Block: no (można zdeployować bez twardego limitu i dodać po walidacji; brak limitu nie blokuje planowania).
 - **Risk:** Sedno klina produktu — jeśli jakość generacji jest słaba (accept rate <75% z metryk wtórnych), cała hipoteza upada. Ryzyko mitiguje: streaming OpenRouter zgodny z Risk Register `infrastructure.md`, test end-to-end po każdym bumpie SDK.
-- **Status:** proposed
+- **Status:** done
 
 ### S-02: Pierwsza pełna sesja powtórki
 
@@ -159,3 +159,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 ## Done
 
 - **F-01: (foundation) tabele `cards` i `review_history` istnieją w migracji SQL, RLS jest włączone i skonfigurowane per-user-owns-own-rows, typy `Database` są wygenerowane z Supabase i importowalne z kodu; istniejące endpointy auth (signin/signup/signout) egzekwują RLS na tabelach użytkowych.** — Archived 2026-07-07 → `context/archive/2026-07-07-data-schema-and-rls/`. Lesson: —.
+- **S-01: user wkleja fragment tekstu, klika "generuj propozycje", w ciągu <30s widzi listę par pytanie–odpowiedź, akceptuje / edytuje / odrzuca każdą osobno, zaakceptowane trafiają do jego talii.** — Archived 2026-07-08 → `context/archive/2026-07-07-first-ai-generation-and-accept/`. Lesson: —.
