@@ -1,2 +1,4 @@
 SUPABASE_URL=
 SUPABASE_KEY=
+OPENROUTER_API_KEY=your-key-here
+OPENROUTER_MODEL=google/gemini-2.5-flash
