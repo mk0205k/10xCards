@@ -1,6 +1,6 @@
 export type StreamState = "idle" | "streaming" | "done" | "aborted";
 
-export type ProposalStatus = "pending" | "editing" | "rejected";
+export type ProposalStatus = "pending" | "editing" | "rejected" | "saving" | "saved" | "error";
 
 export interface ProposalDraft {
   question: string;
@@ -13,6 +13,8 @@ export interface Proposal {
   answer: string;
   status: ProposalStatus;
   draft: ProposalDraft | null;
+  savedCardId: string | null;
+  errorMessage: string | null;
 }
 
 export interface ProposalsState {
@@ -39,6 +41,9 @@ export type ProposalsAction =
   | { type: "editChange"; id: string; patch: Partial<ProposalDraft> }
   | { type: "editSave"; id: string }
   | { type: "editCancel"; id: string }
+  | { type: "saveStart"; id: string }
+  | { type: "saveSuccess"; id: string; savedCardId: string }
+  | { type: "saveError"; id: string; message: string }
   | { type: "reset" };
 
 function assignIds(existing: Proposal[], chunks: ProposalDraft[], makeId: () => string): Proposal[] {
@@ -60,6 +65,8 @@ function assignIds(existing: Proposal[], chunks: ProposalDraft[], makeId: () => 
       answer: chunk.answer,
       status: "pending",
       draft: null,
+      savedCardId: null,
+      errorMessage: null,
     };
   });
 
@@ -117,6 +124,27 @@ export function makeReducer(makeId: () => string) {
         return {
           ...state,
           proposals: state.proposals.map((p) => (p.id === action.id ? { ...p, status: "pending", draft: null } : p)),
+        };
+      case "saveStart":
+        return {
+          ...state,
+          proposals: state.proposals.map((p) =>
+            p.id === action.id ? { ...p, status: "saving", errorMessage: null } : p,
+          ),
+        };
+      case "saveSuccess":
+        return {
+          ...state,
+          proposals: state.proposals.map((p) =>
+            p.id === action.id ? { ...p, status: "saved", savedCardId: action.savedCardId, errorMessage: null } : p,
+          ),
+        };
+      case "saveError":
+        return {
+          ...state,
+          proposals: state.proposals.map((p) =>
+            p.id === action.id ? { ...p, status: "error", errorMessage: action.message } : p,
+          ),
         };
       case "reset":
         return initialState;

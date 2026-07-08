@@ -1,3 +1,4 @@
+import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -72,40 +73,70 @@ export default function ProposalCard({
     );
   }
 
+  const isSaving = proposal.status === "saving";
+  const isSaved = proposal.status === "saved";
+  const hasError = proposal.status === "error";
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-white">{proposal.question}</CardTitle>
       </CardHeader>
       <CardContent className="whitespace-pre-wrap text-white/85">{proposal.answer}</CardContent>
-      <CardFooter>
-        <Button
-          size="sm"
-          onClick={() => {
-            onAccept(proposal.id);
-          }}
-        >
-          Accept
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            onEditStart(proposal.id);
-          }}
-        >
-          Edit
-        </Button>
-        <Button
-          size="sm"
-          variant="destructive"
-          onClick={() => {
-            onReject(proposal.id);
-          }}
-        >
-          Reject
-        </Button>
-      </CardFooter>
+      {isSaved ? (
+        <CardFooter>
+          <span className="inline-flex items-center gap-1 text-sm text-emerald-300">
+            <Check className="size-4" /> Added to deck
+          </span>
+        </CardFooter>
+      ) : (
+        <CardFooter>
+          <Button
+            size="sm"
+            onClick={() => {
+              onAccept(proposal.id);
+            }}
+            disabled={isSaving}
+          >
+            {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
+            {isSaving ? "Saving..." : "Accept"}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              onEditStart(proposal.id);
+            }}
+            disabled={isSaving}
+          >
+            Edit
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => {
+              onReject(proposal.id);
+            }}
+            disabled={isSaving}
+          >
+            Reject
+          </Button>
+        </CardFooter>
+      )}
+      {hasError && proposal.errorMessage ? (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-red-400/40 bg-red-500/10 p-2 text-sm text-red-100">
+          <span>{proposal.errorMessage}</span>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              onAccept(proposal.id);
+            }}
+          >
+            Retry
+          </Button>
+        </div>
+      ) : null}
     </Card>
   );
 }

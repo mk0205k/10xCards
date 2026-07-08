@@ -15,7 +15,20 @@ describe("proposalsReducer", () => {
   it("stream/start clears proposals and sets streaming", () => {
     const reducer = newReducer();
     const state = reducer(
-      { ...initialState, proposals: [{ id: "old", question: "q", answer: "a", status: "pending", draft: null }] },
+      {
+        ...initialState,
+        proposals: [
+          {
+            id: "old",
+            question: "q",
+            answer: "a",
+            status: "pending",
+            draft: null,
+            savedCardId: null,
+            errorMessage: null,
+          },
+        ],
+      },
       { type: "stream/start", text: "hello" },
     );
     expect(state.streamState).toBe("streaming");
@@ -152,5 +165,59 @@ describe("proposalsReducer", () => {
     });
     state = reducer(state, { type: "reset" });
     expect(state).toEqual(initialState);
+  });
+
+  it("saveStart transitions proposal to saving and clears prior error", () => {
+    const reducer = newReducer();
+    let state = reducer(initialState, { type: "stream/start", text: "t" });
+    state = reducer(state, {
+      type: "stream/chunk",
+      proposals: [{ question: "Q", answer: "A" }],
+    });
+    state = reducer(state, { type: "saveError", id: "id-1", message: "old" });
+    state = reducer(state, { type: "saveStart", id: "id-1" });
+    expect(state.proposals[0].status).toBe("saving");
+    expect(state.proposals[0].errorMessage).toBeNull();
+  });
+
+  it("saveSuccess transitions to saved and captures the DB card id", () => {
+    const reducer = newReducer();
+    let state = reducer(initialState, { type: "stream/start", text: "t" });
+    state = reducer(state, {
+      type: "stream/chunk",
+      proposals: [{ question: "Q", answer: "A" }],
+    });
+    state = reducer(state, { type: "saveStart", id: "id-1" });
+    state = reducer(state, { type: "saveSuccess", id: "id-1", savedCardId: "card-42" });
+    expect(state.proposals[0].status).toBe("saved");
+    expect(state.proposals[0].savedCardId).toBe("card-42");
+    expect(state.proposals[0].errorMessage).toBeNull();
+  });
+
+  it("saveError transitions to error and records the message", () => {
+    const reducer = newReducer();
+    let state = reducer(initialState, { type: "stream/start", text: "t" });
+    state = reducer(state, {
+      type: "stream/chunk",
+      proposals: [{ question: "Q", answer: "A" }],
+    });
+    state = reducer(state, { type: "saveStart", id: "id-1" });
+    state = reducer(state, { type: "saveError", id: "id-1", message: "network fail" });
+    expect(state.proposals[0].status).toBe("error");
+    expect(state.proposals[0].errorMessage).toBe("network fail");
+  });
+
+  it("saveStart after saveError clears the message and re-enters saving (retry path)", () => {
+    const reducer = newReducer();
+    let state = reducer(initialState, { type: "stream/start", text: "t" });
+    state = reducer(state, {
+      type: "stream/chunk",
+      proposals: [{ question: "Q", answer: "A" }],
+    });
+    state = reducer(state, { type: "saveStart", id: "id-1" });
+    state = reducer(state, { type: "saveError", id: "id-1", message: "fail" });
+    state = reducer(state, { type: "saveStart", id: "id-1" });
+    expect(state.proposals[0].status).toBe("saving");
+    expect(state.proposals[0].errorMessage).toBeNull();
   });
 });
