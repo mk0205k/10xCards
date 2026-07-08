@@ -468,15 +468,15 @@ Deferred. The pgTAP RLS suite from F-01 (`supabase/tests/rls_cards_isolation.tes
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 All tests pass: `npm test`
-- [x] 3.4 Dry-deploy passes bundle budget: `npm run deploy:dry`
+- [x] 3.1 Type checking passes: `npx tsc --noEmit` — 64db736
+- [x] 3.2 Linting passes: `npm run lint` — 64db736
+- [x] 3.3 All tests pass: `npm test` — 64db736
+- [x] 3.4 Dry-deploy passes bundle budget: `npm run deploy:dry` — 64db736
 
 #### Manual
 
-- [x] 3.5 Accept persists the card; row lands in `cards` with `source='ai'` and correct `user_id`
-- [x] 3.6 Save (from edit mode) persists the edited text, not the original
-- [x] 3.7 `POST /api/cards` without cookie returns 401
-- [x] 3.8 Cross-user read is blocked by RLS (0 rows for user B when reading user A's data)
-- [x] 3.9 End-to-end: paste → generate → accept 2 → cards visible in Supabase Studio
+- [x] 3.5 Accept persists the card; row lands in `cards` with `source='ai'` and correct `user_id` — 64db736
+- [x] 3.6 Save (from edit mode) persists the edited text, not the original — 64db736
+- [x] 3.7 `POST /api/cards` without cookie returns 401 — 64db736
+- [x] 3.8 Cross-user read is blocked by RLS (0 rows for user B when reading user A's data) — 64db736
+- [x] 3.9 End-to-end: paste → generate → accept 2 → cards visible in Supabase Studio — 64db736

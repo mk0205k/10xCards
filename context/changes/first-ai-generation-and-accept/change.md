@@ -1,7 +1,7 @@
 ---
 change_id: first-ai-generation-and-accept
 title: First AI generation + accept/edit/reject cards
-status: implementing
+status: implemented
 created: 2026-07-07
 updated: 2026-07-08
 archived_at: null
