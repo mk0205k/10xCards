@@ -483,26 +483,26 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly against an empty DB (`supabase db reset`)
-- [x] 1.2 Migration applies cleanly against a DB with existing S-01 `cards` rows (backfill DEFAULT-s populate)
-- [x] 1.3 pgTAP suite passes (`supabase test db`) — 14 existing + ~4 new assertions
-- [x] 1.4 `npm run db:types` produces `Database` with `commit_review` under Functions and all new columns on `cards` + `review_history`
-- [x] 1.5 `npm run lint` passes
-- [x] 1.6 `npm run build` passes
+- [x] 1.1 Migration applies cleanly against an empty DB (`supabase db reset`) — 07737fb
+- [x] 1.2 Migration applies cleanly against a DB with existing S-01 `cards` rows (backfill DEFAULT-s populate) — 07737fb
+- [x] 1.3 pgTAP suite passes (`supabase test db`) — 14 existing + ~4 new assertions — 07737fb
+- [x] 1.4 `npm run db:types` produces `Database` with `commit_review` under Functions and all new columns on `cards` + `review_history` — 07737fb
+- [x] 1.5 `npm run lint` passes — 07737fb
+- [x] 1.6 `npm run build` passes — 07737fb
 
 #### Manual
 
-- [ ] 1.7 Migration file is self-contained and readable — comments explain what and why
-- [ ] 1.8 `src/db/database.types.ts` inspection — no phantom `next_review_at`; all 12 required fields on `review_history.Row`
+- [x] 1.7 Migration file is self-contained and readable — comments explain what and why — 07737fb
+- [x] 1.8 `src/db/database.types.ts` inspection — no phantom `next_review_at`; all 12 required fields on `review_history.Row` — 07737fb
 
 ### Phase 2: Install `ts-fsrs`, scheduler service, retrofit `POST /api/cards`
 
 #### Automated
 
-- [ ] 2.1 `npm test` passes (existing + new scheduler unit tests)
-- [ ] 2.2 `npm run lint` passes (`react-compiler/react-compiler` green)
-- [ ] 2.3 `npm run build` passes — Astro bundles `ts-fsrs` into the Worker
-- [ ] 2.4 `wrangler deploy --dry-run` — no new nodejs_compat warnings
+- [x] 2.1 `npm test` passes (existing + new scheduler unit tests)
+- [x] 2.2 `npm run lint` passes (`react-compiler/react-compiler` green)
+- [x] 2.3 `npm run build` passes — Astro bundles `ts-fsrs` into the Worker
+- [x] 2.4 `wrangler deploy --dry-run` — no new nodejs_compat warnings
 
 #### Manual
 

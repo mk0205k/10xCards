@@ -100,12 +100,16 @@ describe("POST /api/cards", () => {
     expect(body.card.id).toBe("card-1");
     expect(body.card.user_id).toBe("u1");
     expect(body.card.source).toBe("ai");
-    expect(insertBuilder.insert).toHaveBeenCalledWith({
-      user_id: "u1",
-      question: "q",
-      answer: "a",
-      source: "ai",
-    });
+    expect(insertBuilder.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        user_id: "u1",
+        question: "q",
+        answer: "a",
+        source: "ai",
+        state: 0,
+        reps: 0,
+      }),
+    );
   });
 
   it("defaults source to 'ai' when omitted", async () => {

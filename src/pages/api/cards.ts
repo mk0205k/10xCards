@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
+import { emptyCardState } from "@/lib/review/scheduler";
 
 export const prerender = false;
 
@@ -47,6 +48,7 @@ export const POST: APIRoute = async (context) => {
       question: parsed.data.question,
       answer: parsed.data.answer,
       source: parsed.data.source,
+      ...emptyCardState(),
     })
     .select()
     .single();
