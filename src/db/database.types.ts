@@ -38,27 +38,57 @@ export type Database = {
         Row: {
           answer: string
           created_at: string
+          difficulty: number
+          due: string
+          elapsed_days: number
           id: string
+          lapses: number
+          last_review: string | null
+          learning_steps: number
           question: string
+          reps: number
+          scheduled_days: number
           source: Database["public"]["Enums"]["card_source"]
+          stability: number
+          state: number
           updated_at: string
           user_id: string
         }
         Insert: {
           answer: string
           created_at?: string
+          difficulty?: number
+          due?: string
+          elapsed_days?: number
           id?: string
+          lapses?: number
+          last_review?: string | null
+          learning_steps?: number
           question: string
+          reps?: number
+          scheduled_days?: number
           source?: Database["public"]["Enums"]["card_source"]
+          stability?: number
+          state?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           answer?: string
           created_at?: string
+          difficulty?: number
+          due?: string
+          elapsed_days?: number
           id?: string
+          lapses?: number
+          last_review?: string | null
+          learning_steps?: number
           question?: string
+          reps?: number
+          scheduled_days?: number
           source?: Database["public"]["Enums"]["card_source"]
+          stability?: number
+          state?: number
           updated_at?: string
           user_id?: string
         }
@@ -67,26 +97,50 @@ export type Database = {
       review_history: {
         Row: {
           card_id: string
+          created_at: string
+          difficulty: number
+          due: string
+          elapsed_days: number
           id: string
-          next_review_at: string
+          last_elapsed_days: number
+          learning_steps: number
           rating: number
-          reviewed_at: string
+          review: string
+          scheduled_days: number
+          stability: number
+          state: number
           user_id: string
         }
         Insert: {
           card_id: string
+          created_at?: string
+          difficulty: number
+          due: string
+          elapsed_days: number
           id?: string
-          next_review_at: string
+          last_elapsed_days: number
+          learning_steps: number
           rating: number
-          reviewed_at?: string
+          review?: string
+          scheduled_days: number
+          stability: number
+          state: number
           user_id: string
         }
         Update: {
           card_id?: string
+          created_at?: string
+          difficulty?: number
+          due?: string
+          elapsed_days?: number
           id?: string
-          next_review_at?: string
+          last_elapsed_days?: number
+          learning_steps?: number
           rating?: number
-          reviewed_at?: string
+          review?: string
+          scheduled_days?: number
+          stability?: number
+          state?: number
           user_id?: string
         }
         Relationships: [
@@ -104,7 +158,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      commit_review: {
+        Args: {
+          p_card_id: string
+          p_log: Json
+          p_now: string
+          p_rating: number
+          p_updated_card: Json
+        }
+        Returns: {
+          answer: string
+          created_at: string
+          difficulty: number
+          due: string
+          elapsed_days: number
+          id: string
+          lapses: number
+          last_review: string | null
+          learning_steps: number
+          question: string
+          reps: number
+          scheduled_days: number
+          source: Database["public"]["Enums"]["card_source"]
+          stability: number
+          state: number
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "cards"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       card_source: "ai" | "manual"
