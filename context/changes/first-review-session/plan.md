@@ -499,24 +499,24 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Automated
 
-- [x] 2.1 `npm test` passes (existing + new scheduler unit tests)
-- [x] 2.2 `npm run lint` passes (`react-compiler/react-compiler` green)
-- [x] 2.3 `npm run build` passes — Astro bundles `ts-fsrs` into the Worker
-- [x] 2.4 `wrangler deploy --dry-run` — no new nodejs_compat warnings
+- [x] 2.1 `npm test` passes (existing + new scheduler unit tests) — 5eb6af0
+- [x] 2.2 `npm run lint` passes (`react-compiler/react-compiler` green) — 5eb6af0
+- [x] 2.3 `npm run build` passes — Astro bundles `ts-fsrs` into the Worker — 5eb6af0
+- [x] 2.4 `wrangler deploy --dry-run` — no new nodejs_compat warnings — 5eb6af0
 
 #### Manual
 
-- [ ] 2.5 `/generate` save produces a card row with `due ≈ now()`, `state = 0`, `stability = 0`, `reps = 0`
-- [ ] 2.6 `src/lib/review/scheduler.ts` — one file, one folder, no cross-imports outside `ts-fsrs`
+- [x] 2.5 `/generate` save produces a card row with `due ≈ now()`, `state = 0`, `stability = 0`, `reps = 0` — 5eb6af0
+- [x] 2.6 `src/lib/review/scheduler.ts` — one file, one folder, no cross-imports outside `ts-fsrs` — 5eb6af0
 
 ### Phase 3: Review API endpoints
 
 #### Automated
 
-- [ ] 3.1 `npm test` passes (existing + new endpoint tests)
-- [ ] 3.2 `npm run lint` passes
-- [ ] 3.3 `npm run build` passes with the new `[card_id]` dynamic route
-- [ ] 3.4 `npm run deploy:dry` succeeds
+- [x] 3.1 `npm test` passes (existing + new endpoint tests)
+- [x] 3.2 `npm run lint` passes
+- [x] 3.3 `npm run build` passes with the new `[card_id]` dynamic route
+- [x] 3.4 `npm run deploy:dry` succeeds
 
 #### Manual
 

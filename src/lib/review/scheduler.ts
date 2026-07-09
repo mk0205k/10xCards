@@ -1,4 +1,13 @@
-import { fsrs, createEmptyCard, Rating, TypeConvert, generatorParameters, type Card, type FSRS } from "ts-fsrs";
+import {
+  fsrs,
+  createEmptyCard,
+  Rating,
+  TypeConvert,
+  generatorParameters,
+  type Card,
+  type FSRS,
+  type ReviewLog,
+} from "ts-fsrs";
 import type { Database } from "@/db/database.types";
 
 type CardRow = Database["public"]["Tables"]["cards"]["Row"];
@@ -97,6 +106,69 @@ function buildEntry(due: Date, now: Date): PreviewEntry {
     interval: formatInterval(due.getTime() - now.getTime()),
   };
 }
+
+// RPC payload types — the shape commit_review expects for p_updated_card / p_log.
+// ts-fsrs 6 will drop elapsed_days / last_elapsed_days, but the DB currently
+// stores them as NOT NULL columns; keep the round-trip until the library
+// upgrade removes them upstream.
+
+export interface RpcCardPayload {
+  due: string;
+  stability: number;
+  difficulty: number;
+  elapsed_days: number;
+  scheduled_days: number;
+  learning_steps: number;
+  reps: number;
+  lapses: number;
+  state: number;
+  last_review: string | null;
+}
+
+export interface RpcLogPayload {
+  rating: number;
+  state: number;
+  due: string;
+  stability: number;
+  difficulty: number;
+  elapsed_days: number;
+  last_elapsed_days: number;
+  scheduled_days: number;
+  learning_steps: number;
+  review: string;
+}
+
+/* eslint-disable @typescript-eslint/no-deprecated -- elapsed_days is deprecated in ts-fsrs 6 but still emitted in 5.x and persisted in DB */
+export function serializeCardForRpc(card: Card): RpcCardPayload {
+  return {
+    due: card.due.toISOString(),
+    stability: card.stability,
+    difficulty: card.difficulty,
+    elapsed_days: card.elapsed_days,
+    scheduled_days: card.scheduled_days,
+    learning_steps: card.learning_steps,
+    reps: card.reps,
+    lapses: card.lapses,
+    state: card.state,
+    last_review: card.last_review ? card.last_review.toISOString() : null,
+  };
+}
+
+export function serializeLogForRpc(log: ReviewLog): RpcLogPayload {
+  return {
+    rating: log.rating,
+    state: log.state,
+    due: log.due.toISOString(),
+    stability: log.stability,
+    difficulty: log.difficulty,
+    elapsed_days: log.elapsed_days,
+    last_elapsed_days: log.last_elapsed_days,
+    scheduled_days: log.scheduled_days,
+    learning_steps: log.learning_steps,
+    review: log.review.toISOString(),
+  };
+}
+/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Human-readable interval for rating-button hints. Input is milliseconds.
 export function formatInterval(ms: number): string {
