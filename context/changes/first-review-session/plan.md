@@ -534,11 +534,11 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Manual
 
-- [ ] 4.4 Signed-in `/review` shows question → answer → 4 rating buttons with interval hints
-- [ ] 4.5 Signed-out `/review` redirects to `/auth/signin`
-- [ ] 4.6 Empty deck shows "Brak fiszek w talii" (or equivalent) without crash
-- [ ] 4.7 Consecutive ratings advance the queue; `reps` grows in DB
-- [ ] 4.8 Refresh mid-session — next-due card reappears (server-driven)
+- [x] 4.4 Signed-in `/review` shows question → answer → 4 rating buttons with interval hints
+- [x] 4.5 Signed-out `/review` redirects to `/auth/signin`
+- [x] 4.6 Empty deck shows "Brak fiszek w talii" (or equivalent) without crash
+- [x] 4.7 Consecutive ratings advance the queue; `reps` grows in DB
+- [x] 4.8 Refresh mid-session — next-due card reappears (server-driven)
 
 ### Phase 5: End-to-end verification + roadmap update
 
