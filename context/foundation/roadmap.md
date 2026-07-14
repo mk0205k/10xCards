@@ -38,6 +38,8 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | done     |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | blocked  |
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | proposed |
+| S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | planned  |
+| S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | planned  |
 
 ## Streams
 
@@ -127,6 +129,32 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Risk:** Bez reset password persona (dorosły wracający po tygodniu/miesiącu, PRD §User & Persona) traci dostęp do talii przy pierwszym zapomnianym haśle — cichy koszt retention. Ryzyko mitiguje: standardowy Supabase Auth reset flow, brak własnego kodu kryptografii; niewielki slice, ale must-have z PRD.
 - **Status:** proposed
 
+### S-05: Usunięcie konta z 30-dniową retencją
+
+- **Outcome:** user uruchamia flow "usuń konto", świadomie potwierdza, konto natychmiast staje się niedostępne (brak możliwości logowania, dane niewidoczne w aplikacji), dane (auth user, `cards`, `review_history`) są zachowane w stanie soft-deleted przez 30 dni z możliwością przywrócenia przez wsparcie/self-service, po 30 dniach są nieodwracalnie usuwane (hard delete).
+- **Change ID:** account-deletion-30d-retention
+- **PRD refs:** — (Privacy / prawo do usunięcia; brak twardego FR w PRD v1 — do potwierdzenia z userem)
+- **Prerequisites:** F-01
+- **Parallel with:** S-06
+- **Blockers:** —
+- **Unknowns:**
+  - Mechanizm hard-delete po 30 dniach (Supabase cron function vs Cloudflare scheduled worker vs manual runbook). Owner: user. Block: yes — decyduje o feasibility retention windowa i o tym, czy slice trzyma się w budżecie MVP.
+  - Zachowanie przy re-signup na ten sam email w oknie 30 dni (blokada vs auto-restore vs nowe konto). Owner: user. Block: yes — decyduje o semantyce uniqueness i UX flow "wracam po tygodniu".
+- **Risk:** Retencja 30 dni oznacza że dane wciąż fizycznie istnieją — RLS musi nadal izolować cudze soft-deleted rows (Privacy NFR); jeśli hard-delete cron zawiedzie po cichu, dane wiszą w nieskończoność (compliance risk bez zewnętrznego sygnału). Ryzyko mitiguje: idempotent hard-delete job z observability alertem gdy licznik soft-deleted starszych niż 30d rośnie; test scenariusz "user B nie widzi rows usera A po soft-delete" analogicznie do gate'u RLS z F-01.
+- **Status:** planned
+
+### S-06: UX improvements
+
+- **Outcome:** user może zbiorczo akceptować/odrzucać wiele propozycji AI naraz na ekranie candidate review (bulk actions), zresetować bieżącą sesję powtórki bez porzucania flow, oraz widzi jasne stany ładowania / empty / error w kluczowych operacjach (generacja, review, deck).
+- **Change ID:** ux-improvements
+- **PRD refs:** — (usability follow-up do S-01 candidate review i S-02 review session; brak twardych FR — obserwacje z workflow S-01–S-04)
+- **Prerequisites:** F-01
+- **Parallel with:** S-05
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** UX friction przekłada się bezpośrednio na retention — bez bulk actions user manualnie klika przez każdą propozycję po każdym paste, bez reset session pomyłka w ratingach wymusza zakończenie sesji, bez loading states aplikacja wygląda jakby zawiesiła się w trakcie generacji. Nie blokuje walidacji hipotezy (north star S-02 już zamknięty), ale gate'uje "polish" launchu.
+- **Status:** planned
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                      | Issue | Sugerowany tytuł issue                                                | Ready for `/10x-plan` | Uwagi                                                        |
@@ -136,6 +164,8 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 | S-02       | first-review-session           | [#3](https://github.com/mk0205k/10xCards/issues/3) | [S-02] Pierwsza pełna sesja powtórki (north star)                     | no                    | Blocked na wyborze algorytmu SR (Open Q1)                    |
 | S-03       | deck-management-crud           | [#4](https://github.com/mk0205k/10xCards/issues/4) | [S-03] Zarządzanie talią (CRUD manualny)                              | no                    | Blocked na decyzji edit-vs-schedule (Open Q3)                |
 | S-04       | password-reset-flow            | [#5](https://github.com/mk0205k/10xCards/issues/5) | [S-04] Reset hasła emailem                                            | no                    | Po zakończeniu F-01                                          |
+| S-05       | account-deletion-30d-retention | —     | [S-05] Usunięcie konta z 30-dniową retencją                           | no                    | Parallel z S-06; wymaga issue w trackerze; 2 Open Questions do rozstrzygnięcia |
+| S-06       | ux-improvements                | —     | [S-06] UX improvements (bulk actions, reset session, loading states)  | no                    | Parallel z S-05; wymaga issue w trackerze                    |
 
 ## Open Roadmap Questions
 
