@@ -35,7 +35,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | ----- | ----------------------------- | ----------------------------------------------------------- | ------------- | --------------------------------------- | -------- |
 | F-01  | data-schema-and-rls           | (foundation) schemat cards + review_history, RLS, typy Database, RLS wpięte w istniejący auth | —             | FR-001, FR-002, FR-004, NFR Privacy, Access Control | done     |
 | S-01  | first-ai-generation-and-accept | wygenerować pierwsze fiszki AI z wklejonego tekstu i zaakceptować/edytować/odrzucić każdą propozycję | F-01          | US-01, FR-005, FR-006, FR-007          | done     |
-| S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | blocked  |
+| S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | done     |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | blocked  |
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | proposed |
 
@@ -100,7 +100,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Unknowns:**
   - Wybór algorytmu SR — binary vs SM-2 vs FSRS vs inny (PRD Open Q1). Owner: user. Block: yes — kształtuje UI ratingu (FR-014), schemat `review_history`, wybór biblioteki. Bez tego S-02 nie da się zaplanować.
 - **Risk:** Domyka pełny flow — dopóki S-02 nie zejdzie, hipoteza AI + spaced repetition nie jest zwalidowana end-to-end (Success Criteria kroki 6–7). Ryzyko mitiguje: rozstrzygnięcie Open Q1 z premedytacją przed `/10x-plan`, nie w trakcie.
-- **Status:** blocked
+- **Status:** done
 
 ### S-03: Zarządzanie talią (CRUD manualny)
 
@@ -160,3 +160,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 
 - **F-01: (foundation) tabele `cards` i `review_history` istnieją w migracji SQL, RLS jest włączone i skonfigurowane per-user-owns-own-rows, typy `Database` są wygenerowane z Supabase i importowalne z kodu; istniejące endpointy auth (signin/signup/signout) egzekwują RLS na tabelach użytkowych.** — Archived 2026-07-07 → `context/archive/2026-07-07-data-schema-and-rls/`. Lesson: —.
 - **S-01: user wkleja fragment tekstu, klika "generuj propozycje", w ciągu <30s widzi listę par pytanie–odpowiedź, akceptuje / edytuje / odrzuca każdą osobno, zaakceptowane trafiają do jego talii.** — Archived 2026-07-08 → `context/archive/2026-07-07-first-ai-generation-and-accept/`. Lesson: —.
+- **S-02: user startuje sesję powtórki, aplikacja pokazuje pytanie, czeka na odpowiedź w głowie, odsłania odpowiedź, user ocenia trudność w skali wymaganej przez algorytm (FSRS via ts-fsrs, 4-button Again/Hard/Good/Easy), algorytm zapisuje nową datę następnej powtórki dla tej fiszki.** — Done 2026-07-14 (pending archive → `context/archive/YYYY-MM-DD-first-review-session/`, run `/10x-archive first-review-session`). Lesson: —.

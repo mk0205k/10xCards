@@ -534,24 +534,24 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Manual
 
-- [x] 4.4 Signed-in `/review` shows question → answer → 4 rating buttons with interval hints
-- [x] 4.5 Signed-out `/review` redirects to `/auth/signin`
-- [x] 4.6 Empty deck shows "Brak fiszek w talii" (or equivalent) without crash
-- [x] 4.7 Consecutive ratings advance the queue; `reps` grows in DB
-- [x] 4.8 Refresh mid-session — next-due card reappears (server-driven)
+- [x] 4.4 Signed-in `/review` shows question → answer → 4 rating buttons with interval hints — 4b52716
+- [x] 4.5 Signed-out `/review` redirects to `/auth/signin` — 4b52716
+- [x] 4.6 Empty deck shows "Brak fiszek w talii" (or equivalent) without crash — 4b52716
+- [x] 4.7 Consecutive ratings advance the queue; `reps` grows in DB — 4b52716
+- [x] 4.8 Refresh mid-session — next-due card reappears (server-driven) — 4b52716
 
 ### Phase 5: End-to-end verification + roadmap update
 
 #### Automated
 
-- [ ] 5.1 `supabase test db` — all pgTAP assertions green
-- [ ] 5.2 `npm run lint && npm run build && npm test` — all green
-- [ ] 5.3 `npm run deploy:dry` succeeds
-- [ ] 5.4 Git status clean outside `context/changes/first-review-session/`
+- [x] 5.1 `supabase test db` — all pgTAP assertions green
+- [x] 5.2 `npm run lint && npm run build && npm test` — all green
+- [x] 5.3 `npm run deploy:dry` succeeds
+- [x] 5.4 Git status clean outside `context/changes/first-review-session/`
 
 #### Manual
 
-- [ ] 5.5 Full US-02 flow: paste → accept → review → rate → next due — no errors, no dead-ends
-- [ ] 5.6 Preview interval hint matches actual `due` after rating (within fuzz tolerance)
-- [ ] 5.7 No browser console errors during review flow
-- [ ] 5.8 Roadmap S-02 flipped to `done`; PRD Open Q1 marked resolved
+- [x] 5.5 Full US-02 flow: paste → accept → review → rate → next due — no errors, no dead-ends
+- [x] 5.6 Preview interval hint matches actual `due` after rating (within fuzz tolerance)
+- [x] 5.7 No browser console errors during review flow
+- [x] 5.8 Roadmap S-02 flipped to `done`; PRD Open Q1 marked resolved

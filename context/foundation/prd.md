@@ -159,7 +159,7 @@ The MVP consciously does NOT do the following:
 
 ## Open Questions
 
-1. **Spaced-repetition algorithm choice.** Concrete algorithm (binary scale vs 4-step SM-2 vs 4-step FSRS, etc.) drives the shape of FR-014's rating UI. To be decided alongside the spaced-repetition library choice. — Owner: user. By: before stack selection.
+1. **Spaced-repetition algorithm choice.** Concrete algorithm (binary scale vs 4-step SM-2 vs 4-step FSRS, etc.) drives the shape of FR-014's rating UI. To be decided alongside the spaced-repetition library choice. — Owner: user. By: before stack selection. → Resolved 2026-07-14: FSRS via ts-fsrs (see `context/changes/first-review-session/`).
 2. **API cost limit per user.** Bound on input length (e.g. daily character cap for the generation endpoint) to prevent runaway AI-API costs from a single user. — Owner: user. By: before MVP launch.
 3. **Edit vs review schedule.** When a user edits an existing card (FR-010) that already has a review history, does the schedule reset to "new card" or persist? — Owner: user. By: before review-session implementation.
 4. **Target QPS estimate.** `target_scale.qps` not specified in shape-notes. Needed to size generation throughput and review-session concurrency expectations. — Owner: user. By: before stack selection.
