@@ -544,14 +544,14 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Automated
 
-- [x] 5.1 `supabase test db` — all pgTAP assertions green
-- [x] 5.2 `npm run lint && npm run build && npm test` — all green
-- [x] 5.3 `npm run deploy:dry` succeeds
-- [x] 5.4 Git status clean outside `context/changes/first-review-session/`
+- [x] 5.1 `supabase test db` — all pgTAP assertions green — 9a6e881
+- [x] 5.2 `npm run lint && npm run build && npm test` — all green — 9a6e881
+- [x] 5.3 `npm run deploy:dry` succeeds — 9a6e881
+- [x] 5.4 Git status clean outside `context/changes/first-review-session/` — 9a6e881
 
 #### Manual
 
-- [x] 5.5 Full US-02 flow: paste → accept → review → rate → next due — no errors, no dead-ends
-- [x] 5.6 Preview interval hint matches actual `due` after rating (within fuzz tolerance)
-- [x] 5.7 No browser console errors during review flow
-- [x] 5.8 Roadmap S-02 flipped to `done`; PRD Open Q1 marked resolved
+- [x] 5.5 Full US-02 flow: paste → accept → review → rate → next due — no errors, no dead-ends — 9a6e881
+- [x] 5.6 Preview interval hint matches actual `due` after rating (within fuzz tolerance) — 9a6e881
+- [x] 5.7 No browser console errors during review flow — 9a6e881
+- [x] 5.8 Roadmap S-02 flipped to `done`; PRD Open Q1 marked resolved — 9a6e881
