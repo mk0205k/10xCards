@@ -513,24 +513,24 @@ Full walkthrough of PRD Success Criteria steps 1–7 in one session; close S-02 
 
 #### Automated
 
-- [x] 3.1 `npm test` passes (existing + new endpoint tests)
-- [x] 3.2 `npm run lint` passes
-- [x] 3.3 `npm run build` passes with the new `[card_id]` dynamic route
-- [x] 3.4 `npm run deploy:dry` succeeds
+- [x] 3.1 `npm test` passes (existing + new endpoint tests) — 6ee1251
+- [x] 3.2 `npm run lint` passes — 6ee1251
+- [x] 3.3 `npm run build` passes with the new `[card_id]` dynamic route — 6ee1251
+- [x] 3.4 `npm run deploy:dry` succeeds — 6ee1251
 
 #### Manual
 
-- [ ] 3.5 `curl GET /api/review/next` returns a card + preview, or `{ card: null, nextDueAt }`
-- [ ] 3.6 `curl POST /api/review/<card>/rate {"rating":3}` returns updated card; `reps` incremented, `due` advanced
-- [ ] 3.7 Rating a card owned by another user returns 404 (RLS-hidden)
+- [x] 3.5 `curl GET /api/review/next` returns a card + preview, or `{ card: null, nextDueAt }` — 6ee1251
+- [x] 3.6 `curl POST /api/review/<card>/rate {"rating":3}` returns updated card; `reps` incremented, `due` advanced — 6ee1251
+- [x] 3.7 Rating a card owned by another user returns 404 (RLS-hidden) — 6ee1251
 
 ### Phase 4: Frontend `/review` page + `ReviewSession` React island
 
 #### Automated
 
-- [ ] 4.1 `npm run lint` passes (including `react-compiler`)
-- [ ] 4.2 `npm run build` passes
-- [ ] 4.3 `npm test` passes — no regression in existing suite
+- [x] 4.1 `npm run lint` passes (including `react-compiler`) — 6fa077b
+- [x] 4.2 `npm run build` passes — 6fa077b
+- [x] 4.3 `npm test` passes — no regression in existing suite — 6fa077b
 
 #### Manual
 
