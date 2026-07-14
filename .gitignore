@@ -36,3 +36,8 @@ dist-dry/
 
 # claude code local config
 .claude/
+
+.dev.vars.cloud-backup
+
+# bash crash dumps
+*.stackdump
