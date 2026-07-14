@@ -3,7 +3,7 @@ project: 10xCards
 version: 1
 status: draft
 created: 2026-07-07
-updated: 2026-07-08
+updated: 2026-07-14
 backlog_tracker: github-issues
 backlog_url: https://github.com/mk0205k/10xCards/milestone/1
 prd_version: 1
@@ -160,4 +160,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 
 - **F-01: (foundation) tabele `cards` i `review_history` istnieją w migracji SQL, RLS jest włączone i skonfigurowane per-user-owns-own-rows, typy `Database` są wygenerowane z Supabase i importowalne z kodu; istniejące endpointy auth (signin/signup/signout) egzekwują RLS na tabelach użytkowych.** — Archived 2026-07-07 → `context/archive/2026-07-07-data-schema-and-rls/`. Lesson: —.
 - **S-01: user wkleja fragment tekstu, klika "generuj propozycje", w ciągu <30s widzi listę par pytanie–odpowiedź, akceptuje / edytuje / odrzuca każdą osobno, zaakceptowane trafiają do jego talii.** — Archived 2026-07-08 → `context/archive/2026-07-07-first-ai-generation-and-accept/`. Lesson: —.
-- **S-02: user startuje sesję powtórki, aplikacja pokazuje pytanie, czeka na odpowiedź w głowie, odsłania odpowiedź, user ocenia trudność w skali wymaganej przez algorytm (FSRS via ts-fsrs, 4-button Again/Hard/Good/Easy), algorytm zapisuje nową datę następnej powtórki dla tej fiszki.** — Done 2026-07-14 (pending archive → `context/archive/YYYY-MM-DD-first-review-session/`, run `/10x-archive first-review-session`). Lesson: —.
+- **S-02: user startuje sesję powtórki, aplikacja pokazuje pytanie, czeka na odpowiedź w głowie, odsłania odpowiedź, user ocenia trudność w skali wymaganej przez algorytm (FSRS via ts-fsrs, 4-button Again/Hard/Good/Easy), algorytm zapisuje nową datę następnej powtórki dla tej fiszki.** — Archived 2026-07-14 → `context/archive/2026-07-09-first-review-session/`. Lesson: —.
