@@ -1,0 +1,26 @@
+---
+import { createClient } from "@/lib/supabase";
+
+const invalidLinkUrl = `/auth/reset-password?error=${encodeURIComponent("Link wygasł lub jest nieprawidłowy — zażądaj nowego.")}`;
+
+const tokenHash = Astro.url.searchParams.get("token_hash");
+const type = Astro.url.searchParams.get("type");
+const rawNext = Astro.url.searchParams.get("next") ?? "/auth/update-password";
+const safeNext = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/auth/update-password";
+
+if (!tokenHash || type !== "recovery") {
+  return Astro.redirect(invalidLinkUrl);
+}
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+if (!supabase) {
+  return Astro.redirect(`/auth/reset-password?error=${encodeURIComponent("Supabase is not configured")}`);
+}
+
+const { error } = await supabase.auth.verifyOtp({ type: "recovery", token_hash: tokenHash });
+if (error) {
+  return Astro.redirect(invalidLinkUrl);
+}
+
+return Astro.redirect(safeNext);
+---

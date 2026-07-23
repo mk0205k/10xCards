@@ -30,6 +30,7 @@ export default defineConfig({
         access: "public",
         default: "google/gemini-2.5-flash",
       }),
+      PUBLIC_SITE_URL: envField.string({ context: "server", access: "public", optional: false }),
     },
   },
 });

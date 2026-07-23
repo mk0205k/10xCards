@@ -16,12 +16,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx wrangler types
       - run: npx astro sync
       - run: npm run lint
       - run: npm run build
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
 
   deploy:
     needs: ci
@@ -34,11 +36,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx wrangler types
       - run: npx astro sync
       - run: npm run build
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
