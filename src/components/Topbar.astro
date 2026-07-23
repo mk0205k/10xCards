@@ -1,4 +1,7 @@
 ---
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { m } from "@/paraglide/messages.js";
+
 const { user } = Astro.locals;
 ---
 
@@ -11,28 +14,30 @@ const { user } = Astro.locals;
         <span class="text-blue-100/70">{user.email}</span>
         <div class="flex items-center gap-3">
           <a href="/dashboard" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
-            Dashboard
+            {m.topbar_dashboard()}
           </a>
           <a href="/account" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
-            Konto
+            {m.topbar_account()}
           </a>
           <form method="POST" action="/api/auth/signout">
             <button type="submit" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
-              Sign out
+              {m.topbar_signout()}
             </button>
           </form>
+          <LanguageSwitcher client:load />
         </div>
       </>
     ) : (
       <>
-        <span class="text-blue-100/70">Not signed in</span>
-        <div class="flex gap-3">
+        <span class="text-blue-100/70">{m.topbar_not_signed_in()}</span>
+        <div class="flex items-center gap-3">
           <a href="/auth/signin" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
-            Sign in
+            {m.topbar_signin()}
           </a>
           <a href="/auth/signup" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
-            Sign up
+            {m.topbar_signup()}
           </a>
+          <LanguageSwitcher client:load />
         </div>
       </>
     )

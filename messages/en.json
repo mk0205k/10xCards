@@ -1,0 +1,12 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "topbar_dashboard": "Dashboard",
+  "topbar_account": "Account",
+  "topbar_signout": "Sign out",
+  "topbar_signin": "Sign in",
+  "topbar_signup": "Sign up",
+  "topbar_not_signed_in": "Not signed in",
+  "language_pl": "PL",
+  "language_en": "EN",
+  "language_switcher_label": "Language"
+}

@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# paraglide compiled output
+src/paraglide/
+
 # dependencies
 node_modules/
 
