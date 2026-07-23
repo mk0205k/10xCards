@@ -197,6 +197,7 @@
 
   "error_unknown": "Something went wrong. Please try again.",
   "error_supabase_not_configured": "Supabase is not configured.",
+  "error_invalid_credentials": "Invalid email or password.",
   "error_password_too_weak": "Password is too weak — use at least 6 characters.",
   "error_password_same_as_old": "New password must be different from the previous one.",
   "error_reset_session_expired": "Reset session expired — request a new link.",

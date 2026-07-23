@@ -21,6 +21,9 @@ export const POST: APIRoute = async (context) => {
       status: error.status,
       message: error.message,
     });
+    if (error.code === "invalid_credentials") {
+      return context.redirect(`/auth/signin?error=${ERROR_CODES.INVALID_CREDENTIALS}`);
+    }
     return context.redirect(`/auth/signin?error=${ERROR_CODES.UNKNOWN}`);
   }
 

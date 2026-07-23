@@ -3,6 +3,7 @@ import { m } from "@/paraglide/messages.js";
 export const ERROR_CODES = {
   UNKNOWN: "UNKNOWN",
   SUPABASE_NOT_CONFIGURED: "SUPABASE_NOT_CONFIGURED",
+  INVALID_CREDENTIALS: "INVALID_CREDENTIALS",
   PASSWORD_TOO_WEAK: "PASSWORD_TOO_WEAK",
   PASSWORD_SAME_AS_OLD: "PASSWORD_SAME_AS_OLD",
   RESET_SESSION_EXPIRED: "RESET_SESSION_EXPIRED",
@@ -18,6 +19,7 @@ export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 const RESOLVERS: Record<ErrorCode, () => string> = {
   UNKNOWN: m.error_unknown,
   SUPABASE_NOT_CONFIGURED: m.error_supabase_not_configured,
+  INVALID_CREDENTIALS: m.error_invalid_credentials,
   PASSWORD_TOO_WEAK: m.error_password_too_weak,
   PASSWORD_SAME_AS_OLD: m.error_password_same_as_old,
   RESET_SESSION_EXPIRED: m.error_reset_session_expired,
