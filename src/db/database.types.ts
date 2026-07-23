@@ -94,6 +94,27 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          scheduled_hard_delete_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          scheduled_hard_delete_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          scheduled_hard_delete_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       review_history: {
         Row: {
           card_id: string
@@ -192,6 +213,11 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      email_pending_deletion: { Args: { p_email: string }; Returns: boolean }
+      enqueue_hard_delete: { Args: { p_user_id: string }; Returns: undefined }
+      execute_hard_delete: { Args: never; Returns: number }
+      restore_account: { Args: never; Returns: undefined }
+      retention_watchdog: { Args: never; Returns: undefined }
     }
     Enums: {
       card_source: "ai" | "manual"

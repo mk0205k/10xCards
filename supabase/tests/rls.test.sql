@@ -10,7 +10,7 @@
 
 begin;
 
-select plan(20);
+select plan(38);
 
 -- Setup: two auth.users, one card + one review_history row each. All
 -- privileged inserts happen before role restriction.
@@ -191,6 +191,170 @@ select is(
   (select count(*)::int from public.review_history where user_id = '22222222-2222-2222-2222-222222222222'),
   1,
   'review_history: user B row still present (DELETE was grant-denied)'
+);
+
+
+-- =========================================================================
+-- S-05: soft-delete gate + retention functions + auto-insert trigger.
+-- Runs as admin/authenticated with role switches; ends by resetting to
+-- admin so the subsequent anon section can `set local role anon`.
+-- =========================================================================
+
+-- Trigger auto-inserted profiles for users A + B from the setup above.
+select is(
+  (select count(*)::int from public.profiles),
+  2,
+  'profiles: on_auth_user_created trigger auto-inserted rows for users A + B'
+);
+
+-- Fresh auth.users insert fires the trigger for user C.
+insert into auth.users (id, email, aud, role)
+values ('33333333-3333-3333-3333-333333333333', 'user-c@test.local', 'authenticated', 'authenticated');
+
+select is(
+  (select count(*)::int from public.profiles),
+  3,
+  'profiles: trigger auto-inserts profile for user C on auth.users INSERT'
+);
+
+insert into public.cards (id, user_id, question, answer)
+values ('cccccccc-cccc-cccc-cccc-cccccccccccc', '33333333-3333-3333-3333-333333333333', 'Q-C', 'A-C');
+
+-- Switch to user A (authenticated). Soft-delete self.
+set local role authenticated;
+set local request.jwt.claims to '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+
+select lives_ok(
+  $$select public.enqueue_hard_delete('11111111-1111-1111-1111-111111111111')$$,
+  'enqueue_hard_delete: user A soft-deletes own account'
+);
+
+select is(
+  (select count(*)::int from public.cards),
+  0,
+  'soft-delete gate: user A sees 0 cards after enqueue (EXISTS gate filters out own rows)'
+);
+
+select throws_ok(
+  $$insert into public.cards (user_id, question, answer)
+    values ('11111111-1111-1111-1111-111111111111', 'x', 'y')$$,
+  '42501',
+  null,
+  'soft-delete gate: user A INSERT card blocked by EXISTS gate'
+);
+
+-- Cross-user enqueue authorization: A cannot delete B.
+select throws_ok(
+  $$select public.enqueue_hard_delete('22222222-2222-2222-2222-222222222222')$$,
+  '42501',
+  null,
+  'enqueue_hard_delete: user A cannot soft-delete user B (raises 42501)'
+);
+
+-- User B (alive) unaffected by A's soft-delete.
+set local request.jwt.claims to '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+
+select is(
+  (select count(*)::int from public.cards),
+  1,
+  'soft-delete gate: user B (alive) still sees own cards after A soft-delete'
+);
+
+-- User A restores.
+set local request.jwt.claims to '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+
+select lives_ok(
+  $$select public.restore_account()$$,
+  'restore_account: user A un-marks own soft-delete'
+);
+
+select is(
+  (select count(*)::int from public.cards),
+  1,
+  'restore_account: user A regains SELECT visibility on own cards'
+);
+
+-- execute_hard_delete: backdate A + C past cutoff, B future cutoff.
+reset request.jwt.claims;
+reset role;
+
+update public.profiles
+   set deleted_at = now() - interval '31 days',
+       scheduled_hard_delete_at = now() - interval '1 day'
+ where user_id in ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333');
+
+update public.profiles
+   set deleted_at = now() - interval '15 days',
+       scheduled_hard_delete_at = now() + interval '15 days'
+ where user_id = '22222222-2222-2222-2222-222222222222';
+
+select is(
+  public.execute_hard_delete(),
+  2,
+  'execute_hard_delete: returns 2 (users A + C past cutoff)'
+);
+
+select is(
+  (select count(*)::int from auth.users where id in ('11111111-1111-1111-1111-111111111111','33333333-3333-3333-3333-333333333333')),
+  0,
+  'execute_hard_delete: users A + C removed from auth.users'
+);
+
+select is(
+  (select count(*)::int from public.cards where user_id in ('11111111-1111-1111-1111-111111111111','33333333-3333-3333-3333-333333333333')),
+  0,
+  'execute_hard_delete: FK CASCADE removed cards for A + C'
+);
+
+select is(
+  (select count(*)::int from auth.users where id = '22222222-2222-2222-2222-222222222222'),
+  1,
+  'execute_hard_delete: user B (future cutoff) survives'
+);
+
+select is(
+  public.execute_hard_delete(),
+  0,
+  'execute_hard_delete: idempotent — second call returns 0'
+);
+
+-- email_pending_deletion — user B still soft-deleted in window; callable as anon.
+set local role anon;
+
+select is(
+  public.email_pending_deletion('user-b@test.local'),
+  true,
+  'email_pending_deletion: true for soft-deleted email in retention window'
+);
+
+select is(
+  public.email_pending_deletion('nonexistent@test.local'),
+  false,
+  'email_pending_deletion: false for unknown email'
+);
+
+reset role;
+
+-- retention_watchdog fail-loud when orphans past cutoff by >1 day.
+update public.profiles
+   set scheduled_hard_delete_at = now() - interval '2 days'
+ where user_id = '22222222-2222-2222-2222-222222222222';
+
+select throws_ok(
+  $$select public.retention_watchdog()$$,
+  'P0001',
+  null,
+  'retention_watchdog: raises P0001 when profiles >1d past cutoff'
+);
+
+-- Clean run — 0 orphans.
+update public.profiles
+   set deleted_at = null, scheduled_hard_delete_at = null
+ where user_id = '22222222-2222-2222-2222-222222222222';
+
+select lives_ok(
+  $$select public.retention_watchdog()$$,
+  'retention_watchdog: clean run when 0 orphans past cutoff'
 );
 
 
