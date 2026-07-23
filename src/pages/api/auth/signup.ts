@@ -5,8 +5,17 @@ export const prerender = false;
 
 export const POST: APIRoute = async (context) => {
   const form = await context.request.formData();
-  const email = form.get("email") as string;
+  const rawEmail = form.get("email");
+  // Normalize at the endpoint boundary so email_pending_deletion (which
+  // does lower() but not trim()) and supabase.auth.signUp (which trims +
+  // lowercases server-side) see the same value. Skip this and a padded
+  // variant like "  foo@x.local  " escapes the retention guard.
+  const email = typeof rawEmail === "string" ? rawEmail.trim().toLowerCase() : "";
   const password = form.get("password") as string;
+
+  if (!email) {
+    return context.redirect(`/auth/signup?error=${encodeURIComponent("Email is required")}`);
+  }
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {
