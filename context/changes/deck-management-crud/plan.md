@@ -421,16 +421,16 @@ None. Schema already accommodates all decisions in this plan (F-01 shipped the F
 
 #### Automated
 
-- [x] 4.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [x] 4.2 Lint passes: `npm run lint`
-- [x] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type-check passes: `npx astro sync && npx tsc --noEmit` — 8cba0b0
+- [x] 4.2 Lint passes: `npm run lint` — 8cba0b0
+- [x] 4.3 Build passes: `npm run build` — 8cba0b0
 
 #### Manual
 
-- [x] 4.4 Delete confirm dialog mentions review-history loss
-- [x] 4.5 Confirmed delete removes card; review_history cascade verified via SQL
-- [x] 4.6 Cancel delete leaves state unchanged
-- [x] 4.7 Search filters visible rows on question OR answer (case-insensitive)
-- [x] 4.8 Empty search restores full list
-- [x] 4.9 Search matching nothing shows "Brak wyników" state
-- [x] 4.10 User A cannot delete user B's card (endpoint 404 → inline error)
+- [x] 4.4 Delete confirm dialog mentions review-history loss — 8cba0b0
+- [x] 4.5 Confirmed delete removes card; review_history cascade verified via SQL — 8cba0b0
+- [x] 4.6 Cancel delete leaves state unchanged — 8cba0b0
+- [x] 4.7 Search filters visible rows on question OR answer (case-insensitive) — 8cba0b0
+- [x] 4.8 Empty search restores full list — 8cba0b0
+- [x] 4.9 Search matching nothing shows "Brak wyników" state — 8cba0b0
+- [x] 4.10 User A cannot delete user B's card (endpoint 404 → inline error) — 8cba0b0
