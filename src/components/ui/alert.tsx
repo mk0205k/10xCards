@@ -26,7 +26,7 @@ const VARIANT_ICON: Record<AlertVariant, ReactNode> = {
 };
 
 export function Alert({ variant = "error", title, children, action, className, role }: AlertProps) {
-  const resolvedRole = role ?? (variant === "info" ? "status" : "alert");
+  const resolvedRole = role ?? (variant === "error" ? "alert" : "status");
   return (
     <div
       role={resolvedRole}

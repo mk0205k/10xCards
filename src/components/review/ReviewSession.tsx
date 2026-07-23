@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -70,12 +70,19 @@ const RATING_ORDER = [
 
 export default function ReviewSession() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // Generation counter — every reset (or a fresh call site) bumps it; in-flight
+  // requests capture the generation at start and only dispatch when it still
+  // matches, so a slow response landing after reset can't overwrite fresh state.
+  const generationRef = useRef(0);
 
   const loadNext = useCallback(async () => {
+    const gen = generationRef.current;
     try {
       const data = await fetchNext();
+      if (gen !== generationRef.current) return;
       dispatch({ type: "loaded", data });
     } catch (error) {
+      if (gen !== generationRef.current) return;
       const message = error instanceof ReviewApiError ? error.message : m.review_error_next();
       dispatch({ type: "error", message });
     }
@@ -90,6 +97,7 @@ export default function ReviewSession() {
   }, []);
 
   const onReset = useCallback(() => {
+    generationRef.current += 1;
     dispatch({ type: "reset" });
     void loadNext();
   }, [loadNext]);
@@ -98,11 +106,14 @@ export default function ReviewSession() {
     async (rating: Rating) => {
       const card = state.data?.card ?? null;
       if (!card) return;
+      const gen = generationRef.current;
       dispatch({ type: "submitting" });
       try {
         await rateCard(card.id, rating);
+        if (gen !== generationRef.current) return;
         await loadNext();
       } catch (error) {
+        if (gen !== generationRef.current) return;
         const message = error instanceof ReviewApiError ? error.message : m.review_error_save();
         dispatch({ type: "error", message });
       }

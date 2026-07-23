@@ -16,10 +16,15 @@ const SIZE_CLASSES: Record<SpinnerSize, string> = {
 };
 
 export function Spinner({ size = "md", className, label }: SpinnerProps) {
+  const hasLabel = Boolean(label);
   return (
-    <span className={cn("inline-flex items-center gap-2", className)} role="status">
-      <Loader2 aria-hidden="true" className={cn("animate-spin text-white/70", SIZE_CLASSES[size])} />
-      {label ? <span className="sr-only">{label}</span> : null}
+    <span
+      className={cn("inline-flex items-center gap-2", className)}
+      role={hasLabel ? "status" : undefined}
+      aria-hidden={hasLabel ? undefined : true}
+    >
+      <Loader2 aria-hidden="true" className={cn("animate-spin text-current", SIZE_CLASSES[size])} />
+      {hasLabel ? <span className="sr-only">{label}</span> : null}
     </span>
   );
 }

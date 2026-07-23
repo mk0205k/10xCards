@@ -90,9 +90,7 @@ export default function GeneratePanel() {
     for (let i = 0; i < pending.length; i += BULK_ACCEPT_CONCURRENCY) {
       const chunk = pending.slice(i, i + BULK_ACCEPT_CONCURRENCY);
       await Promise.allSettled(chunk.map((p) => persist(p.id, p.question, p.answer)));
-      setBulkAcceptInProgress((prev) =>
-        prev ? { ...prev, done: Math.min(prev.done + chunk.length, prev.total) } : null,
-      );
+      setBulkAcceptInProgress((prev) => (prev ? { ...prev, done: prev.done + chunk.length } : null));
     }
     setBulkAcceptInProgress(null);
   }, [state.proposals, persist]);
@@ -131,13 +129,14 @@ export default function GeneratePanel() {
               {m.generate_bulk_reject_all_button()}
             </Button>
           </div>
-          <div aria-live="polite" role="status" className="w-full text-right text-xs text-white/60">
-            {bulkAcceptInProgress
-              ? m.generate_bulk_progress({ done: bulkAcceptInProgress.done, total: bulkAcceptInProgress.total })
-              : ""}
-          </div>
         </div>
       )}
+      {/* Persistent live region — hoisted out of showBulkBar so screen readers observe it before the first progress update. */}
+      <div aria-live="polite" role="status" className="sr-only">
+        {bulkAcceptInProgress
+          ? m.generate_bulk_progress({ done: bulkAcceptInProgress.done, total: bulkAcceptInProgress.total })
+          : ""}
+      </div>
       <ProposalsList
         proposals={state.proposals}
         streamState={state.streamState}

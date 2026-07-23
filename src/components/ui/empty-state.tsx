@@ -18,7 +18,7 @@ export function EmptyState({ title, description, icon, action, className }: Empt
       )}
     >
       {icon ? <div className="text-white/60">{icon}</div> : null}
-      <p className="text-lg font-medium text-white">{title}</p>
+      <h2 className="text-lg font-medium text-white">{title}</h2>
       {description ? <p className="text-sm text-white/60">{description}</p> : null}
       {action ? <div className="mt-2">{action}</div> : null}
     </div>
