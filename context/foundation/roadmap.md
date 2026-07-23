@@ -40,6 +40,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | done     |
 | S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | done     |
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | planned  |
+| S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
 
 ## Streams
 
@@ -155,6 +156,21 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Risk:** UX friction przekłada się bezpośrednio na retention — bez bulk actions user manualnie klika przez każdą propozycję po każdym paste, bez reset session pomyłka w ratingach wymusza zakończenie sesji, bez loading states aplikacja wygląda jakby zawiesiła się w trakcie generacji. Nie blokuje walidacji hipotezy (north star S-02 już zamknięty), ale gate'uje "polish" launchu.
 - **Status:** planned
 
+### S-07: Internacjonalizacja UI (PL/EN, domyślnie PL)
+
+- **Outcome:** user widzi interfejs domyślnie po polsku, może przełączyć język na angielski (i z powrotem) w widocznym miejscu w UI, wybór jest trwały między sesjami; wszystkie widoczne teksty w aplikacji (nawigacja, formularze, komunikaty błędów, empty states, dialogi, strony auth, review, deck, delete/restore) są przetłumaczone na oba języki.
+- **Change ID:** i18n-pl-en-toggle
+- **PRD refs:** — (brak twardego FR w PRD v1; angielski jako drugi język to rozszerzenie zasięgu poza polskojęzycznych użytkowników)
+- **Prerequisites:** F-01 (brak nowych tabel obowiązkowo; preferencja języka może żyć w cookie/localStorage albo w user settings — decyzja w `/10x-plan`)
+- **Parallel with:** S-06 (oba są niezależnymi ulepszeniami po zamknięciu ścieżki must-have; nie dzielą kodu poza wspólnymi komponentami UI)
+- **Blockers:** —
+- **Unknowns:**
+  - Gdzie żyje preferencja języka — cookie/localStorage (zero-migration) vs kolumna w user settings w Supabase (persystencja między urządzeniami, ale kolejna migracja + RLS). Owner: user. Block: no — można wystartować od cookie i migrować później.
+  - Zakres tłumaczeń dla treści generowanych przez AI — czy prompt do OpenRouter dostaje info o języku UI i zwraca fiszki w tym języku, czy fiszki zawsze są w języku wklejonego tekstu (UI to tylko chrome). Owner: user. Block: no — sensowny default: fiszki w języku źródła, UI niezależnie.
+  - Biblioteka i18n vs własne wrappery (Astro i18n routing vs react-i18next vs Paraglide vs własny słownik JSON). Owner: user. Block: no — decyzja implementacyjna w `/10x-plan`.
+- **Risk:** i18n dotyka każdego widoku i wielu komponentów naraz — bez dyscypliny string leakage (kawałki UI po polsku w wersji EN i odwrotnie) będzie ciągłym śladem widocznym dla użytkowników. Ryzyko mitiguje: audyt hardcoded stringów przed startem (grep na literały PL w `.astro`/`.tsx`), lint rule na literały w JSX/Astro, review każdego widoku w obu językach przed zamknięciem. Nie blokuje walidacji hipotezy — north star S-02 już zamknięty — ale bez tego produkt jest de facto polski-only.
+- **Status:** done
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                      | Issue | Sugerowany tytuł issue                                                | Ready for `/10x-plan` | Uwagi                                                        |
@@ -166,6 +182,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 | S-04       | password-reset-flow            | [#5](https://github.com/mk0205k/10xCards/issues/5) | [S-04] Reset hasła emailem                                            | no                    | Po zakończeniu F-01                                          |
 | S-05       | account-deletion-30d-retention | —     | [S-05] Usunięcie konta z 30-dniową retencją                           | no                    | Parallel z S-06; wymaga issue w trackerze; 2 Open Questions do rozstrzygnięcia |
 | S-06       | ux-improvements                | —     | [S-06] UX improvements (bulk actions, reset session, loading states)  | no                    | Parallel z S-05; wymaga issue w trackerze                    |
+| S-07       | i18n-pl-en-toggle              | —     | [S-07] Internacjonalizacja UI (PL/EN, domyślnie PL)                    | no                    | Parallel z S-06; wymaga issue w trackerze; 3 Open Questions do rozstrzygnięcia w /10x-plan |
 
 ## Open Roadmap Questions
 
@@ -194,3 +211,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **S-03: user ręcznie tworzy fiszkę (wpisując pytanie i odpowiedź), przegląda wszystkie swoje fiszki w jednej liście, edytuje istniejącą fiszkę, usuwa fiszkę.** — Archived 2026-07-23 → `context/archive/2026-07-14-deck-management-crud/`. Lesson: —.
 - **S-04: user, który zapomniał hasła, uruchamia flow "przypomnij hasło", dostaje email z linkiem, ustawia nowe hasło, loguje się nowym hasłem.** — Archived 2026-07-23 → `context/archive/2026-07-14-password-reset-flow/`. Lesson: —.
 - **S-05: user uruchamia flow "usuń konto", świadomie potwierdza, konto natychmiast staje się niedostępne (brak możliwości logowania, dane niewidoczne w aplikacji), dane (auth user, `cards`, `review_history`) są zachowane w stanie soft-deleted przez 30 dni z możliwością przywrócenia przez wsparcie/self-service, po 30 dniach są nieodwracalnie usuwane (hard delete).** — Archived 2026-07-23 → `context/archive/2026-07-23-account-deletion-30d-retention/`. Lesson: —.
+- **S-07: user widzi interfejs domyślnie po polsku, może przełączyć język na angielski (i z powrotem) w widocznym miejscu w UI, wybór jest trwały między sesjami; wszystkie widoczne teksty w aplikacji (nawigacja, formularze, komunikaty błędów, empty states, dialogi, strony auth, review, deck, delete/restore) są przetłumaczone na oba języki.** — Archived 2026-07-23 → `context/archive/2026-07-23-i18n-pl-en-toggle/`. Lesson: —.
