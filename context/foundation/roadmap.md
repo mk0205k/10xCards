@@ -37,7 +37,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-01  | first-ai-generation-and-accept | wygenerować pierwsze fiszki AI z wklejonego tekstu i zaakceptować/edytować/odrzucić każdą propozycję | F-01          | US-01, FR-005, FR-006, FR-007          | done     |
 | S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | done     |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | done     |
-| S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | proposed |
+| S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | done     |
 | S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | planned  |
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | planned  |
 
@@ -127,7 +127,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Bez reset password persona (dorosły wracający po tygodniu/miesiącu, PRD §User & Persona) traci dostęp do talii przy pierwszym zapomnianym haśle — cichy koszt retention. Ryzyko mitiguje: standardowy Supabase Auth reset flow, brak własnego kodu kryptografii; niewielki slice, ale must-have z PRD.
-- **Status:** proposed
+- **Status:** done
 
 ### S-05: Usunięcie konta z 30-dniową retencją
 
@@ -192,3 +192,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **S-01: user wkleja fragment tekstu, klika "generuj propozycje", w ciągu <30s widzi listę par pytanie–odpowiedź, akceptuje / edytuje / odrzuca każdą osobno, zaakceptowane trafiają do jego talii.** — Archived 2026-07-08 → `context/archive/2026-07-07-first-ai-generation-and-accept/`. Lesson: —.
 - **S-02: user startuje sesję powtórki, aplikacja pokazuje pytanie, czeka na odpowiedź w głowie, odsłania odpowiedź, user ocenia trudność w skali wymaganej przez algorytm (FSRS via ts-fsrs, 4-button Again/Hard/Good/Easy), algorytm zapisuje nową datę następnej powtórki dla tej fiszki.** — Archived 2026-07-14 → `context/archive/2026-07-09-first-review-session/`. Lesson: —.
 - **S-03: user ręcznie tworzy fiszkę (wpisując pytanie i odpowiedź), przegląda wszystkie swoje fiszki w jednej liście, edytuje istniejącą fiszkę, usuwa fiszkę.** — Archived 2026-07-23 → `context/archive/2026-07-14-deck-management-crud/`. Lesson: —.
+- **S-04: user, który zapomniał hasła, uruchamia flow "przypomnij hasło", dostaje email z linkiem, ustawia nowe hasło, loguje się nowym hasłem.** — Archived 2026-07-23 → `context/archive/2026-07-14-password-reset-flow/`. Lesson: —.
