@@ -389,33 +389,33 @@ None. Schema already accommodates all decisions in this plan (F-01 shipped the F
 
 #### Automated
 
-- [x] 2.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type-check passes: `npx astro sync && npx tsc --noEmit` — 457fb25
+- [x] 2.2 Lint passes: `npm run lint` — 457fb25
+- [x] 2.3 Build passes: `npm run build` — 457fb25
 
 #### Manual
 
-- [x] 2.4 /deck signed-out → redirect to /auth/signin
-- [x] 2.5 /deck signed-in → list renders with source badges
-- [x] 2.6 Empty account → empty state renders
-- [x] 2.7 User A cannot see user B's cards (RLS holds)
+- [x] 2.4 /deck signed-out → redirect to /auth/signin — 457fb25
+- [x] 2.5 /deck signed-in → list renders with source badges — 457fb25
+- [x] 2.6 Empty account → empty state renders — 457fb25
+- [x] 2.7 User A cannot see user B's cards (RLS holds) — 457fb25
 
 ### Phase 3: Create + Edit modal
 
 #### Automated
 
-- [ ] 3.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 Build passes: `npm run build`
-- [ ] 3.4 shadcn Dialog/Input files match canonical shadcn output
+- [x] 3.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 Build passes: `npm run build`
+- [x] 3.4 shadcn Dialog/Input files match canonical shadcn output
 
 #### Manual
 
-- [ ] 3.5 "Dodaj fiszkę" → modal → save creates manual card at top of list
-- [ ] 3.6 Save with empty field → inline error, no API call
-- [ ] 3.7 Click row → modal pre-filled; edit persists; FSRS state unchanged (SQL diff)
-- [ ] 3.8 Editing AI card keeps source='ai' badge
-- [ ] 3.9 Esc/Cancel closes without saving; controls disabled while submitting
+- [x] 3.5 "Dodaj fiszkę" → modal → save creates manual card at top of list
+- [x] 3.6 Save with empty field → inline error, no API call
+- [x] 3.7 Click row → modal pre-filled; edit persists; FSRS state unchanged (SQL diff)
+- [x] 3.8 Editing AI card keeps source='ai' badge
+- [x] 3.9 Esc/Cancel closes without saving; controls disabled while submitting
 
 ### Phase 4: Delete confirmation + search
 

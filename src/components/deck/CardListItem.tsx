@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 
 interface CardListItemProps {
   card: CardRow;
+  onEditClick: () => void;
+  onDeleteClick?: () => void;
 }
 
 const SOURCE_LABELS: Record<string, { label: string; className: string }> = {
@@ -17,22 +19,52 @@ const SOURCE_LABELS: Record<string, { label: string; className: string }> = {
   },
 };
 
-export default function CardListItem({ card }: CardListItemProps) {
+export default function CardListItem({ card, onEditClick, onDeleteClick }: CardListItemProps) {
   const badge = SOURCE_LABELS[card.source] ?? SOURCE_LABELS.manual;
   return (
-    <Card>
-      <div className="flex items-start justify-between gap-3">
-        <p className="flex-1 text-base leading-snug font-medium text-white">{card.question}</p>
-        <span
-          className={cn(
-            "shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium tracking-wide uppercase",
-            badge.className,
-          )}
-        >
-          {badge.label}
-        </span>
-      </div>
-      <CardContent className="text-sm leading-relaxed text-blue-100/70">{card.answer}</CardContent>
-    </Card>
+    <button
+      type="button"
+      onClick={onEditClick}
+      className="block w-full rounded-xl text-left focus-visible:ring-2 focus-visible:ring-blue-400/60 focus-visible:outline-none"
+      aria-label={`Edytuj fiszkę: ${card.question}`}
+    >
+      <Card className="cursor-pointer transition-colors hover:bg-white/10">
+        <div className="flex items-start justify-between gap-3">
+          <p className="flex-1 text-base leading-snug font-medium text-white">{card.question}</p>
+          <span
+            className={cn(
+              "shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium tracking-wide uppercase",
+              badge.className,
+            )}
+          >
+            {badge.label}
+          </span>
+        </div>
+        <CardContent className="text-sm leading-relaxed text-blue-100/70">{card.answer}</CardContent>
+        {onDeleteClick && (
+          <div className="flex justify-end">
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteClick();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDeleteClick();
+                }
+              }}
+              className="rounded-md border border-red-400/40 bg-red-500/10 px-2 py-1 text-xs text-red-100 hover:bg-red-500/20"
+              aria-label={`Usuń fiszkę: ${card.question}`}
+            >
+              Usuń
+            </span>
+          </div>
+        )}
+      </Card>
+    </button>
   );
 }

@@ -1,30 +1,57 @@
 import { useEffect, useReducer } from "react";
 import { listCards, CardApiError, type CardRow } from "@/lib/api/cards";
 import CardListItem from "@/components/deck/CardListItem";
+import CardFormDialog, { type CardFormMode } from "@/components/deck/CardFormDialog";
+import { Button } from "@/components/ui/button";
 
 type Phase = "loading" | "ready" | "error";
+
+interface DialogState {
+  mode: CardFormMode | null;
+  card?: CardRow;
+}
 
 interface State {
   phase: Phase;
   cards: CardRow[];
   error: string | null;
+  dialog: DialogState;
 }
 
 type Action =
   | { type: "loadStart" }
   | { type: "loadSuccess"; cards: CardRow[] }
-  | { type: "loadError"; message: string };
+  | { type: "loadError"; message: string }
+  | { type: "openCreate" }
+  | { type: "openEdit"; card: CardRow }
+  | { type: "closeDialog" }
+  | { type: "savedCreate"; card: CardRow }
+  | { type: "savedEdit"; card: CardRow };
 
-const initialState: State = { phase: "loading", cards: [], error: null };
+const initialState: State = { phase: "loading", cards: [], error: null, dialog: { mode: null } };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "loadStart":
-      return { phase: "loading", cards: [], error: null };
+      return { ...state, phase: "loading", cards: [], error: null };
     case "loadSuccess":
-      return { phase: "ready", cards: action.cards, error: null };
+      return { ...state, phase: "ready", cards: action.cards, error: null };
     case "loadError":
-      return { phase: "error", cards: [], error: action.message };
+      return { ...state, phase: "error", cards: [], error: action.message };
+    case "openCreate":
+      return { ...state, dialog: { mode: "create" } };
+    case "openEdit":
+      return { ...state, dialog: { mode: "edit", card: action.card } };
+    case "closeDialog":
+      return { ...state, dialog: { mode: null } };
+    case "savedCreate":
+      return { ...state, cards: [action.card, ...state.cards], dialog: { mode: null } };
+    case "savedEdit":
+      return {
+        ...state,
+        cards: state.cards.map((c) => (c.id === action.card.id ? action.card : c)),
+        dialog: { mode: null },
+      };
     default:
       return state;
   }
@@ -50,6 +77,26 @@ export default function DeckPanel() {
     };
   }, []);
 
+  const handleSaved = (card: CardRow) => {
+    if (state.dialog.mode === "create") {
+      dispatch({ type: "savedCreate", card });
+    } else if (state.dialog.mode === "edit") {
+      dispatch({ type: "savedEdit", card });
+    }
+  };
+
+  const dialog = (
+    <CardFormDialog
+      mode={state.dialog.mode ?? "create"}
+      card={state.dialog.card}
+      open={state.dialog.mode !== null}
+      onOpenChange={(open) => {
+        if (!open) dispatch({ type: "closeDialog" });
+      }}
+      onSaved={handleSaved}
+    />
+  );
+
   if (state.phase === "loading") {
     return <p className="text-sm text-blue-100/60">Ładowanie…</p>;
   }
@@ -62,17 +109,35 @@ export default function DeckPanel() {
     );
   }
 
-  if (state.cards.length === 0) {
-    return (
-      <p className="text-sm text-blue-100/70">Twoja talia jest pusta. Wygeneruj fiszki przez AI albo dodaj ręcznie.</p>
-    );
-  }
-
   return (
-    <div className="space-y-3">
-      {state.cards.map((card) => (
-        <CardListItem key={card.id} card={card} />
-      ))}
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => {
+            dispatch({ type: "openCreate" });
+          }}
+        >
+          Dodaj fiszkę
+        </Button>
+      </div>
+      {state.cards.length === 0 ? (
+        <p className="text-sm text-blue-100/70">
+          Twoja talia jest pusta. Wygeneruj fiszki przez AI albo dodaj ręcznie.
+        </p>
+      ) : (
+        <div className="space-y-3">
+          {state.cards.map((card) => (
+            <CardListItem
+              key={card.id}
+              card={card}
+              onEditClick={() => {
+                dispatch({ type: "openEdit", card });
+              }}
+            />
+          ))}
+        </div>
+      )}
+      {dialog}
     </div>
   );
 }
