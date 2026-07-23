@@ -433,35 +433,35 @@ Rollback: revert PR-a. Cookie `PARAGLIDE_LOCALE` w przeglądarkach użytkownikó
 
 #### Automated
 
-- [x] 3.1 Build przechodzi: `npm run build`
-- [x] 3.2 Type check przechodzi
-- [x] 3.3 Lint przechodzi
-- [x] 3.4 Grep dla PL diakrytyków w `src/components/{generate,review,deck}/` i `src/pages/{index,dashboard,generate,review,deck}.astro` zwraca 0 (poza komentarzami)
+- [x] 3.1 Build przechodzi: `npm run build` — 30011a3
+- [x] 3.2 Type check przechodzi — 30011a3
+- [x] 3.3 Lint przechodzi — 30011a3
+- [x] 3.4 Grep dla PL diakrytyków w `src/components/{generate,review,deck}/` i `src/pages/{index,dashboard,generate,review,deck}.astro` zwraca 0 (poza komentarzami) — 30011a3
 
 #### Manual
 
-- [x] 3.5 Landing (`/`) w obu językach — hero + CTA właściwe
-- [x] 3.6 Dashboard w obu językach
-- [x] 3.7 Generate flow: wklejenie, generacja, kandydaci, edycja — wszystko w obu językach
-- [x] 3.8 Review session: start, 4 przyciski, zakończenie — obie wersje
-- [x] 3.9 Deck: lista, wyszukiwarka, dodanie, edycja, usunięcie z potwierdzeniem — obie wersje
-- [x] 3.10 Empty states widoczne w obu językach
+- [x] 3.5 Landing (`/`) w obu językach — hero + CTA właściwe — 30011a3
+- [x] 3.6 Dashboard w obu językach — 30011a3
+- [x] 3.7 Generate flow: wklejenie, generacja, kandydaci, edycja — wszystko w obu językach — 30011a3
+- [x] 3.8 Review session: start, 4 przyciski, zakończenie — obie wersje — 30011a3
+- [x] 3.9 Deck: lista, wyszukiwarka, dodanie, edycja, usunięcie z potwierdzeniem — obie wersje — 30011a3
+- [x] 3.10 Empty states widoczne w obu językach — 30011a3
 
 ### Phase 4: API error codes + client mapping + regression pass
 
 #### Automated
 
-- [ ] 4.1 Build przechodzi: `npm run build`
-- [ ] 4.2 Type check + lint przechodzą
-- [ ] 4.3 Grep dla PL diakrytyków poza `messages/pl.json`: `rg "[łćśąężźń]" src/ --glob "!messages/pl.json"` zwraca 0
-- [ ] 4.4 Endpointy API zwracają kody (curl weryfikacja na `/api/auth/reset-confirm`)
-- [ ] 4.5 `errorCodeToMessage("UNKNOWN_CODE_XYZ")` zwraca `m.error_unknown()` output
+- [x] 4.1 Build przechodzi: `npm run build`
+- [x] 4.2 Type check + lint przechodzą
+- [x] 4.3 Grep dla PL diakrytyków poza `messages/pl.json`: `rg "[łćśąężźń]" src/ --glob "!messages/pl.json"` zwraca 0
+- [x] 4.4 Endpointy API zwracają kody (curl weryfikacja na `/api/auth/reset-confirm`)
+- [x] 4.5 `errorCodeToMessage("UNKNOWN_CODE_XYZ")` zwraca `m.error_unknown()` output
 
 #### Manual
 
-- [ ] 4.6 Reset password flow end-to-end w obu językach: request → email → confirm → login
-- [ ] 4.7 Delete + restore flow w obu językach; daty w formacie właściwym dla locale
-- [ ] 4.8 Generate + review + deck — pełny obchód w EN, potem w PL; zero cross-language leakage
-- [ ] 4.9 Przełącznik na dowolnej stronie działa bez błędów; wybór persystuje między sesjami
-- [ ] 4.10 `<html lang>` w każdej podstronie zgadza się z aktywnym locale
-- [ ] 4.11 `AGENTS.md` sekcja i18n czytelna, reguły łatwe do zastosowania
+- [x] 4.6 Reset password flow end-to-end w obu językach: request → email → confirm → login
+- [x] 4.7 Delete + restore flow w obu językach; daty w formacie właściwym dla locale
+- [x] 4.8 Generate + review + deck — pełny obchód w EN, potem w PL; zero cross-language leakage
+- [x] 4.9 Przełącznik na dowolnej stronie działa bez błędów; wybór persystuje między sesjami
+- [x] 4.10 `<html lang>` w każdej podstronie zgadza się z aktywnym locale
+- [x] 4.11 `AGENTS.md` sekcja i18n czytelna, reguły łatwe do zastosowania

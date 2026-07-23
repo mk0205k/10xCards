@@ -178,5 +178,15 @@
   "config_banner_warning_prefix": "Uwaga:",
   "config_banner_docs_default": "Dokumentacja",
   "config_supabase_missing": "Supabase nie jest skonfigurowany — funkcje uwierzytelniania są wyłączone.",
-  "config_supabase_docs_label": "Zobacz instrukcję konfiguracji"
+  "config_supabase_docs_label": "Zobacz instrukcję konfiguracji",
+
+  "error_unknown": "Coś poszło nie tak. Spróbuj ponownie.",
+  "error_supabase_not_configured": "Supabase nie jest skonfigurowany.",
+  "error_password_too_weak": "Hasło jest zbyt słabe — użyj co najmniej 6 znaków.",
+  "error_password_same_as_old": "Nowe hasło musi się różnić od poprzedniego.",
+  "error_reset_session_expired": "Sesja resetu wygasła — zażądaj nowego linku.",
+  "error_reset_too_many_attempts": "Za dużo prób — spróbuj ponownie za godzinę.",
+  "error_account_delete_failed": "Nie udało się usunąć konta. Spróbuj ponownie.",
+  "error_account_restore_failed": "Nie udało się przywrócić konta. Spróbuj ponownie.",
+  "error_email_required": "Email jest wymagany."
 }

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { PUBLIC_SITE_URL } from "astro:env/server";
 import { createClient } from "@/lib/supabase";
+import { ERROR_CODES } from "@/lib/error-messages";
 
 export const prerender = false;
 
@@ -10,7 +11,7 @@ export const POST: APIRoute = async (context) => {
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {
-    return context.redirect(`/auth/reset-password?error=${encodeURIComponent("Supabase is not configured")}`);
+    return context.redirect(`/auth/reset-password?error=${ERROR_CODES.SUPABASE_NOT_CONFIGURED}`);
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -19,9 +20,7 @@ export const POST: APIRoute = async (context) => {
 
   if (error) {
     if (error.status === 429) {
-      return context.redirect(
-        `/auth/reset-password?error=${encodeURIComponent("Za dużo prób — spróbuj ponownie za godzinę.")}`,
-      );
+      return context.redirect(`/auth/reset-password?error=${ERROR_CODES.RESET_TOO_MANY_ATTEMPTS}`);
     }
     return context.redirect(`/auth/reset-password?error=${encodeURIComponent(error.message)}`);
   }

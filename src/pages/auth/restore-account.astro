@@ -2,6 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import { createClient } from "@/lib/supabase";
 import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
+import { errorCodeToMessage } from "@/lib/error-messages";
 
 const user = Astro.locals.user;
 
@@ -30,14 +32,14 @@ const atIndex = email.indexOf("@");
 const maskedEmail = atIndex > 0 ? `${email[0]}***@${email.slice(atIndex + 1)}` : email;
 
 const scheduledDate = profile.scheduled_hard_delete_at
-  ? new Date(profile.scheduled_hard_delete_at).toLocaleDateString("pl-PL", {
+  ? new Date(profile.scheduled_hard_delete_at).toLocaleDateString(getLocale(), {
       year: "numeric",
       month: "long",
       day: "numeric",
     })
   : null;
 
-const error = Astro.url.searchParams.get("error");
+const errorMessage = errorCodeToMessage(Astro.url.searchParams.get("error"));
 ---
 
 <Layout title={m.auth_restore_account_title()}>
@@ -59,8 +61,10 @@ const error = Astro.url.searchParams.get("error");
         )
       }
       {
-        error && (
-          <p class="mb-4 rounded-lg border border-red-500/30 bg-red-900/30 px-3 py-2 text-sm text-red-300">{error}</p>
+        errorMessage && (
+          <p class="mb-4 rounded-lg border border-red-500/30 bg-red-900/30 px-3 py-2 text-sm text-red-300">
+            {errorMessage}
+          </p>
         )
       }
       <form method="POST" action="/api/account/restore">

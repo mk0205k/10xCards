@@ -34,3 +34,10 @@ See `@README.md` § Available Scripts and § Deployment.
 
 - GitHub Actions (`@.github/workflows/ci.yml`) runs `npm ci → npx astro sync → npm run lint → npm run build` on push/PR to `master`. Build needs `SUPABASE_URL` and `SUPABASE_KEY` repo secrets.
 - husky + lint-staged auto-runs `eslint --fix` on `*.{ts,tsx,astro}` and `prettier --write` on `*.{json,css,md}` at commit time.
+
+## Internationalization
+
+- Every user-visible string must have a key in **both** `@messages/pl.json` and `@messages/en.json`. `npm run prebuild` runs `@scripts/check-i18n-parity.mjs` and fails the build on any missing key — no silent locale fallback.
+- API endpoints (`src/pages/api/**`) return UPPER_SNAKE_CASE codes, not localized text — e.g. `?error=PASSWORD_TOO_WEAK`. Register codes in `@src/lib/error-messages.ts` and consume via `errorCodeToMessage(code)` in the client. Unknown UPPER_SNAKE inputs fall through to `m.error_unknown()`; free-form strings pass through unchanged (for raw Supabase SDK messages).
+- Locale-aware formatting (dates, numbers) uses `getLocale()` from `@/paraglide/runtime.js` — never hardcoded `"pl-PL"` / `"en-US"`.
+- Base locale is `pl`; strategy is `["cookie", "globalVariable", "baseLocale"]` (cookie-only, no URL prefix). `<html lang>` in `@src/layouts/Layout.astro` follows `getLocale()`.

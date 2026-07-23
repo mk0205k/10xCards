@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
+import { ERROR_CODES } from "@/lib/error-messages";
 
 export const prerender = false;
 
@@ -18,7 +19,7 @@ export const POST: APIRoute = async (context) => {
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {
-    return context.redirect(`/auth/restore-account?error=${encodeURIComponent("Supabase is not configured")}`, 303);
+    return context.redirect(`/auth/restore-account?error=${ERROR_CODES.SUPABASE_NOT_CONFIGURED}`, 303);
   }
 
   const { error } = await supabase.rpc("restore_account");
@@ -28,10 +29,7 @@ export const POST: APIRoute = async (context) => {
       message: error.message,
       user_id: user.id,
     });
-    return context.redirect(
-      `/auth/restore-account?error=${encodeURIComponent("Nie udało się przywrócić konta. Spróbuj ponownie.")}`,
-      303,
-    );
+    return context.redirect(`/auth/restore-account?error=${ERROR_CODES.ACCOUNT_RESTORE_FAILED}`, 303);
   }
 
   return context.redirect("/dashboard", 303);

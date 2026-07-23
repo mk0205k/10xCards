@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
+import { ERROR_CODES } from "@/lib/error-messages";
 
 export const prerender = false;
 
@@ -14,12 +15,12 @@ export const POST: APIRoute = async (context) => {
   const password = form.get("password") as string;
 
   if (!email) {
-    return context.redirect(`/auth/signup?error=${encodeURIComponent("Email is required")}`);
+    return context.redirect(`/auth/signup?error=${ERROR_CODES.EMAIL_REQUIRED}`);
   }
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {
-    return context.redirect(`/auth/signup?error=${encodeURIComponent("Supabase is not configured")}`);
+    return context.redirect(`/auth/signup?error=${ERROR_CODES.SUPABASE_NOT_CONFIGURED}`);
   }
 
   // Guard: block re-signup on an email still in the soft-delete retention

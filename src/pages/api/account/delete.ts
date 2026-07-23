@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
+import { ERROR_CODES } from "@/lib/error-messages";
 
 export const prerender = false;
 
@@ -18,7 +19,7 @@ export const POST: APIRoute = async (context) => {
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {
-    return context.redirect(`/account?error=${encodeURIComponent("Supabase is not configured")}`, 303);
+    return context.redirect(`/account?error=${ERROR_CODES.SUPABASE_NOT_CONFIGURED}`, 303);
   }
 
   const { error: rpcErr } = await supabase.rpc("enqueue_hard_delete", { p_user_id: user.id });
@@ -28,10 +29,7 @@ export const POST: APIRoute = async (context) => {
       message: rpcErr.message,
       user_id: user.id,
     });
-    return context.redirect(
-      `/account?error=${encodeURIComponent("Nie udało się usunąć konta. Spróbuj ponownie.")}`,
-      303,
-    );
+    return context.redirect(`/account?error=${ERROR_CODES.ACCOUNT_DELETE_FAILED}`, 303);
   }
 
   // Global signout must happen AFTER the DB write so the RLS EXISTS gate
