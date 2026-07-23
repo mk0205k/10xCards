@@ -372,33 +372,33 @@ None. Schema already accommodates all decisions in this plan (F-01 shipped the F
 
 #### Automated
 
-- [x] 1.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [x] 1.2 Lint passes: `npm run lint`
-- [x] 1.3 Build passes: `npm run build`
-- [x] 1.4 No breaking changes to existing `POST /api/cards` — verified by build
+- [x] 1.1 Type-check passes: `npx astro sync && npx tsc --noEmit` — 5b272cf
+- [x] 1.2 Lint passes: `npm run lint` — 5b272cf
+- [x] 1.3 Build passes: `npm run build` — 5b272cf
+- [x] 1.4 No breaking changes to existing `POST /api/cards` — verified by build — 5b272cf
 
 #### Manual
 
-- [x] 1.5 GET /api/cards with valid session returns `{ cards: [...] }`; without session returns 401
-- [x] 1.6 PATCH /api/cards/<uuid> updates question/answer; FSRS columns byte-identical in SQL diff
-- [x] 1.7 PATCH with `{source: "ai"}` (or any extra key) rejected 400
-- [x] 1.8 DELETE /api/cards/<uuid> returns 204; review_history cascade deletion verified
-- [x] 1.9 User A PATCH/DELETE on user B's card returns 404 (not 200/403)
+- [x] 1.5 GET /api/cards with valid session returns `{ cards: [...] }`; without session returns 401 — 5b272cf
+- [x] 1.6 PATCH /api/cards/<uuid> updates question/answer; FSRS columns byte-identical in SQL diff — 5b272cf
+- [x] 1.7 PATCH with `{source: "ai"}` (or any extra key) rejected 400 — 5b272cf
+- [x] 1.8 DELETE /api/cards/<uuid> returns 204; review_history cascade deletion verified — 5b272cf
+- [x] 1.9 User A PATCH/DELETE on user B's card returns 404 (not 200/403) — 5b272cf
 
 ### Phase 2: /deck page + list view
 
 #### Automated
 
-- [ ] 2.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Build passes: `npm run build`
+- [x] 2.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 /deck signed-out → redirect to /auth/signin
-- [ ] 2.5 /deck signed-in → list renders with source badges
-- [ ] 2.6 Empty account → empty state renders
-- [ ] 2.7 User A cannot see user B's cards (RLS holds)
+- [x] 2.4 /deck signed-out → redirect to /auth/signin
+- [x] 2.5 /deck signed-in → list renders with source badges
+- [x] 2.6 Empty account → empty state renders
+- [x] 2.7 User A cannot see user B's cards (RLS holds)
 
 ### Phase 3: Create + Edit modal
 

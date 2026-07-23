@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DeckPanel from "@/components/deck/DeckPanel";
+
+const { user } = Astro.locals;
+---
+
+<Layout title="Twoja talia">
+  <div class="bg-cosmic min-h-screen p-4 md:p-8">
+    <div class="mx-auto max-w-3xl space-y-6 text-white">
+      <header class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
+        <h1 class="mb-2 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
+          Twoja talia
+        </h1>
+        <p class="text-sm text-blue-100/70">
+          Zalogowano jako <span class="font-semibold text-white">{user?.email}</span>. Zarządzaj swoimi fiszkami:
+          przeglądaj, edytuj, dodawaj i usuwaj.
+        </p>
+      </header>
+      <DeckPanel client:load />
+    </div>
+  </div>
+</Layout>
