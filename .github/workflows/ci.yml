@@ -16,6 +16,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx wrangler types
       - run: npx astro sync
       - run: npm run lint
       - run: npm run build
@@ -35,6 +36,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx wrangler types
       - run: npx astro sync
       - run: npm run build
         env:
