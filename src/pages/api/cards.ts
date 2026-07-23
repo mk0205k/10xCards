@@ -18,6 +18,31 @@ function jsonResponse(status: number, body: unknown) {
   });
 }
 
+export const GET: APIRoute = async (context) => {
+  const user = context.locals.user;
+  if (!user) {
+    return jsonResponse(401, { error: "unauthorized" });
+  }
+
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (!supabase) {
+    return jsonResponse(500, { error: "supabase not configured" });
+  }
+
+  const { data, error } = await supabase.from("cards").select("*").order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("[/api/cards] supabase list error", {
+      code: error.code,
+      message: error.message,
+      user_id: user.id,
+    });
+    return jsonResponse(500, { error: "list failed" });
+  }
+
+  return jsonResponse(200, { cards: data });
+};
+
 export const POST: APIRoute = async (context) => {
   const user = context.locals.user;
   if (!user) {

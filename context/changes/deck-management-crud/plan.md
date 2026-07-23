@@ -372,18 +372,18 @@ None. Schema already accommodates all decisions in this plan (F-01 shipped the F
 
 #### Automated
 
-- [ ] 1.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 1.2 Lint passes: `npm run lint`
-- [ ] 1.3 Build passes: `npm run build`
-- [ ] 1.4 No breaking changes to existing `POST /api/cards` — verified by build
+- [x] 1.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
+- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.3 Build passes: `npm run build`
+- [x] 1.4 No breaking changes to existing `POST /api/cards` — verified by build
 
 #### Manual
 
-- [ ] 1.5 GET /api/cards with valid session returns `{ cards: [...] }`; without session returns 401
-- [ ] 1.6 PATCH /api/cards/<uuid> updates question/answer; FSRS columns byte-identical in SQL diff
-- [ ] 1.7 PATCH with `{source: "ai"}` (or any extra key) rejected 400
-- [ ] 1.8 DELETE /api/cards/<uuid> returns 204; review_history cascade deletion verified
-- [ ] 1.9 User A PATCH/DELETE on user B's card returns 404 (not 200/403)
+- [x] 1.5 GET /api/cards with valid session returns `{ cards: [...] }`; without session returns 401
+- [x] 1.6 PATCH /api/cards/<uuid> updates question/answer; FSRS columns byte-identical in SQL diff
+- [x] 1.7 PATCH with `{source: "ai"}` (or any extra key) rejected 400
+- [x] 1.8 DELETE /api/cards/<uuid> returns 204; review_history cascade deletion verified
+- [x] 1.9 User A PATCH/DELETE on user B's card returns 404 (not 200/403)
 
 ### Phase 2: /deck page + list view
 
