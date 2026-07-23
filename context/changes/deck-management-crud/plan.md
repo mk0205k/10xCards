@@ -404,33 +404,33 @@ None. Schema already accommodates all decisions in this plan (F-01 shipped the F
 
 #### Automated
 
-- [x] 3.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 Build passes: `npm run build`
-- [x] 3.4 shadcn Dialog/Input files match canonical shadcn output
+- [x] 3.1 Type-check passes: `npx astro sync && npx tsc --noEmit` — 3cae625
+- [x] 3.2 Lint passes: `npm run lint` — 3cae625
+- [x] 3.3 Build passes: `npm run build` — 3cae625
+- [x] 3.4 shadcn Dialog/Input files match canonical shadcn output — 3cae625
 
 #### Manual
 
-- [x] 3.5 "Dodaj fiszkę" → modal → save creates manual card at top of list
-- [x] 3.6 Save with empty field → inline error, no API call
-- [x] 3.7 Click row → modal pre-filled; edit persists; FSRS state unchanged (SQL diff)
-- [x] 3.8 Editing AI card keeps source='ai' badge
-- [x] 3.9 Esc/Cancel closes without saving; controls disabled while submitting
+- [x] 3.5 "Dodaj fiszkę" → modal → save creates manual card at top of list — 3cae625
+- [x] 3.6 Save with empty field → inline error, no API call — 3cae625
+- [x] 3.7 Click row → modal pre-filled; edit persists; FSRS state unchanged (SQL diff) — 3cae625
+- [x] 3.8 Editing AI card keeps source='ai' badge — 3cae625
+- [x] 3.9 Esc/Cancel closes without saving; controls disabled while submitting — 3cae625
 
 ### Phase 4: Delete confirmation + search
 
 #### Automated
 
-- [ ] 4.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 4.2 Lint passes: `npm run lint`
-- [ ] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type-check passes: `npx astro sync && npx tsc --noEmit`
+- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 4.4 Delete confirm dialog mentions review-history loss
-- [ ] 4.5 Confirmed delete removes card; review_history cascade verified via SQL
-- [ ] 4.6 Cancel delete leaves state unchanged
-- [ ] 4.7 Search filters visible rows on question OR answer (case-insensitive)
-- [ ] 4.8 Empty search restores full list
-- [ ] 4.9 Search matching nothing shows "Brak wyników" state
-- [ ] 4.10 User A cannot delete user B's card (endpoint 404 → inline error)
+- [x] 4.4 Delete confirm dialog mentions review-history loss
+- [x] 4.5 Confirmed delete removes card; review_history cascade verified via SQL
+- [x] 4.6 Cancel delete leaves state unchanged
+- [x] 4.7 Search filters visible rows on question OR answer (case-insensitive)
+- [x] 4.8 Empty search restores full list
+- [x] 4.9 Search matching nothing shows "Brak wyników" state
+- [x] 4.10 User A cannot delete user B's card (endpoint 404 → inline error)
