@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import { fetchNext, rateCard, ReviewApiError, type NextResponse, type PreviewMap, type Rating } from "@/lib/api/review";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
@@ -100,23 +103,34 @@ export default function ReviewSession() {
   );
 
   if (state.phase === "loading" && !state.data) {
-    return <SessionShell>{m.review_loading()}</SessionShell>;
+    return (
+      <SessionShell>
+        <div className="flex justify-center">
+          <Spinner size="md" label={m.review_loading()} />
+        </div>
+      </SessionShell>
+    );
   }
 
   if (state.phase === "error") {
     return (
       <SessionShell>
-        <p className="text-red-300">{state.errorMessage ?? m.review_error_generic()}</p>
-        <div className="mt-4">
-          <Button
-            variant="outline"
-            onClick={() => {
-              void loadNext();
-            }}
-          >
-            {m.review_retry()}
-          </Button>
-        </div>
+        <Alert
+          variant="error"
+          action={
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                void loadNext();
+              }}
+            >
+              {m.review_retry()}
+            </Button>
+          }
+        >
+          {state.errorMessage ?? m.review_error_generic()}
+        </Alert>
       </SessionShell>
     );
   }
@@ -127,7 +141,13 @@ export default function ReviewSession() {
   }
 
   if (!data?.card) {
-    return <SessionShell>{m.review_loading()}</SessionShell>;
+    return (
+      <SessionShell>
+        <div className="flex justify-center">
+          <Spinner size="md" label={m.review_loading()} />
+        </div>
+      </SessionShell>
+    );
   }
 
   const { card, preview } = data;
@@ -190,16 +210,15 @@ function RatingRow({
 
 function EmptyQueue({ nextDueAt }: { nextDueAt: string | null }) {
   const now = new Date();
+  const description =
+    nextDueAt === null ? m.review_empty_deck() : m.review_next_card_at({ when: formatRelativeDate(nextDueAt, now) });
   return (
     <SessionShell>
-      <div className="space-y-3 text-center">
-        <p className="text-lg">{m.review_session_complete()}</p>
-        <p className="text-blue-100/70">
-          {nextDueAt === null
-            ? m.review_empty_deck()
-            : m.review_next_card_at({ when: formatRelativeDate(nextDueAt, now) })}
-        </p>
-      </div>
+      <EmptyState
+        title={m.review_session_complete()}
+        description={description}
+        className="border-transparent bg-transparent p-0"
+      />
     </SessionShell>
   );
 }

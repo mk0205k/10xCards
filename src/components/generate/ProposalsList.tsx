@@ -1,5 +1,6 @@
 import type { Proposal, ProposalDraft, StreamState } from "@/components/generate/proposalsReducer";
 import ProposalCard from "@/components/generate/ProposalCard";
+import { EmptyState } from "@/components/ui/empty-state";
 import { m } from "@/paraglide/messages.js";
 
 interface Props {
@@ -25,8 +26,14 @@ export default function ProposalsList({
 }: Props) {
   const visible = proposals.filter((p) => p.status !== "rejected");
   const streaming = streamState === "streaming";
+  const streamFinished = streamState === "done" || streamState === "aborted";
 
-  if (!streaming && visible.length === 0) return null;
+  if (!streaming && visible.length === 0) {
+    if (streamFinished) {
+      return <EmptyState title={m.generate_empty_state_title()} description={m.generate_empty_state_description()} />;
+    }
+    return null;
+  }
 
   return (
     <div className="space-y-3">

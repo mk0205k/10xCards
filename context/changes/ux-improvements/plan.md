@@ -386,32 +386,32 @@ Brak migracji schemy. Brak zmiennych środowiskowych. Brak zależności do dodan
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Build passes: `npm run build`
+- [x] 1.1 Type checking passes: `npx astro sync && npx tsc --noEmit` — 53e9608
+- [x] 1.2 Linting passes: `npm run lint` — 53e9608
+- [x] 1.3 Build passes: `npm run build` — 53e9608
 
 #### Manual
 
-- [x] 1.4 Spinner / EmptyState / Alert renderują się w obu locale
-- [x] 1.5 Spinner animuje (widoczna rotacja)
-- [x] 1.6 Alert renderuje z każdym z 3 wariantów, czytelny na tle glassmorph
+- [x] 1.4 Spinner / EmptyState / Alert renderują się w obu locale — 53e9608
+- [x] 1.5 Spinner animuje (widoczna rotacja) — 53e9608
+- [x] 1.6 Alert renderuje z każdym z 3 wariantów, czytelny na tle glassmorph — 53e9608
 
 ### Phase 2: Ujednolicenie loading/empty/error w istniejących flow'ach
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Build passes (Paraglide strict-mode nie wywala się na kluczach): `npm run build`
+- [x] 2.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Build passes (Paraglide strict-mode nie wywala się na kluczach): `npm run build`
 
 #### Manual
 
-- [ ] 2.4 `/generate` loading pokazuje `<Spinner>` w miejsce dawnego `Loader2`
-- [ ] 2.5 `/generate` po streamie z 0 propozycjami pokazuje `<EmptyState>` z nowym copy
-- [ ] 2.6 `/generate` error state pokazuje `<Alert variant="error">` z retry
-- [ ] 2.7 `/review` loading/error/empty używa nowych prymitywów
-- [ ] 2.8 `/deck` loading/error/empty używa nowych prymitywów
-- [ ] 2.9 Wszystkie ekrany działają identycznie w PL i EN
+- [x] 2.4 `/generate` loading pokazuje `<Spinner>` w miejsce dawnego `Loader2`
+- [x] 2.5 `/generate` po streamie z 0 propozycjami pokazuje `<EmptyState>` z nowym copy
+- [x] 2.6 `/generate` error state pokazuje `<Alert variant="error">` z retry
+- [x] 2.7 `/review` loading/error/empty używa nowych prymitywów
+- [x] 2.8 `/deck` loading/error/empty używa nowych prymitywów
+- [x] 2.9 Wszystkie ekrany działają identycznie w PL i EN
 
 ### Phase 3: Reset sesji powtórki
 

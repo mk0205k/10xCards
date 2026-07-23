@@ -5,6 +5,9 @@ import CardFormDialog, { type CardFormMode } from "@/components/deck/CardFormDia
 import DeleteConfirmDialog from "@/components/deck/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Alert } from "@/components/ui/alert";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import { m } from "@/paraglide/messages.js";
 
 type Phase = "loading" | "ready" | "error";
@@ -140,15 +143,15 @@ export default function DeckPanel() {
   );
 
   if (state.phase === "loading") {
-    return <p className="text-sm text-blue-100/60">{m.deck_loading()}</p>;
+    return (
+      <div className="flex justify-center py-6">
+        <Spinner size="md" label={m.deck_loading()} />
+      </div>
+    );
   }
 
   if (state.phase === "error") {
-    return (
-      <div className="rounded-lg border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
-        {state.error ?? m.deck_error_generic()}
-      </div>
-    );
+    return <Alert variant="error">{state.error ?? m.deck_error_generic()}</Alert>;
   }
 
   return (
@@ -173,9 +176,9 @@ export default function DeckPanel() {
         </Button>
       </div>
       {state.cards.length === 0 ? (
-        <p className="text-sm text-blue-100/70">{m.deck_empty()}</p>
+        <EmptyState title={m.deck_empty()} />
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-blue-100/70">{m.deck_search_no_results()}</p>
+        <EmptyState title={m.deck_search_no_results()} />
       ) : (
         <div className="space-y-3">
           {filtered.map((card) => (

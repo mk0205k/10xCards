@@ -1,7 +1,9 @@
-import { Check, Loader2 } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 import type { Proposal, ProposalDraft } from "@/components/generate/proposalsReducer";
 import { m } from "@/paraglide/messages.js";
 
@@ -103,7 +105,7 @@ export default function ProposalCard({
             }}
             disabled={isSaving}
           >
-            {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
+            {isSaving ? <Spinner size="sm" /> : null}
             {isSaving ? m.generate_proposal_saving() : m.generate_proposal_accept()}
           </Button>
           <Button
@@ -129,18 +131,22 @@ export default function ProposalCard({
         </CardFooter>
       )}
       {hasError && proposal.errorMessage ? (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-red-400/40 bg-red-500/10 p-2 text-sm text-red-100">
-          <span>{proposal.errorMessage}</span>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => {
-              onAccept(proposal.id);
-            }}
-          >
-            {m.generate_proposal_retry()}
-          </Button>
-        </div>
+        <Alert
+          variant="error"
+          action={
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                onAccept(proposal.id);
+              }}
+            >
+              {m.generate_proposal_retry()}
+            </Button>
+          }
+        >
+          {proposal.errorMessage}
+        </Alert>
       ) : null}
     </Card>
   );

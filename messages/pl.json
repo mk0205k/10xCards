@@ -121,6 +121,8 @@
   "generate_proposals_streaming": "Trwa generowanie…",
   "generate_save_failed": "Zapis nie powiódł się",
   "generate_stream_interrupted": "Generowanie przerwane — niektóre propozycje mogą być brakujące.",
+  "generate_empty_state_title": "Brak propozycji do przejrzenia",
+  "generate_empty_state_description": "Generowanie zakończyło się bez rezultatów. Spróbuj wkleić inny fragment tekstu.",
 
   "review_page_title": "Powtórka",
   "review_page_intro": "Zalogowano jako {email}. Karty zaplanowane na dziś.",

@@ -121,6 +121,8 @@
   "generate_proposals_streaming": "Still generating…",
   "generate_save_failed": "Save failed",
   "generate_stream_interrupted": "Generation interrupted — some proposals may be missing.",
+  "generate_empty_state_title": "No proposals to review",
+  "generate_empty_state_description": "Generation finished with no results. Try pasting a different fragment of text.",
 
   "review_page_title": "Review",
   "review_page_intro": "Signed in as {email}. Cards scheduled for today.",
