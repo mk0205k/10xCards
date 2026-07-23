@@ -19,7 +19,8 @@ type Action =
   | { type: "loaded"; data: NextResponse }
   | { type: "error"; message: string }
   | { type: "reveal" }
-  | { type: "submitting" };
+  | { type: "submitting" }
+  | { type: "reset" };
 
 const initialState: State = {
   phase: "loading",
@@ -41,6 +42,8 @@ function reducer(state: State, action: Action): State {
       return state.phase === "question" ? { ...state, phase: "answer" } : state;
     case "submitting":
       return { ...state, phase: "submitting" };
+    case "reset":
+      return initialState;
   }
 }
 
@@ -86,6 +89,11 @@ export default function ReviewSession() {
     dispatch({ type: "reveal" });
   }, []);
 
+  const onReset = useCallback(() => {
+    dispatch({ type: "reset" });
+    void loadNext();
+  }, [loadNext]);
+
   const onRate = useCallback(
     async (rating: Rating) => {
       const card = state.data?.card ?? null;
@@ -115,6 +123,9 @@ export default function ReviewSession() {
   if (state.phase === "error") {
     return (
       <SessionShell>
+        <div className="mb-4 flex justify-end">
+          <ResetButton onReset={onReset} disabled={false} />
+        </div>
         <Alert
           variant="error"
           action={
@@ -155,6 +166,9 @@ export default function ReviewSession() {
 
   return (
     <SessionShell>
+      <div className="mb-4 flex justify-end">
+        <ResetButton onReset={onReset} disabled={submitting} />
+      </div>
       <div className="space-y-6">
         <section>
           <h2 className="mb-2 text-sm tracking-wide text-blue-200/70 uppercase">{m.review_question()}</h2>
@@ -226,5 +240,13 @@ function EmptyQueue({ nextDueAt }: { nextDueAt: string | null }) {
 function SessionShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl">{children}</div>
+  );
+}
+
+function ResetButton({ onReset, disabled }: { onReset: () => void; disabled: boolean }) {
+  return (
+    <Button variant="ghost" size="sm" onClick={onReset} disabled={disabled} aria-label={m.review_reset_aria()}>
+      {m.review_reset_button()}
+    </Button>
   );
 }

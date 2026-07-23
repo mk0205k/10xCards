@@ -146,6 +146,8 @@
   "review_when_hours": "in {n} h",
   "review_when_tomorrow": "tomorrow",
   "review_when_days": "in {n} days",
+  "review_reset_button": "Start over",
+  "review_reset_aria": "Restart review session",
 
   "deck_page_title": "Your deck",
   "deck_page_intro": "Signed in as {email}. Manage your flashcards: browse, edit, add, and delete.",

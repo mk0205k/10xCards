@@ -146,6 +146,8 @@
   "review_when_hours": "za {n} h",
   "review_when_tomorrow": "jutro",
   "review_when_days": "za {n} dni",
+  "review_reset_button": "Zacznij od nowa",
+  "review_reset_aria": "Zacznij sesję powtórki od nowa",
 
   "deck_page_title": "Twoja talia",
   "deck_page_intro": "Zalogowano jako {email}. Zarządzaj swoimi fiszkami: przeglądaj, edytuj, dodawaj i usuwaj.",

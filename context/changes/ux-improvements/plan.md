@@ -400,35 +400,35 @@ Brak migracji schemy. Brak zmiennych środowiskowych. Brak zależności do dodan
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [x] 2.2 Linting passes: `npm run lint`
-- [x] 2.3 Build passes (Paraglide strict-mode nie wywala się na kluczach): `npm run build`
+- [x] 2.1 Type checking passes: `npx astro sync && npx tsc --noEmit` — ae0e98b
+- [x] 2.2 Linting passes: `npm run lint` — ae0e98b
+- [x] 2.3 Build passes (Paraglide strict-mode nie wywala się na kluczach): `npm run build` — ae0e98b
 
 #### Manual
 
-- [x] 2.4 `/generate` loading pokazuje `<Spinner>` w miejsce dawnego `Loader2`
-- [x] 2.5 `/generate` po streamie z 0 propozycjami pokazuje `<EmptyState>` z nowym copy
-- [x] 2.6 `/generate` error state pokazuje `<Alert variant="error">` z retry
-- [x] 2.7 `/review` loading/error/empty używa nowych prymitywów
-- [x] 2.8 `/deck` loading/error/empty używa nowych prymitywów
-- [x] 2.9 Wszystkie ekrany działają identycznie w PL i EN
+- [x] 2.4 `/generate` loading pokazuje `<Spinner>` w miejsce dawnego `Loader2` — ae0e98b
+- [x] 2.5 `/generate` po streamie z 0 propozycjami pokazuje `<EmptyState>` z nowym copy — ae0e98b
+- [x] 2.6 `/generate` error state pokazuje `<Alert variant="error">` z retry — ae0e98b
+- [x] 2.7 `/review` loading/error/empty używa nowych prymitywów — ae0e98b
+- [x] 2.8 `/deck` loading/error/empty używa nowych prymitywów — ae0e98b
+- [x] 2.9 Wszystkie ekrany działają identycznie w PL i EN — ae0e98b
 
 ### Phase 3: Reset sesji powtórki
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Build passes: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 3.4 Przycisk "Zacznij od nowa" widoczny gdy jest ≥1 due card
-- [ ] 3.5 Kliknięcie resetu wraca sesję do pierwszej due card
-- [ ] 3.6 Przycisk disabled podczas `submitting`
-- [ ] 3.7 Przycisk widoczny i działa w stanie `error`
-- [ ] 3.8 Przycisk NIE jest widoczny gdy 0 due cards
-- [ ] 3.9 Działa w obu locale
+- [x] 3.4 Przycisk "Zacznij od nowa" widoczny gdy jest ≥1 due card
+- [x] 3.5 Kliknięcie resetu wraca sesję do pierwszej due card
+- [x] 3.6 Przycisk disabled podczas `submitting`
+- [x] 3.7 Przycisk widoczny i działa w stanie `error`
+- [x] 3.8 Przycisk NIE jest widoczny gdy 0 due cards
+- [x] 3.9 Działa w obu locale
 
 ### Phase 4: Bulk actions na candidate review
 
