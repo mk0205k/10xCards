@@ -353,9 +353,9 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Manual
 
-- [ ] 1.4 Restart local Supabase — `config.toml` changes require restart
-- [ ] 1.5 Inbucket UI loads at `http://127.0.0.1:54324`
-- [ ] 1.6 New env var visible as import in a scratch endpoint
+- [x] 1.4 Restart local Supabase — `config.toml` changes require restart
+- [x] 1.5 Inbucket UI loads at `http://127.0.0.1:54324`
+- [x] 1.6 New env var visible as import in a scratch endpoint
 
 ### Phase 2: Request-reset flow
 
@@ -367,13 +367,13 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Manual
 
-- [ ] 2.4 `/auth/signin` shows "Zapomniałeś hasła?" link
-- [ ] 2.5 `/auth/reset-password` renders form matching signin backdrop
-- [ ] 2.6 Invalid email → inline error under field
-- [ ] 2.7 Valid email → lands on `/auth/reset-password-sent`
-- [ ] 2.8 Inbucket shows "Reset hasła — 10xCards" email with `/auth/confirm?token_hash=…&type=recovery&next=/auth/update-password` link
-- [ ] 2.9 3rd rapid reset attempt on same email → rate-limit error
-- [ ] 2.10 Nonexistent email → still lands on `/auth/reset-password-sent` (enumeration-safe)
+- [x] 2.4 `/auth/signin` shows "Zapomniałeś hasła?" link
+- [x] 2.5 `/auth/reset-password` renders form matching signin backdrop
+- [x] 2.6 Invalid email → inline error under field
+- [x] 2.7 Valid email → lands on `/auth/reset-password-sent`
+- [x] 2.8 Inbucket shows "Reset hasła — 10xCards" email with `/auth/confirm?token_hash=…&type=recovery&next=/auth/update-password` link
+- [x] 2.9 3rd rapid reset attempt on same email → rate-limit error
+- [x] 2.10 Nonexistent email → still lands on `/auth/reset-password-sent` (enumeration-safe)
 
 ### Phase 3: Confirm callback + update-password flow
 
@@ -385,10 +385,10 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Manual
 
-- [ ] 3.4 End-to-end: request reset → click Inbucket link → land on `/auth/update-password` (no token in URL) → set new password → land on `/` signed in
-- [ ] 3.5 Wait >1h then click link → redirected to `/auth/reset-password?error=Link+wygas\u0142…`
-- [ ] 3.6 Submitting same password → `?error=Nowe+has\u0142o+musi+si\u0119+r\u00f3\u017cni\u0107…`
-- [ ] 3.7 Submitting 3-char password via curl → `weak_password` error surfaced
-- [ ] 3.8 `/auth/update-password` accessed directly while logged out → 302 to `/auth/reset-password?error=Sesja…`
-- [ ] 3.9 Sign out and sign in with new password → succeeds
-- [ ] 3.10 Sign in with old password → fails (`Invalid login credentials`)
+- [x] 3.4 End-to-end: request reset → click Inbucket link → land on `/auth/update-password` (no token in URL) → set new password → land on `/` signed in
+- [x] 3.5 Wait >1h then click link → redirected to `/auth/reset-password?error=Link+wygas\u0142…`
+- [x] 3.6 Submitting same password → `?error=Nowe+has\u0142o+musi+si\u0119+r\u00f3\u017cni\u0107…`
+- [x] 3.7 Submitting 3-char password via curl → `weak_password` error surfaced
+- [x] 3.8 `/auth/update-password` accessed directly while logged out → 302 to `/auth/reset-password?error=Sesja…`
+- [x] 3.9 Sign out and sign in with new password → succeeds
+- [x] 3.10 Sign in with old password → fails (`Invalid login credentials`)
