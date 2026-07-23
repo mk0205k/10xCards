@@ -451,17 +451,17 @@ Rollback: revert PR-a. Cookie `PARAGLIDE_LOCALE` w przeglądarkach użytkownikó
 
 #### Automated
 
-- [x] 4.1 Build przechodzi: `npm run build`
-- [x] 4.2 Type check + lint przechodzą
-- [x] 4.3 Grep dla PL diakrytyków poza `messages/pl.json`: `rg "[łćśąężźń]" src/ --glob "!messages/pl.json"` zwraca 0
-- [x] 4.4 Endpointy API zwracają kody (curl weryfikacja na `/api/auth/reset-confirm`)
-- [x] 4.5 `errorCodeToMessage("UNKNOWN_CODE_XYZ")` zwraca `m.error_unknown()` output
+- [x] 4.1 Build przechodzi: `npm run build` — 8c03eb8
+- [x] 4.2 Type check + lint przechodzą — 8c03eb8
+- [x] 4.3 Grep dla PL diakrytyków poza `messages/pl.json`: `rg "[łćśąężźń]" src/ --glob "!messages/pl.json"` zwraca 0 — 8c03eb8
+- [x] 4.4 Endpointy API zwracają kody (curl weryfikacja na `/api/auth/reset-confirm`) — 8c03eb8
+- [x] 4.5 `errorCodeToMessage("UNKNOWN_CODE_XYZ")` zwraca `m.error_unknown()` output — 8c03eb8
 
 #### Manual
 
-- [x] 4.6 Reset password flow end-to-end w obu językach: request → email → confirm → login
-- [x] 4.7 Delete + restore flow w obu językach; daty w formacie właściwym dla locale
-- [x] 4.8 Generate + review + deck — pełny obchód w EN, potem w PL; zero cross-language leakage
-- [x] 4.9 Przełącznik na dowolnej stronie działa bez błędów; wybór persystuje między sesjami
-- [x] 4.10 `<html lang>` w każdej podstronie zgadza się z aktywnym locale
-- [x] 4.11 `AGENTS.md` sekcja i18n czytelna, reguły łatwe do zastosowania
+- [x] 4.6 Reset password flow end-to-end w obu językach: request → email → confirm → login — 8c03eb8
+- [x] 4.7 Delete + restore flow w obu językach; daty w formacie właściwym dla locale — 8c03eb8
+- [x] 4.8 Generate + review + deck — pełny obchód w EN, potem w PL; zero cross-language leakage — 8c03eb8
+- [x] 4.9 Przełącznik na dowolnej stronie działa bez błędów; wybór persystuje między sesjami — 8c03eb8
+- [x] 4.10 `<html lang>` w każdej podstronie zgadza się z aktywnym locale — 8c03eb8
+- [x] 4.11 `AGENTS.md` sekcja i18n czytelna, reguły łatwe do zastosowania — 8c03eb8
