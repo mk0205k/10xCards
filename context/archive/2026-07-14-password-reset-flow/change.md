@@ -1,10 +1,10 @@
 ---
 change_id: password-reset-flow
 title: Reset hasła emailem (S-04)
-status: impl_reviewed
+status: archived
 created: 2026-07-14
 updated: 2026-07-23
-archived_at: null
+archived_at: 2026-07-23T17:28:30Z
 ---
 
 ## Notes
