@@ -551,18 +551,18 @@ Note: revert po Phase 2/3 wymaga dodatkowo `git revert` na plikach `src/pages/ap
 
 #### Automated
 
-- [x] 3.1 `npm run astro sync && npm run lint && npm run build` zielone
-- [x] 3.2 `npm run test` — istniejące + Phase 2 testy dalej zielone
+- [x] 3.1 `npm run astro sync && npm run lint && npm run build` zielone — 281c429
+- [x] 3.2 `npm run test` — istniejące + Phase 2 testy dalej zielone — 281c429
 
 #### Manual
 
-- [x] 3.3 Signin jako user → widoczny link "Konto" w Topbar
-- [x] 3.4 `/account` renderuje sekcję "Strefa niebezpieczna"
-- [x] 3.5 AlertDialog otwiera się; submit disabled dopóki input != email
-- [x] 3.6 Po delete: nowa karta z tym samym cookie → redirect `/auth/restore-account`
-- [x] 3.7 Restore-account strona pokazuje masked email + scheduled_hard_delete_at
-- [x] 3.8 Klik "Przywróć konto" → `/dashboard`, wszystkie fiszki widoczne (byte-identical)
-- [x] 3.9 Signout + signup na email userA → `?error=account_pending_deletion` widoczny
-- [x] 3.10 Signin userA → restore-account → restore → dashboard
-- [x] 3.11 SQL na cloud: manual `execute_hard_delete()` po backdate `scheduled_hard_delete_at` → user zniknął z auth.users; cards + review_history wyczyszczone przez cascade
-- [x] 3.12 Watchdog query zwraca 0 w steady state
+- [x] 3.3 Signin jako user → widoczny link "Konto" w Topbar — 281c429
+- [x] 3.4 `/account` renderuje sekcję "Strefa niebezpieczna" — 281c429
+- [x] 3.5 AlertDialog otwiera się; submit disabled dopóki input != email — 281c429
+- [x] 3.6 Po delete: nowa karta z tym samym cookie → redirect `/auth/restore-account` — 281c429
+- [x] 3.7 Restore-account strona pokazuje masked email + scheduled_hard_delete_at — 281c429
+- [x] 3.8 Klik "Przywróć konto" → `/dashboard`, wszystkie fiszki widoczne (byte-identical) — 281c429
+- [x] 3.9 Signout + signup na email userA → `?error=account_pending_deletion` widoczny — 281c429
+- [x] 3.10 Signin userA → restore-account → restore → dashboard — 281c429
+- [x] 3.11 SQL na cloud: manual `execute_hard_delete()` po backdate `scheduled_hard_delete_at` → user zniknął z auth.users; cards + review_history wyczyszczone przez cascade — 281c429
+- [x] 3.12 Watchdog query zwraca 0 w steady state — 281c429
