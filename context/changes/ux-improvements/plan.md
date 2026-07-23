@@ -434,18 +434,18 @@ Brak migracji schemy. Brak zmiennych środowiskowych. Brak zależności do dodan
 
 #### Automated
 
-- [x] 4.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [x] 4.2 Linting passes: `npm run lint`
-- [x] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npx astro sync && npx tsc --noEmit` — 920dcc4
+- [x] 4.2 Linting passes: `npm run lint` — 920dcc4
+- [x] 4.3 Build passes: `npm run build` — 920dcc4
 
 #### Manual
 
-- [x] 4.4 Header nad listą pokazuje "N do przejrzenia" i dwa bulk buttony
-- [x] 4.5 Bulk accept zapisuje wszystkie pending, progress region pokazuje `Saving: X / N`
-- [x] 4.6 Padnięta karta zostaje w statusie `error`, pozostałe idą dalej
-- [x] 4.7 Bulk reject otwiera confirm dialog z liczbą propozycji
-- [x] 4.8 Confirm bulk reject usuwa wszystkie pending, Anuluj nie zmienia stanu
-- [x] 4.9 Bulk actions nie dotykają edited / saved / już rejected propozycji
-- [x] 4.10 Podczas bulk accept oba bulk buttony i per-card akcje disabled
-- [x] 4.11 Wszystko działa w PL i EN
-- [x] 4.12 A11y: `aria-live` region ogłasza progress
+- [x] 4.4 Header nad listą pokazuje "N do przejrzenia" i dwa bulk buttony — 920dcc4
+- [x] 4.5 Bulk accept zapisuje wszystkie pending, progress region pokazuje `Saving: X / N` — 920dcc4
+- [x] 4.6 Padnięta karta zostaje w statusie `error`, pozostałe idą dalej — 920dcc4
+- [x] 4.7 Bulk reject otwiera confirm dialog z liczbą propozycji — 920dcc4
+- [x] 4.8 Confirm bulk reject usuwa wszystkie pending, Anuluj nie zmienia stanu — 920dcc4
+- [x] 4.9 Bulk actions nie dotykają edited / saved / już rejected propozycji — 920dcc4
+- [x] 4.10 Podczas bulk accept oba bulk buttony i per-card akcje disabled — 920dcc4
+- [x] 4.11 Wszystko działa w PL i EN — 920dcc4
+- [x] 4.12 A11y: `aria-live` region ogłasza progress — 920dcc4
