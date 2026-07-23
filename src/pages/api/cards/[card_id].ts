@@ -72,6 +72,11 @@ export const PATCH: APIRoute = async (context) => {
       user_id: user.id,
       card_id: paramsParsed.data.card_id,
     });
+    // 42501: RLS-filtered UPDATE (cross-user attempt or RLS misconfig). Return
+    // 404 to avoid disclosing that the id exists but is not owned.
+    if (error.code === "42501") {
+      return jsonResponse(404, { error: "not found" });
+    }
     return jsonResponse(500, { error: "update failed" });
   }
   if (!data) {
@@ -113,6 +118,11 @@ export const DELETE: APIRoute = async (context) => {
       user_id: user.id,
       card_id: paramsParsed.data.card_id,
     });
+    // 42501: RLS-filtered DELETE (cross-user attempt or RLS misconfig). Return
+    // 404 to avoid disclosing that the id exists but is not owned.
+    if (error.code === "42501") {
+      return jsonResponse(404, { error: "not found" });
+    }
     return jsonResponse(500, { error: "delete failed" });
   }
   if (!data) {

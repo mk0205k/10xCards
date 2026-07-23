@@ -5,11 +5,13 @@ import { emptyCardState } from "@/lib/review/scheduler";
 
 export const prerender = false;
 
-const bodySchema = z.object({
-  question: z.string().min(1),
-  answer: z.string().min(1),
-  source: z.enum(["ai", "manual"]).default("ai"),
-});
+const bodySchema = z
+  .object({
+    question: z.string().min(1),
+    answer: z.string().min(1),
+    source: z.enum(["ai", "manual"]).default("ai"),
+  })
+  .strict();
 
 function jsonResponse(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
@@ -29,7 +31,11 @@ export const GET: APIRoute = async (context) => {
     return jsonResponse(500, { error: "supabase not configured" });
   }
 
-  const { data, error } = await supabase.from("cards").select("*").order("created_at", { ascending: false });
+  const { data, error } = await supabase
+    .from("cards")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(1000);
 
   if (error) {
     console.error("[/api/cards] supabase list error", {
