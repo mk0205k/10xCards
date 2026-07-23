@@ -398,36 +398,36 @@ Rollback: revert PR-a. Cookie `PARAGLIDE_LOCALE` w przeglądarkach użytkownikó
 
 #### Automated
 
-- [x] 1.1 Zależność `@inlang/paraglide-js` zainstalowana: `npm ls @inlang/paraglide-js` zwraca wersję
-- [x] 1.2 Generacja Paraglide przechodzi: `npx astro sync` produkuje `src/paraglide/messages.js`, `runtime.js`, `server.js` bez błędów
-- [x] 1.3 TypeScript przechodzi: `npx astro check` zielone
-- [x] 1.4 Lint przechodzi: `npm run lint`
-- [x] 1.5 Build przechodzi: `npm run build`
-- [x] 1.6 Strict mode działa: usunięcie klucza z `messages/en.json` powoduje failure `npm run build` (weryfikacja + revert)
+- [x] 1.1 Zależność `@inlang/paraglide-js` zainstalowana: `npm ls @inlang/paraglide-js` zwraca wersję — 4264cbd
+- [x] 1.2 Generacja Paraglide przechodzi: `npx astro sync` produkuje `src/paraglide/messages.js`, `runtime.js`, `server.js` bez błędów — 4264cbd
+- [x] 1.3 TypeScript przechodzi: `npx astro check` zielone — 4264cbd
+- [x] 1.4 Lint przechodzi: `npm run lint` — 4264cbd
+- [x] 1.5 Build przechodzi: `npm run build` — 4264cbd
+- [x] 1.6 Strict mode działa: usunięcie klucza z `messages/en.json` powoduje failure `npm run build` (weryfikacja + revert) — 4264cbd
 
 #### Manual
 
-- [x] 1.7 `npm run dev`, `/` — Topbar renderuje polskie napisy, `<html lang="pl">` w źródle
-- [x] 1.8 Kliknięcie przełącznika na EN — Topbar po angielsku, `<html lang="en">`, cookie `PARAGLIDE_LOCALE=en`
-- [x] 1.9 Odświeżenie strony — wybór EN persystuje
-- [x] 1.10 Powrót na PL — Topbar wraca do polskiego, cookie `PARAGLIDE_LOCALE=pl`
-- [x] 1.11 Logowanie/wylogowanie nie resetuje wyboru języka
+- [x] 1.7 `npm run dev`, `/` — Topbar renderuje polskie napisy, `<html lang="pl">` w źródle — 4264cbd
+- [x] 1.8 Kliknięcie przełącznika na EN — Topbar po angielsku, `<html lang="en">`, cookie `PARAGLIDE_LOCALE=en` — 4264cbd
+- [x] 1.9 Odświeżenie strony — wybór EN persystuje — 4264cbd
+- [x] 1.10 Powrót na PL — Topbar wraca do polskiego, cookie `PARAGLIDE_LOCALE=pl` — 4264cbd
+- [x] 1.11 Logowanie/wylogowanie nie resetuje wyboru języka — 4264cbd
 
 ### Phase 2: Auth surface — 9 stron auth + formularze
 
 #### Automated
 
-- [ ] 2.1 Build przechodzi: `npm run build`
-- [ ] 2.2 Type check przechodzi: `npx astro check`
-- [ ] 2.3 Lint przechodzi: `npm run lint`
-- [ ] 2.4 Grep na PL diakrytyki w migrowanych plikach zwraca 0 (poza komentarzami)
+- [x] 2.1 Build przechodzi: `npm run build`
+- [x] 2.2 Type check przechodzi: `npx astro check`
+- [x] 2.3 Lint przechodzi: `npm run lint`
+- [x] 2.4 Grep na PL diakrytyki w migrowanych plikach zwraca 0 (poza komentarzami)
 
 #### Manual
 
-- [ ] 2.5 Wszystkie 9 stron auth renderuje się poprawnie w PL i EN
-- [ ] 2.6 Formularze signin/signup/reset-password/update-password działają w obu językach; walidacja client-side pokazuje właściwe komunikaty
-- [ ] 2.7 Dialog "Usuń konto" — wszystkie teksty w obu językach, w tym input placeholder i disabled state
-- [ ] 2.8 Strona `restore-account` — komunikat w obu językach; data wciąż `pl-PL` (naprawa w Fazie 4)
+- [x] 2.5 Wszystkie 9 stron auth renderuje się poprawnie w PL i EN
+- [x] 2.6 Formularze signin/signup/reset-password/update-password działają w obu językach; walidacja client-side pokazuje właściwe komunikaty
+- [x] 2.7 Dialog "Usuń konto" — wszystkie teksty w obu językach, w tym input placeholder i disabled state
+- [x] 2.8 Strona `restore-account` — komunikat w obu językach; data wciąż `pl-PL` (naprawa w Fazie 4)
 
 ### Phase 3: Core features — generate, review, deck + walidacja + dialogi
 

@@ -4,6 +4,7 @@ import { FormField } from "@/components/auth/FormField";
 import { PasswordToggle } from "@/components/auth/PasswordToggle";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   serverError?: string | null;
@@ -18,12 +19,12 @@ export default function SignInForm({ serverError }: Props) {
   function validate() {
     const next: typeof errors = {};
     if (!email.trim()) {
-      next.email = "Email is required";
+      next.email = m.auth_form_email_required();
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      next.email = "Enter a valid email address";
+      next.email = m.auth_form_email_invalid();
     }
     if (!password) {
-      next.password = "Password is required";
+      next.password = m.auth_form_password_required();
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -44,27 +45,27 @@ export default function SignInForm({ serverError }: Props) {
       <FormField
         id="email"
         type="email"
-        label="Email"
+        label={m.auth_form_email_label()}
         value={email}
         onChange={(v) => {
           setEmail(v);
           clearError("email");
         }}
-        placeholder="you@example.com"
+        placeholder={m.auth_form_email_placeholder()}
         error={errors.email}
         icon={<Mail className="size-4" />}
       />
 
       <FormField
         id="password"
-        label="Password"
+        label={m.auth_form_password_label()}
         type={showPassword ? "text" : "password"}
         value={password}
         onChange={(v) => {
           setPassword(v);
           clearError("password");
         }}
-        placeholder="Your password"
+        placeholder={m.auth_form_password_placeholder()}
         error={errors.password}
         icon={<Lock className="size-4" />}
         endContent={
@@ -79,8 +80,8 @@ export default function SignInForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Signing in..." icon={<LogIn className="size-4" />}>
-        Sign in
+      <SubmitButton pendingText={m.auth_form_signin_pending()} icon={<LogIn className="size-4" />}>
+        {m.auth_form_signin_button()}
       </SubmitButton>
     </form>
   );

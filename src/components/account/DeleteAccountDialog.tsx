@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   userEmail: string;
@@ -27,16 +28,14 @@ export default function DeleteAccountDialog({ userEmail }: Props) {
       <AlertDialogTrigger asChild>
         <Button variant="destructive" className="gap-2">
           <Trash2 className="size-4" />
-          Usuń konto
+          {m.account_delete_dialog_trigger()}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Usuń konto trwale</AlertDialogTitle>
+          <AlertDialogTitle>{m.account_delete_dialog_title()}</AlertDialogTitle>
           <AlertDialogDescription>
-            Konto zostanie oznaczone do usunięcia. Przez 30 dni możesz je przywrócić, logując się ponownie. Po tym
-            czasie fiszki i historia powtórek są kasowane nieodwracalnie. Aby potwierdzić, wpisz swój email:{" "}
-            <span className="font-semibold">{userEmail}</span>.
+            {m.account_delete_dialog_description()} <span className="font-semibold">{userEmail}</span>.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <form method="POST" action="/api/account/delete" className="space-y-3">
@@ -48,12 +47,12 @@ export default function DeleteAccountDialog({ userEmail }: Props) {
             onChange={(e) => {
               setConfirm(e.target.value);
             }}
-            aria-label="Wpisz swój email, aby potwierdzić"
+            aria-label={m.account_delete_dialog_aria_input()}
           />
           <AlertDialogFooter>
-            <AlertDialogCancel type="button">Anuluj</AlertDialogCancel>
+            <AlertDialogCancel type="button">{m.account_delete_dialog_cancel()}</AlertDialogCancel>
             <AlertDialogAction type="submit" disabled={!canSubmit}>
-              Usuń konto
+              {m.account_delete_dialog_action()}
             </AlertDialogAction>
           </AlertDialogFooter>
         </form>

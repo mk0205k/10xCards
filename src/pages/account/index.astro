@@ -1,27 +1,27 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import DeleteAccountDialog from "@/components/account/DeleteAccountDialog";
+import { m } from "@/paraglide/messages.js";
 
 const { user } = Astro.locals;
 ---
 
-<Layout title="Konto">
+<Layout title={m.account_title()}>
   <div class="bg-cosmic min-h-screen p-4 md:p-8">
     <div class="mx-auto max-w-2xl space-y-6 text-white">
       <header class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
         <h1 class="mb-2 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-          Konto
+          {m.account_title()}
         </h1>
         <p class="text-sm text-blue-100/70">
-          Zalogowano jako <span class="font-semibold text-white">{user?.email}</span>
+          {m.account_signed_in_as({ email: user?.email ?? "" })}
         </p>
       </header>
 
       <section class="rounded-2xl border border-red-500/30 bg-red-950/20 p-6 backdrop-blur-xl">
-        <h2 class="mb-2 text-xl font-semibold text-red-200">Strefa niebezpieczna</h2>
+        <h2 class="mb-2 text-xl font-semibold text-red-200">{m.account_danger_zone_title()}</h2>
         <p class="mb-4 text-sm text-red-100/80">
-          Usunięcie konta zablokuje dostęp do wszystkich fiszek. Masz 30 dni na przywrócenie po ponownym zalogowaniu; po
-          tym czasie dane są kasowane nieodwracalnie.
+          {m.account_danger_zone_body()}
         </p>
         <DeleteAccountDialog client:load userEmail={user?.email ?? ""} />
       </section>

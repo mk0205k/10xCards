@@ -1,20 +1,21 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { m } from "@/paraglide/messages.js";
 
 const isAutoConfirmed = import.meta.env.DEV;
 
 const content = isAutoConfirmed
   ? {
       emoji: "✅",
-      heading: "Registration successful",
-      description: "Your account has been created. You can now sign in.",
-      linkText: "Go to sign in",
+      heading: m.auth_confirm_email_registered_title(),
+      description: m.auth_confirm_email_registered_body(),
+      linkText: m.auth_confirm_email_registered_link(),
     }
   : {
       emoji: "📧",
-      heading: "Check your email",
-      description: "We've sent a confirmation link to your email address. Click it to activate your account.",
-      linkText: "Back to sign in",
+      heading: m.auth_confirm_email_check_title(),
+      description: m.auth_confirm_email_check_body(),
+      linkText: m.auth_confirm_email_check_link(),
     };
 ---
 

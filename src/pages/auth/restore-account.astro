@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { createClient } from "@/lib/supabase";
+import { m } from "@/paraglide/messages.js";
 
 const user = Astro.locals.user;
 
@@ -39,22 +40,21 @@ const scheduledDate = profile.scheduled_hard_delete_at
 const error = Astro.url.searchParams.get("error");
 ---
 
-<Layout title="Przywróć konto">
+<Layout title={m.auth_restore_account_title()}>
   <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
     <div class="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
       <h1
         class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-2xl font-bold text-transparent"
       >
-        Twoje konto oczekuje na usunięcie
+        {m.auth_restore_account_title()}
       </h1>
       <p class="mb-2 text-center text-sm text-blue-100/80">
-        Konto <span class="font-semibold text-white">{maskedEmail}</span>
+        <span class="font-semibold text-white">{maskedEmail}</span>
       </p>
       {
         scheduledDate && (
           <p class="mb-6 text-center text-sm text-blue-100/70">
-            Zostanie trwale usunięte <span class="font-semibold text-white">{scheduledDate}</span>. Do tego czasu możesz
-            je przywrócić jednym kliknięciem.
+            {m.auth_restore_account_scheduled({ date: scheduledDate })}
           </p>
         )
       }
@@ -68,7 +68,7 @@ const error = Astro.url.searchParams.get("error");
           type="submit"
           class="w-full rounded-lg border border-purple-400/40 bg-purple-500/30 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-500/50"
         >
-          Przywróć konto
+          {m.auth_restore_account_action()}
         </button>
       </form>
       <form method="POST" action="/api/auth/signout" class="mt-3">
@@ -76,7 +76,7 @@ const error = Astro.url.searchParams.get("error");
           type="submit"
           class="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10"
         >
-          Wyloguj i zdecyduj później
+          {m.auth_restore_account_signout()}
         </button>
       </form>
     </div>

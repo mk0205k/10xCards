@@ -4,6 +4,7 @@ import { FormField } from "@/components/auth/FormField";
 import { PasswordToggle } from "@/components/auth/PasswordToggle";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
+import { m } from "@/paraglide/messages.js";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -23,21 +24,21 @@ export default function SignUpForm({ serverError }: Props) {
     const next: typeof errors = {};
 
     if (!email.trim()) {
-      next.email = "Email is required";
+      next.email = m.auth_form_email_required();
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      next.email = "Enter a valid email address";
+      next.email = m.auth_form_email_invalid();
     }
 
     if (!password) {
-      next.password = "Password is required";
+      next.password = m.auth_form_password_required();
     } else if (password.length < MIN_PASSWORD_LENGTH) {
-      next.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
+      next.password = m.auth_form_password_too_short({ min: MIN_PASSWORD_LENGTH });
     }
 
     if (!confirmPassword) {
-      next.confirmPassword = "Please confirm your password";
+      next.confirmPassword = m.auth_form_confirm_password_required();
     } else if (password !== confirmPassword) {
-      next.confirmPassword = "Passwords do not match";
+      next.confirmPassword = m.auth_form_passwords_dont_match();
     }
 
     setErrors(next);
@@ -57,8 +58,7 @@ export default function SignUpForm({ serverError }: Props) {
   const passwordHint =
     !errors.password && password.length > 0 && password.length < MIN_PASSWORD_LENGTH ? (
       <p className="mt-1 text-xs text-blue-100/50">
-        {MIN_PASSWORD_LENGTH - password.length} more character
-        {MIN_PASSWORD_LENGTH - password.length !== 1 ? "s" : ""} needed
+        {m.auth_form_password_hint_remaining({ n: MIN_PASSWORD_LENGTH - password.length })}
       </p>
     ) : undefined;
 
@@ -67,27 +67,27 @@ export default function SignUpForm({ serverError }: Props) {
       <FormField
         id="email"
         type="email"
-        label="Email"
+        label={m.auth_form_email_label()}
         value={email}
         onChange={(v) => {
           setEmail(v);
           clearError("email");
         }}
-        placeholder="you@example.com"
+        placeholder={m.auth_form_email_placeholder()}
         error={errors.email}
         icon={<Mail className="size-4" />}
       />
 
       <FormField
         id="password"
-        label="Password"
+        label={m.auth_form_password_label()}
         type={showPassword ? "text" : "password"}
         value={password}
         onChange={(v) => {
           setPassword(v);
           clearError("password");
         }}
-        placeholder="Min. 6 characters"
+        placeholder={m.auth_form_password_placeholder_min()}
         error={errors.password}
         hint={passwordHint}
         icon={<Lock className="size-4" />}
@@ -104,14 +104,14 @@ export default function SignUpForm({ serverError }: Props) {
       <FormField
         id="confirmPassword"
         name="confirmPassword"
-        label="Confirm password"
+        label={m.auth_form_confirm_password_label()}
         type={showConfirmPassword ? "text" : "password"}
         value={confirmPassword}
         onChange={(v) => {
           setConfirmPassword(v);
           clearError("confirmPassword");
         }}
-        placeholder="Re-enter your password"
+        placeholder={m.auth_form_confirm_password_placeholder()}
         error={errors.confirmPassword}
         icon={<Lock className="size-4" />}
         endContent={
@@ -126,8 +126,8 @@ export default function SignUpForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Creating account..." icon={<UserPlus className="size-4" />}>
-        Create account
+      <SubmitButton pendingText={m.auth_form_signup_pending()} icon={<UserPlus className="size-4" />}>
+        {m.auth_form_signup_button()}
       </SubmitButton>
     </form>
   );

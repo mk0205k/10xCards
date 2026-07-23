@@ -1,24 +1,26 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import SignInForm from "@/components/auth/SignInForm";
+import { m } from "@/paraglide/messages.js";
 
 const error = Astro.url.searchParams.get("error");
 ---
 
-<Layout title="Sign in">
+<Layout title={m.auth_signin_title()}>
   <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
     <div class="w-full max-w-sm rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
       <h1
         class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-2xl font-bold text-transparent"
       >
-        Sign in
+        {m.auth_signin_title()}
       </h1>
       <SignInForm serverError={error} client:load />
       <p class="mt-4 text-center text-sm text-blue-100/60">
-        <a href="/auth/reset-password" class="text-purple-300 hover:underline">Zapomniałeś hasła?</a>
+        <a href="/auth/reset-password" class="text-purple-300 hover:underline">{m.auth_signin_forgot_password()}</a>
       </p>
       <p class="mt-2 text-center text-sm text-blue-100/60">
-        Don't have an account? <a href="/auth/signup" class="text-purple-300 hover:underline">Sign up</a>
+        {m.auth_signin_no_account()}{" "}
+        <a href="/auth/signup" class="text-purple-300 hover:underline">{m.auth_signin_link_signup()}</a>
       </p>
     </div>
   </div>

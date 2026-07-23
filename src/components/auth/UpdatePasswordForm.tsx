@@ -4,6 +4,7 @@ import { FormField } from "@/components/auth/FormField";
 import { PasswordToggle } from "@/components/auth/PasswordToggle";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
+import { m } from "@/paraglide/messages.js";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -22,15 +23,15 @@ export default function UpdatePasswordForm({ serverError }: Props) {
     const next: typeof errors = {};
 
     if (!password) {
-      next.password = "Hasło jest wymagane";
+      next.password = m.auth_form_password_required();
     } else if (password.length < MIN_PASSWORD_LENGTH) {
-      next.password = `Hasło musi mieć co najmniej ${MIN_PASSWORD_LENGTH} znaków`;
+      next.password = m.auth_form_password_too_short({ min: MIN_PASSWORD_LENGTH });
     }
 
     if (!confirmPassword) {
-      next.confirmPassword = "Potwierdź hasło";
+      next.confirmPassword = m.auth_form_confirm_password_required();
     } else if (password !== confirmPassword) {
-      next.confirmPassword = "Hasła nie są zgodne";
+      next.confirmPassword = m.auth_form_passwords_dont_match();
     }
 
     setErrors(next);
@@ -50,25 +51,24 @@ export default function UpdatePasswordForm({ serverError }: Props) {
   const passwordHint =
     !errors.password && password.length > 0 && password.length < MIN_PASSWORD_LENGTH ? (
       <p className="mt-1 text-xs text-blue-100/50">
-        Brakuje jeszcze {MIN_PASSWORD_LENGTH - password.length} znak
-        {MIN_PASSWORD_LENGTH - password.length === 1 ? "" : "ów"}
+        {m.auth_form_password_hint_remaining({ n: MIN_PASSWORD_LENGTH - password.length })}
       </p>
     ) : (
-      <p className="mt-1 text-xs text-blue-100/50">Minimum {MIN_PASSWORD_LENGTH} znaków</p>
+      <p className="mt-1 text-xs text-blue-100/50">{m.auth_form_password_hint_min({ min: MIN_PASSWORD_LENGTH })}</p>
     );
 
   return (
     <form method="POST" action="/api/auth/reset-confirm" className="space-y-4" onSubmit={handleSubmit} noValidate>
       <FormField
         id="password"
-        label="Nowe hasło"
+        label={m.auth_form_new_password_label()}
         type={showPassword ? "text" : "password"}
         value={password}
         onChange={(v) => {
           setPassword(v);
           clearError("password");
         }}
-        placeholder="Min. 6 znaków"
+        placeholder={m.auth_form_password_placeholder_min()}
         error={errors.password}
         hint={passwordHint}
         icon={<Lock className="size-4" />}
@@ -85,14 +85,14 @@ export default function UpdatePasswordForm({ serverError }: Props) {
       <FormField
         id="confirmPassword"
         name="confirmPassword"
-        label="Powtórz hasło"
+        label={m.auth_form_confirm_password_label()}
         type={showConfirmPassword ? "text" : "password"}
         value={confirmPassword}
         onChange={(v) => {
           setConfirmPassword(v);
           clearError("confirmPassword");
         }}
-        placeholder="Powtórz hasło"
+        placeholder={m.auth_form_confirm_password_placeholder()}
         error={errors.confirmPassword}
         icon={<Lock className="size-4" />}
         endContent={
@@ -107,8 +107,8 @@ export default function UpdatePasswordForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Zapisywanie..." icon={<Lock className="size-4" />}>
-        Ustaw hasło
+      <SubmitButton pendingText={m.auth_form_update_password_pending()} icon={<Lock className="size-4" />}>
+        {m.auth_form_update_password_button()}
       </SubmitButton>
     </form>
   );
