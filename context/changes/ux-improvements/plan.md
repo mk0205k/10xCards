@@ -417,35 +417,35 @@ Brak migracji schemy. Brak zmiennych środowiskowych. Brak zależności do dodan
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Build passes: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro sync && npx tsc --noEmit` — 8ee098a
+- [x] 3.2 Linting passes: `npm run lint` — 8ee098a
+- [x] 3.3 Build passes: `npm run build` — 8ee098a
 
 #### Manual
 
-- [x] 3.4 Przycisk "Zacznij od nowa" widoczny gdy jest ≥1 due card
-- [x] 3.5 Kliknięcie resetu wraca sesję do pierwszej due card
-- [x] 3.6 Przycisk disabled podczas `submitting`
-- [x] 3.7 Przycisk widoczny i działa w stanie `error`
-- [x] 3.8 Przycisk NIE jest widoczny gdy 0 due cards
-- [x] 3.9 Działa w obu locale
+- [x] 3.4 Przycisk "Zacznij od nowa" widoczny gdy jest ≥1 due card — 8ee098a
+- [x] 3.5 Kliknięcie resetu wraca sesję do pierwszej due card — 8ee098a
+- [x] 3.6 Przycisk disabled podczas `submitting` — 8ee098a
+- [x] 3.7 Przycisk widoczny i działa w stanie `error` — 8ee098a
+- [x] 3.8 Przycisk NIE jest widoczny gdy 0 due cards — 8ee098a
+- [x] 3.9 Działa w obu locale — 8ee098a
 
 ### Phase 4: Bulk actions na candidate review
 
 #### Automated
 
-- [ ] 4.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
-- [ ] 4.2 Linting passes: `npm run lint`
-- [ ] 4.3 Build passes: `npm run build`
+- [x] 4.1 Type checking passes: `npx astro sync && npx tsc --noEmit`
+- [x] 4.2 Linting passes: `npm run lint`
+- [x] 4.3 Build passes: `npm run build`
 
 #### Manual
 
-- [ ] 4.4 Header nad listą pokazuje "N do przejrzenia" i dwa bulk buttony
-- [ ] 4.5 Bulk accept zapisuje wszystkie pending, progress region pokazuje `Saving: X / N`
-- [ ] 4.6 Padnięta karta zostaje w statusie `error`, pozostałe idą dalej
-- [ ] 4.7 Bulk reject otwiera confirm dialog z liczbą propozycji
-- [ ] 4.8 Confirm bulk reject usuwa wszystkie pending, Anuluj nie zmienia stanu
-- [ ] 4.9 Bulk actions nie dotykają edited / saved / już rejected propozycji
-- [ ] 4.10 Podczas bulk accept oba bulk buttony i per-card akcje disabled
-- [ ] 4.11 Wszystko działa w PL i EN
-- [ ] 4.12 A11y: `aria-live` region ogłasza progress
+- [x] 4.4 Header nad listą pokazuje "N do przejrzenia" i dwa bulk buttony
+- [x] 4.5 Bulk accept zapisuje wszystkie pending, progress region pokazuje `Saving: X / N`
+- [x] 4.6 Padnięta karta zostaje w statusie `error`, pozostałe idą dalej
+- [x] 4.7 Bulk reject otwiera confirm dialog z liczbą propozycji
+- [x] 4.8 Confirm bulk reject usuwa wszystkie pending, Anuluj nie zmienia stanu
+- [x] 4.9 Bulk actions nie dotykają edited / saved / już rejected propozycji
+- [x] 4.10 Podczas bulk accept oba bulk buttony i per-card akcje disabled
+- [x] 4.11 Wszystko działa w PL i EN
+- [x] 4.12 A11y: `aria-live` region ogłasza progress

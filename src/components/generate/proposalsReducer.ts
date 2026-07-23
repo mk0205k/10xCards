@@ -44,7 +44,8 @@ export type ProposalsAction =
   | { type: "saveStart"; id: string }
   | { type: "saveSuccess"; id: string; savedCardId: string }
   | { type: "saveError"; id: string; message: string }
-  | { type: "reset" };
+  | { type: "reset" }
+  | { type: "bulkRejectPending" };
 
 function assignIds(existing: Proposal[], chunks: ProposalDraft[], makeId: () => string): Proposal[] {
   const visible = existing.filter((p) => p.status !== "rejected");
@@ -148,6 +149,11 @@ export function makeReducer(makeId: () => string) {
         };
       case "reset":
         return initialState;
+      case "bulkRejectPending":
+        return {
+          ...state,
+          proposals: state.proposals.map((p) => (p.status === "pending" ? { ...p, status: "rejected" } : p)),
+        };
       default:
         return state;
     }

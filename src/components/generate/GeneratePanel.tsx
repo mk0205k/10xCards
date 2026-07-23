@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { initialState, proposalsReducer } from "@/components/generate/proposalsReducer";
 import type { ProposalDraft, ProposalsState } from "@/components/generate/proposalsReducer";
 import { useProposalStream } from "@/components/hooks/useProposalStream";
@@ -6,15 +6,26 @@ import { createCard, CreateCardError } from "@/lib/api/cards";
 import GenerateForm from "@/components/generate/GenerateForm";
 import ProposalsList from "@/components/generate/ProposalsList";
 import StreamBanner from "@/components/generate/StreamBanner";
+import BulkRejectConfirmDialog from "@/components/generate/BulkRejectConfirmDialog";
+import { Button } from "@/components/ui/button";
 import { m } from "@/paraglide/messages.js";
+
+const BULK_ACCEPT_CONCURRENCY = 4;
 
 function findProposal(state: ProposalsState, id: string) {
   return state.proposals.find((p) => p.id === id);
 }
 
+interface BulkProgress {
+  done: number;
+  total: number;
+}
+
 export default function GeneratePanel() {
   const [state, dispatch] = useReducer(proposalsReducer, initialState);
   const { start, abort } = useProposalStream(dispatch);
+  const [bulkRejectOpen, setBulkRejectOpen] = useState(false);
+  const [bulkAcceptInProgress, setBulkAcceptInProgress] = useState<BulkProgress | null>(null);
 
   const onSubmit = useCallback(
     (text: string) => {
@@ -72,10 +83,61 @@ export default function GeneratePanel() {
     dispatch({ type: "editCancel", id });
   }, []);
 
+  const onBulkAccept = useCallback(async () => {
+    const pending = state.proposals.filter((p) => p.status === "pending");
+    if (pending.length === 0) return;
+    setBulkAcceptInProgress({ done: 0, total: pending.length });
+    for (let i = 0; i < pending.length; i += BULK_ACCEPT_CONCURRENCY) {
+      const chunk = pending.slice(i, i + BULK_ACCEPT_CONCURRENCY);
+      await Promise.allSettled(chunk.map((p) => persist(p.id, p.question, p.answer)));
+      setBulkAcceptInProgress((prev) =>
+        prev ? { ...prev, done: Math.min(prev.done + chunk.length, prev.total) } : null,
+      );
+    }
+    setBulkAcceptInProgress(null);
+  }, [state.proposals, persist]);
+
+  const onBulkReject = useCallback(() => {
+    setBulkRejectOpen(true);
+  }, []);
+  const onBulkRejectConfirm = useCallback(() => {
+    dispatch({ type: "bulkRejectPending" });
+    setBulkRejectOpen(false);
+  }, []);
+
+  const pendingCount = state.proposals.filter((p) => p.status === "pending").length;
+  const bulkDisabled = bulkAcceptInProgress !== null;
+  const showBulkBar = pendingCount > 0 || bulkAcceptInProgress !== null;
+
   return (
     <div className="space-y-4">
       <GenerateForm streamState={state.streamState} onSubmit={onSubmit} onAbort={abort} />
       <StreamBanner streamState={state.streamState} errorMessage={state.errorMessage} onRetry={onRetry} />
+      {showBulkBar && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-md">
+          <span className="text-sm text-white/80">
+            {pendingCount > 0 ? m.generate_bulk_pending_count({ n: pendingCount }) : null}
+          </span>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={() => void onBulkAccept()} disabled={bulkDisabled || pendingCount === 0}>
+              {m.generate_bulk_accept_all_button()}
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={onBulkReject}
+              disabled={bulkDisabled || pendingCount === 0}
+            >
+              {m.generate_bulk_reject_all_button()}
+            </Button>
+          </div>
+          <div aria-live="polite" role="status" className="w-full text-right text-xs text-white/60">
+            {bulkAcceptInProgress
+              ? m.generate_bulk_progress({ done: bulkAcceptInProgress.done, total: bulkAcceptInProgress.total })
+              : ""}
+          </div>
+        </div>
+      )}
       <ProposalsList
         proposals={state.proposals}
         streamState={state.streamState}
@@ -85,6 +147,12 @@ export default function GeneratePanel() {
         onEditChange={onEditChange}
         onEditSave={onEditSave}
         onEditCancel={onEditCancel}
+      />
+      <BulkRejectConfirmDialog
+        open={bulkRejectOpen}
+        onOpenChange={setBulkRejectOpen}
+        pendingCount={pendingCount}
+        onConfirm={onBulkRejectConfirm}
       />
     </div>
   );
