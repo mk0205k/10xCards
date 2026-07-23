@@ -533,36 +533,36 @@ Note: revert po Phase 2/3 wymaga dodatkowo `git revert` na plikach `src/pages/ap
 
 #### Automated
 
-- [x] 2.1 `npm run test` — 3 nowe test files pass
-- [x] 2.2 `npm run lint` OK
-- [x] 2.3 `npm run build` zielony
-- [x] 2.4 `npm run astro sync` — bez zmian w env schema
+- [x] 2.1 `npm run test` — 3 nowe test files pass — 763854d
+- [x] 2.2 `npm run lint` OK — 763854d
+- [x] 2.3 `npm run build` zielony — 763854d
+- [x] 2.4 `npm run astro sync` — bez zmian w env schema — 763854d
 
 #### Manual
 
-- [ ] 2.5 `curl POST /api/account/delete` z valid cookie → 303 redirect
-- [ ] 2.6 W Studio: `select deleted_at, scheduled_hard_delete_at from profiles where user_id=<uuid>` — oba set
-- [ ] 2.7 W Studio: `select * from auth.audit_log_entries where actor_id = '<uuid>'` — widać logout scope=global
-- [ ] 2.8 W Studio: `select count(*) from auth.refresh_tokens where user_id='<uuid>' and revoked=false` = 0
-- [ ] 2.9 `curl POST /api/auth/signup` z soft-deleted emailem → redirect z `?error=account_pending_deletion`
-- [ ] 2.10 Cookie current usera po delete już nie działa (401 na `/api/cards`) w innej karcie
+- [x] 2.5 `curl POST /api/account/delete` z valid cookie → 303 redirect — 763854d
+- [x] 2.6 W Studio: `select deleted_at, scheduled_hard_delete_at from profiles where user_id=<uuid>` — oba set — 763854d
+- [x] 2.7 W Studio: `select * from auth.audit_log_entries where actor_id = '<uuid>'` — widać logout scope=global — 763854d
+- [x] 2.8 W Studio: `select count(*) from auth.refresh_tokens where user_id='<uuid>' and revoked=false` = 0 — 763854d
+- [x] 2.9 `curl POST /api/auth/signup` z soft-deleted emailem → redirect z `?error=account_pending_deletion` — 763854d
+- [x] 2.10 Cookie current usera po delete już nie działa (401 na `/api/cards`) w innej karcie — 763854d
 
 ### Phase 3: Middleware gate + restore page + /account page + delete dialog + docs
 
 #### Automated
 
-- [ ] 3.1 `npm run astro sync && npm run lint && npm run build` zielone
-- [ ] 3.2 `npm run test` — istniejące + Phase 2 testy dalej zielone
+- [x] 3.1 `npm run astro sync && npm run lint && npm run build` zielone
+- [x] 3.2 `npm run test` — istniejące + Phase 2 testy dalej zielone
 
 #### Manual
 
-- [ ] 3.3 Signin jako user → widoczny link "Konto" w Topbar
-- [ ] 3.4 `/account` renderuje sekcję "Strefa niebezpieczna"
-- [ ] 3.5 AlertDialog otwiera się; submit disabled dopóki input != email
-- [ ] 3.6 Po delete: nowa karta z tym samym cookie → redirect `/auth/restore-account`
-- [ ] 3.7 Restore-account strona pokazuje masked email + scheduled_hard_delete_at
-- [ ] 3.8 Klik "Przywróć konto" → `/dashboard`, wszystkie fiszki widoczne (byte-identical)
-- [ ] 3.9 Signout + signup na email userA → `?error=account_pending_deletion` widoczny
-- [ ] 3.10 Signin userA → restore-account → restore → dashboard
-- [ ] 3.11 SQL na cloud: manual `execute_hard_delete()` po backdate `scheduled_hard_delete_at` → user zniknął z auth.users; cards + review_history wyczyszczone przez cascade
-- [ ] 3.12 Watchdog query zwraca 0 w steady state
+- [x] 3.3 Signin jako user → widoczny link "Konto" w Topbar
+- [x] 3.4 `/account` renderuje sekcję "Strefa niebezpieczna"
+- [x] 3.5 AlertDialog otwiera się; submit disabled dopóki input != email
+- [x] 3.6 Po delete: nowa karta z tym samym cookie → redirect `/auth/restore-account`
+- [x] 3.7 Restore-account strona pokazuje masked email + scheduled_hard_delete_at
+- [x] 3.8 Klik "Przywróć konto" → `/dashboard`, wszystkie fiszki widoczne (byte-identical)
+- [x] 3.9 Signout + signup na email userA → `?error=account_pending_deletion` widoczny
+- [x] 3.10 Signin userA → restore-account → restore → dashboard
+- [x] 3.11 SQL na cloud: manual `execute_hard_delete()` po backdate `scheduled_hard_delete_at` → user zniknął z auth.users; cards + review_history wyczyszczone przez cascade
+- [x] 3.12 Watchdog query zwraca 0 w steady state

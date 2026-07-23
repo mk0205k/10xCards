@@ -1,0 +1,84 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { createClient } from "@/lib/supabase";
+
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect("/auth/signin");
+}
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+let profile: { deleted_at: string | null; scheduled_hard_delete_at: string | null } | null = null;
+
+if (supabase) {
+  const { data } = await supabase
+    .from("profiles")
+    .select("deleted_at, scheduled_hard_delete_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  profile = data;
+}
+
+if (!profile?.deleted_at) {
+  return Astro.redirect("/dashboard");
+}
+
+const email = user.email ?? "";
+const atIndex = email.indexOf("@");
+const maskedEmail = atIndex > 0 ? `${email[0]}***@${email.slice(atIndex + 1)}` : email;
+
+const scheduledDate = profile.scheduled_hard_delete_at
+  ? new Date(profile.scheduled_hard_delete_at).toLocaleDateString("pl-PL", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : null;
+
+const error = Astro.url.searchParams.get("error");
+---
+
+<Layout title="Przywróć konto">
+  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
+      <h1
+        class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-center text-2xl font-bold text-transparent"
+      >
+        Twoje konto oczekuje na usunięcie
+      </h1>
+      <p class="mb-2 text-center text-sm text-blue-100/80">
+        Konto <span class="font-semibold text-white">{maskedEmail}</span>
+      </p>
+      {
+        scheduledDate && (
+          <p class="mb-6 text-center text-sm text-blue-100/70">
+            Zostanie trwale usunięte <span class="font-semibold text-white">{scheduledDate}</span>. Do tego czasu możesz
+            je przywrócić jednym kliknięciem.
+          </p>
+        )
+      }
+      {
+        error && (
+          <p class="mb-4 rounded-lg border border-red-500/30 bg-red-900/30 px-3 py-2 text-sm text-red-300">{error}</p>
+        )
+      }
+      <form method="POST" action="/api/account/restore">
+        <button
+          type="submit"
+          class="w-full rounded-lg border border-purple-400/40 bg-purple-500/30 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-500/50"
+        >
+          Przywróć konto
+        </button>
+      </form>
+      <form method="POST" action="/api/auth/signout" class="mt-3">
+        <button
+          type="submit"
+          class="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10"
+        >
+          Wyloguj i zdecyduj później
+        </button>
+      </form>
+    </div>
+  </div>
+</Layout>

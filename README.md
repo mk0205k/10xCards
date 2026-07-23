@@ -159,6 +159,41 @@ Users can then sign in immediately after sign-up without clicking a confirmation
 
 Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
 
+## Account deletion & 30-day retention
+
+Users can delete their account from `/account`. The flow is soft-delete + retention window rather than immediate hard-delete:
+
+1. User clicks **Usuń konto** in `/account` → `AlertDialog` requires them to type their exact email.
+2. `POST /api/account/delete` calls `enqueue_hard_delete(user_id)` which sets `profiles.deleted_at = now()` and `scheduled_hard_delete_at = now() + 30d`, then `supabase.auth.signOut({ scope: "global" })` revokes every refresh token for the user.
+3. Any subsequent request with an old cookie hits the middleware soft-delete gate and is redirected to `/auth/restore-account`. RLS `EXISTS` gates on `cards` and `review_history` also block reads/writes even if a token slips through.
+4. If the user logs in again within the 30-day window they land on `/auth/restore-account` and can click **Przywróć konto** → `POST /api/account/restore` calls `restore_account()` which clears `deleted_at`. Data (fiszki, historia FSRS) is byte-identical.
+5. Two `pg_cron` jobs run daily on Supabase:
+   - `hard_delete_expired_accounts` @ 03:00 UTC — deletes from `auth.users` for every row past cutoff. FK CASCADE clears `cards`, `review_history`, `profiles`.
+   - `retention_watchdog` @ 04:00 UTC — RAISE EXCEPTION when any profile is more than 1 day past its cutoff. The failed job appears red in Supabase Studio → Cron Jobs → History (fail-loud, no external alerting infra required).
+
+Sign-up on an email in the retention window is blocked. `POST /api/auth/signup` pre-checks via the `email_pending_deletion` RPC and redirects with `?error=account_pending_deletion` + a link to sign in and restore.
+
+### Monitoring
+
+- **Supabase Studio → Database → Cron Jobs → History**:
+  - Green rows for `hard_delete_expired_accounts` (03:00 UTC daily) — normal.
+  - Red row for `retention_watchdog` (04:00 UTC daily) = orphans past cutoff. Investigate:
+    ```sql
+    select * from public.profiles
+    where scheduled_hard_delete_at is not null
+      and scheduled_hard_delete_at < now() - interval '1 day';
+    ```
+    Then check `cron.job_run_details` for `hard_delete_expired_accounts` failures the previous day.
+- **Ad-hoc query** (manual double-check outside Studio):
+  ```sql
+  select count(*) from public.profiles
+  where scheduled_hard_delete_at is not null
+    and scheduled_hard_delete_at < now() - interval '1 day';
+  -- 0 = healthy; >0 = investigate as above.
+  ```
+
+`retention_watchdog` is fail-loud (RAISE EXCEPTION), so a red job in Studio is the signal, not just an elevated counter.
+
 ## Deployment
 
 This project deploys to [Cloudflare Workers](https://workers.cloudflare.com/).
