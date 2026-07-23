@@ -35,7 +35,7 @@ A logged-out user who forgot their password can:
 
 ## What We're NOT Doing
 
-- **No custom-branded email template.** Default Supabase template body, only overridden to point at our `/auth/confirm` callback with `token_hash`+`type`+`next`. Subject may be renamed to Polish. No `recovery.html` file.
+- **No custom-branded email template.** The overridden body (`supabase/templates/recovery.html`, 5 lines) only exists to route the recovery link through our `/auth/confirm` callback with the PKCE `token_hash`+`type`+`next` shape — the default Supabase link points at `<supabase-url>/auth/v1/verify?token=…` which does not integrate with our SSR PKCE cookie flow. The body itself remains unbranded; no marketing copy, no logo, no styling beyond a heading and a link. Subject renamed to Polish.
 - **No middleware changes.** Sessions from `verifyOtp({ type: "recovery" })` are treated as ordinary signed-in sessions. This slice does not add an AAL-gate on `/auth/update-password`.
 - **No signout after successful password change.** User stays signed in and is redirected to `/`.
 - **No JSON responses on new endpoints.** Native form POST + redirect-with-query-param, matching the existing pattern.
@@ -347,9 +347,9 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes
-- [ ] 1.2 `npx astro sync` passes (env schema types generated)
-- [ ] 1.3 `npm run build` passes (`PUBLIC_SITE_URL` set in build env)
+- [x] 1.1 `npm run lint` passes — bfba965
+- [x] 1.2 `npx astro sync` passes (env schema types generated) — bfba965
+- [x] 1.3 `npm run build` passes (`PUBLIC_SITE_URL` set in build env) — bfba965
 
 #### Manual
 
@@ -361,9 +361,9 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npm run build` passes
-- [ ] 2.3 `npx astro sync` passes (new routes registered)
+- [x] 2.1 `npm run lint` passes — bfba965
+- [x] 2.2 `npm run build` passes — bfba965
+- [x] 2.3 `npx astro sync` passes (new routes registered) — bfba965
 
 #### Manual
 
@@ -379,9 +379,9 @@ No data migrations. Users signed up before this slice retain their accounts unch
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run build` passes
-- [ ] 3.3 `npx astro sync` passes
+- [x] 3.1 `npm run lint` passes — bfba965
+- [x] 3.2 `npm run build` passes — bfba965
+- [x] 3.3 `npx astro sync` passes — bfba965
 
 #### Manual
 
