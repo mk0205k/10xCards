@@ -39,7 +39,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | done     |
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | done     |
 | S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | done     |
-| S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | planned  |
+| S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | done     |
 | S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
 
 ## Streams
@@ -154,7 +154,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** UX friction przekłada się bezpośrednio na retention — bez bulk actions user manualnie klika przez każdą propozycję po każdym paste, bez reset session pomyłka w ratingach wymusza zakończenie sesji, bez loading states aplikacja wygląda jakby zawiesiła się w trakcie generacji. Nie blokuje walidacji hipotezy (north star S-02 już zamknięty), ale gate'uje "polish" launchu.
-- **Status:** planned
+- **Status:** done
 
 ### S-07: Internacjonalizacja UI (PL/EN, domyślnie PL)
 
@@ -212,3 +212,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **S-04: user, który zapomniał hasła, uruchamia flow "przypomnij hasło", dostaje email z linkiem, ustawia nowe hasło, loguje się nowym hasłem.** — Archived 2026-07-23 → `context/archive/2026-07-14-password-reset-flow/`. Lesson: —.
 - **S-05: user uruchamia flow "usuń konto", świadomie potwierdza, konto natychmiast staje się niedostępne (brak możliwości logowania, dane niewidoczne w aplikacji), dane (auth user, `cards`, `review_history`) są zachowane w stanie soft-deleted przez 30 dni z możliwością przywrócenia przez wsparcie/self-service, po 30 dniach są nieodwracalnie usuwane (hard delete).** — Archived 2026-07-23 → `context/archive/2026-07-23-account-deletion-30d-retention/`. Lesson: —.
 - **S-07: user widzi interfejs domyślnie po polsku, może przełączyć język na angielski (i z powrotem) w widocznym miejscu w UI, wybór jest trwały między sesjami; wszystkie widoczne teksty w aplikacji (nawigacja, formularze, komunikaty błędów, empty states, dialogi, strony auth, review, deck, delete/restore) są przetłumaczone na oba języki.** — Archived 2026-07-23 → `context/archive/2026-07-23-i18n-pl-en-toggle/`. Lesson: —.
+- **S-06: user może zbiorczo akceptować/odrzucać wiele propozycji AI naraz na ekranie candidate review (bulk actions), zresetować bieżącą sesję powtórki bez porzucania flow, oraz widzi jasne stany ładowania / empty / error w kluczowych operacjach (generacja, review, deck).** — Archived 2026-07-23 → `context/archive/2026-07-23-ux-improvements/`. Lesson: —.
