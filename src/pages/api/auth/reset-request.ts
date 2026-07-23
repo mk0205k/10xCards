@@ -22,7 +22,12 @@ export const POST: APIRoute = async (context) => {
     if (error.status === 429) {
       return context.redirect(`/auth/reset-password?error=${ERROR_CODES.RESET_TOO_MANY_ATTEMPTS}`);
     }
-    return context.redirect(`/auth/reset-password?error=${encodeURIComponent(error.message)}`);
+    console.error("[/api/auth/reset-request] resetPasswordForEmail failed", {
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
+    return context.redirect(`/auth/reset-password?error=${ERROR_CODES.UNKNOWN}`);
   }
 
   return context.redirect("/auth/reset-password-sent");

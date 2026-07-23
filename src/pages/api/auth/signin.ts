@@ -16,7 +16,12 @@ export const POST: APIRoute = async (context) => {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return context.redirect(`/auth/signin?error=${encodeURIComponent(error.message)}`);
+    console.error("[/api/auth/signin] signInWithPassword failed", {
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
+    return context.redirect(`/auth/signin?error=${ERROR_CODES.UNKNOWN}`);
   }
 
   return context.redirect("/");

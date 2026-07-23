@@ -12,13 +12,11 @@ export default defineConfig({
   output: "server",
   site: "https://10x-astro-starter.mk-betasi.workers.dev",
   integrations: [react(), sitemap()],
-  i18n: {
-    defaultLocale: "pl",
-    locales: ["pl", "en"],
-  },
   vite: {
     plugins: [
       tailwindcss(),
+      // Paraglide is the single source of truth for i18n (cookie-only strategy,
+      // no URL prefixes) — see AGENTS.md § Internationalization.
       paraglideVitePlugin({
         project: "./project.inlang",
         outdir: "./src/paraglide",

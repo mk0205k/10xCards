@@ -51,6 +51,7 @@ const errorMessage = errorCodeToMessage(Astro.url.searchParams.get("error"));
         {m.auth_restore_account_title()}
       </h1>
       <p class="mb-2 text-center text-sm text-blue-100/80">
+        {m.auth_restore_account_email_prefix()}
         <span class="font-semibold text-white">{maskedEmail}</span>
       </p>
       {

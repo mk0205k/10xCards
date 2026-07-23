@@ -9,19 +9,19 @@ interface CardListItemProps {
   onDeleteClick?: () => void;
 }
 
-const SOURCE_LABELS: Record<string, { label: string; className: string }> = {
+const SOURCE_BADGES: Record<string, { label: () => string; className: string }> = {
   ai: {
-    label: "AI",
+    label: m.deck_card_source_ai,
     className: "bg-purple-500/20 text-purple-100 border-purple-400/30",
   },
   manual: {
-    label: "manual",
+    label: m.deck_card_source_manual,
     className: "bg-blue-500/20 text-blue-100 border-blue-400/30",
   },
 };
 
 export default function CardListItem({ card, onEditClick, onDeleteClick }: CardListItemProps) {
-  const badge = SOURCE_LABELS[card.source] ?? SOURCE_LABELS.manual;
+  const badge = SOURCE_BADGES[card.source] ?? SOURCE_BADGES.manual;
   return (
     <div
       role="button"
@@ -45,7 +45,7 @@ export default function CardListItem({ card, onEditClick, onDeleteClick }: CardL
               badge.className,
             )}
           >
-            {badge.label}
+            {badge.label()}
           </span>
         </div>
         <CardContent className="text-sm leading-relaxed text-blue-100/70">{card.answer}</CardContent>

@@ -2,10 +2,10 @@
 import Layout from "@/layouts/Layout.astro";
 import SignUpForm from "@/components/auth/SignUpForm";
 import { m } from "@/paraglide/messages.js";
+import { ERROR_CODES } from "@/lib/error-messages";
 
 const rawError = Astro.url.searchParams.get("error");
-const isPendingDeletion = rawError === "account_pending_deletion";
-const error = isPendingDeletion ? m.auth_signup_pending_deletion() : rawError;
+const isPendingDeletion = rawError === ERROR_CODES.ACCOUNT_PENDING_DELETION;
 ---
 
 <Layout title={m.auth_signup_title()}>
@@ -16,7 +16,7 @@ const error = isPendingDeletion ? m.auth_signup_pending_deletion() : rawError;
       >
         {m.auth_signup_title()}
       </h1>
-      <SignUpForm serverError={error} client:load />
+      <SignUpForm serverError={rawError} client:load />
       {
         isPendingDeletion && (
           <p class="mt-3 text-center text-sm text-blue-100/70">

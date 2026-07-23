@@ -43,6 +43,7 @@
   "auth_confirm_supabase_not_configured": "Supabase is not configured.",
 
   "auth_restore_account_title": "Your account is pending deletion",
+  "auth_restore_account_email_prefix": "Account",
   "auth_restore_account_scheduled": "Will be permanently deleted on {date}. Until then you can restore it with a single click.",
   "auth_restore_account_action": "Restore account",
   "auth_restore_account_signout": "Sign out and decide later",
@@ -157,6 +158,8 @@
   "deck_card_edit_aria": "Edit card: {question}",
   "deck_card_delete_aria": "Delete card: {question}",
   "deck_card_delete_button": "Delete",
+  "deck_card_source_ai": "AI",
+  "deck_card_source_manual": "manual",
   "deck_dialog_new_title": "New card",
   "deck_dialog_new_description": "Add a card manually. It will land at the top of your deck.",
   "deck_dialog_edit_title": "Edit card",

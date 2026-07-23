@@ -14,7 +14,10 @@ const SOFT_DELETE_ALLOWED_PATHS = [
 ];
 
 export const onRequest = defineMiddleware((context, next) => {
-  return paraglideMiddleware(context.request, async () => {
+  return paraglideMiddleware(context.request, async ({ request }) => {
+    // Read the pathname from the delocalized request Paraglide hands back —
+    // future-proofs the route matchers if the strategy ever adds "url".
+    const pathname = new URL(request.url).pathname;
     const supabase = createClient(context.request.headers, context.cookies);
 
     if (supabase) {
@@ -24,7 +27,6 @@ export const onRequest = defineMiddleware((context, next) => {
       context.locals.user = user ?? null;
 
       if (user) {
-        const pathname = context.url.pathname;
         const onAllowedPath = SOFT_DELETE_ALLOWED_PATHS.some((p) => pathname.startsWith(p));
         if (!onAllowedPath) {
           const { data: profile } = await supabase
@@ -41,7 +43,7 @@ export const onRequest = defineMiddleware((context, next) => {
       context.locals.user = null;
     }
 
-    if (PROTECTED_ROUTES.some((route) => context.url.pathname.startsWith(route))) {
+    if (PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
       if (!context.locals.user) {
         return context.redirect("/auth/signin");
       }

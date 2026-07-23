@@ -33,13 +33,18 @@ export const POST: APIRoute = async (context) => {
       message: peErr.message,
     });
   } else if (pending) {
-    return context.redirect(`/auth/signup?error=account_pending_deletion`);
+    return context.redirect(`/auth/signup?error=${ERROR_CODES.ACCOUNT_PENDING_DELETION}`);
   }
 
   const { error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
-    return context.redirect(`/auth/signup?error=${encodeURIComponent(error.message)}`);
+    console.error("[/api/auth/signup] signUp failed", {
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
+    return context.redirect(`/auth/signup?error=${ERROR_CODES.UNKNOWN}`);
   }
 
   return context.redirect("/auth/confirm-email");

@@ -9,6 +9,7 @@ export const ERROR_CODES = {
   RESET_TOO_MANY_ATTEMPTS: "RESET_TOO_MANY_ATTEMPTS",
   ACCOUNT_DELETE_FAILED: "ACCOUNT_DELETE_FAILED",
   ACCOUNT_RESTORE_FAILED: "ACCOUNT_RESTORE_FAILED",
+  ACCOUNT_PENDING_DELETION: "ACCOUNT_PENDING_DELETION",
   EMAIL_REQUIRED: "EMAIL_REQUIRED",
 } as const;
 
@@ -23,10 +24,9 @@ const RESOLVERS: Record<ErrorCode, () => string> = {
   RESET_TOO_MANY_ATTEMPTS: m.error_reset_too_many_attempts,
   ACCOUNT_DELETE_FAILED: m.error_account_delete_failed,
   ACCOUNT_RESTORE_FAILED: m.error_account_restore_failed,
+  ACCOUNT_PENDING_DELETION: m.auth_signup_pending_deletion,
   EMAIL_REQUIRED: m.error_email_required,
 };
-
-const CODE_PATTERN = /^[A-Z][A-Z0-9_]*$/;
 
 function isKnownCode(input: string): input is ErrorCode {
   return input in RESOLVERS;
@@ -34,13 +34,12 @@ function isKnownCode(input: string): input is ErrorCode {
 
 /**
  * Resolve a server-side error code to a localized message.
- * - Known UPPER_SNAKE codes → translated via Paraglide.
- * - Unknown UPPER_SNAKE codes → error_unknown fallback.
- * - Free-form strings (e.g. raw Supabase SDK messages) → returned as-is.
+ * Known codes translate via Paraglide; anything else — unknown codes or raw
+ * vendor strings — collapses to `error_unknown` so untranslated vendor text
+ * never renders in a localized UI.
  */
 export function errorCodeToMessage(input: string | null | undefined): string | null {
   if (!input) return null;
   if (isKnownCode(input)) return RESOLVERS[input]();
-  if (CODE_PATTERN.test(input)) return m.error_unknown();
-  return input;
+  return m.error_unknown();
 }

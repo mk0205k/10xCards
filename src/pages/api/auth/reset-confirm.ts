@@ -28,7 +28,13 @@ export const POST: APIRoute = async (context) => {
     if (error.name === "AuthSessionMissingError") {
       return errRedirect(context, "/auth/reset-password", ERROR_CODES.RESET_SESSION_EXPIRED);
     }
-    return context.redirect(`/auth/update-password?error=${encodeURIComponent(error.message)}`);
+    console.error("[/api/auth/reset-confirm] updateUser failed", {
+      code: error.code,
+      name: error.name,
+      status: error.status,
+      message: error.message,
+    });
+    return errRedirect(context, "/auth/update-password", ERROR_CODES.UNKNOWN);
   }
 
   return context.redirect("/");
