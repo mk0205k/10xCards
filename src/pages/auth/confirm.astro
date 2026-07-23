@@ -5,7 +5,8 @@ const invalidLinkUrl = `/auth/reset-password?error=${encodeURIComponent("Link wy
 
 const tokenHash = Astro.url.searchParams.get("token_hash");
 const type = Astro.url.searchParams.get("type");
-const next = Astro.url.searchParams.get("next") ?? "/auth/update-password";
+const rawNext = Astro.url.searchParams.get("next") ?? "/auth/update-password";
+const safeNext = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/auth/update-password";
 
 if (!tokenHash || type !== "recovery") {
   return Astro.redirect(invalidLinkUrl);
@@ -21,5 +22,5 @@ if (error) {
   return Astro.redirect(invalidLinkUrl);
 }
 
-return Astro.redirect(next);
+return Astro.redirect(safeNext);
 ---
