@@ -2,7 +2,11 @@
 import Layout from "@/layouts/Layout.astro";
 import SignUpForm from "@/components/auth/SignUpForm";
 
-const error = Astro.url.searchParams.get("error");
+const rawError = Astro.url.searchParams.get("error");
+const isPendingDeletion = rawError === "account_pending_deletion";
+const error = isPendingDeletion
+  ? "Konto z tym mailem oczekuje na usunięcie. Zaloguj się, aby je przywrócić w ciągu 30 dni."
+  : rawError;
 ---
 
 <Layout title="Sign up">
@@ -14,6 +18,15 @@ const error = Astro.url.searchParams.get("error");
         Sign up
       </h1>
       <SignUpForm serverError={error} client:load />
+      {
+        isPendingDeletion && (
+          <p class="mt-3 text-center text-sm text-blue-100/70">
+            <a href="/auth/signin" class="text-purple-300 hover:underline">
+              Zaloguj się, aby przywrócić konto
+            </a>
+          </p>
+        )
+      }
       <p class="mt-4 text-center text-sm text-blue-100/60">
         Already have an account? <a href="/auth/signin" class="text-purple-300 hover:underline">Sign in</a>
       </p>

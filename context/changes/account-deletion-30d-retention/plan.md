@@ -512,31 +512,31 @@ Note: revert po Phase 2/3 wymaga dodatkowo `git revert` na plikach `src/pages/ap
 
 #### Automated
 
-- [x] 1.1 `supabase db reset` bez błędów
-- [x] 1.2 `supabase db lint --level warning` bez warningów o RLS na profiles
-- [x] 1.3 `supabase test db` — exit 0, ~36-38 asercji ok
-- [x] 1.4 `npm run db:types` regeneracja bez błędów; drugi run pusty diff
-- [x] 1.5 `npm run astro sync && npm run lint && npm run build` zielone
-- [x] 1.6 Na cloud: `select extname from pg_extension where extname = 'pg_cron'` zwraca wiersz
-- [x] 1.7 Na cloud: `select jobname from cron.job where jobname in ('hard_delete_expired_accounts','retention_watchdog')` zwraca 2 wiersze
+- [x] 1.1 `supabase db reset` bez błędów — 8233ef1
+- [x] 1.2 `supabase db lint --level warning` bez warningów o RLS na profiles — 8233ef1
+- [x] 1.3 `supabase test db` — exit 0, ~36-38 asercji ok — 8233ef1
+- [x] 1.4 `npm run db:types` regeneracja bez błędów; drugi run pusty diff — 8233ef1
+- [x] 1.5 `npm run astro sync && npm run lint && npm run build` zielone — 8233ef1
+- [x] 1.6 Na cloud: `select extname from pg_extension where extname = 'pg_cron'` zwraca wiersz — 8233ef1
+- [x] 1.7 Na cloud: `select jobname from cron.job where jobname in ('hard_delete_expired_accounts','retention_watchdog')` zwraca 2 wiersze — 8233ef1
 
 #### Manual
 
-- [x] 1.8 W Studio widoczna tabela `public.profiles`
-- [x] 1.9 W Studio widocznych 5 nowych funkcji z poprawnymi security modes (enqueue/restore/execute/watchdog/email_pending)
-- [x] 1.10 W Studio widoczny trigger `on_auth_user_created`
-- [x] 1.11 Na cloud: `select * from cron.job` pokazuje oba joby
-- [x] 1.12 Ręczne wywołanie `select public.execute_hard_delete()` na cloud po insercie testowego wiersza usuwa wiersz
-- [x] 1.13 Ręczne wywołanie `select public.retention_watchdog()` na cloud z orphanem >1d — exception (fail-loud); bez orphanów — clean run
+- [x] 1.8 W Studio widoczna tabela `public.profiles` — 8233ef1
+- [x] 1.9 W Studio widocznych 5 nowych funkcji z poprawnymi security modes (enqueue/restore/execute/watchdog/email_pending) — 8233ef1
+- [x] 1.10 W Studio widoczny trigger `on_auth_user_created` — 8233ef1
+- [x] 1.11 Na cloud: `select * from cron.job` pokazuje oba joby — 8233ef1
+- [x] 1.12 Ręczne wywołanie `select public.execute_hard_delete()` na cloud po insercie testowego wiersza usuwa wiersz — 8233ef1
+- [x] 1.13 Ręczne wywołanie `select public.retention_watchdog()` na cloud z orphanem >1d — exception (fail-loud); bez orphanów — clean run — 8233ef1
 
 ### Phase 2: Delete/restore endpoints + signup guard
 
 #### Automated
 
-- [ ] 2.1 `npm run test` — 3 nowe test files pass
-- [ ] 2.2 `npm run lint` OK
-- [ ] 2.3 `npm run build` zielony
-- [ ] 2.4 `npm run astro sync` — bez zmian w env schema
+- [x] 2.1 `npm run test` — 3 nowe test files pass
+- [x] 2.2 `npm run lint` OK
+- [x] 2.3 `npm run build` zielony
+- [x] 2.4 `npm run astro sync` — bez zmian w env schema
 
 #### Manual
 
