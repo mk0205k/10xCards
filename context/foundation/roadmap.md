@@ -38,7 +38,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-02  | first-review-session          | przejść pełną sesję powtórki: pytanie → odpowiedź → ocena trudności → nowa data powtórki | F-01, S-01    | US-02, FR-012, FR-013, FR-014, FR-015  | done     |
 | S-03  | deck-management-crud          | ręcznie utworzyć fiszkę, przeglądać wszystkie fiszki, edytować i usuwać istniejące | F-01          | FR-008, FR-009, FR-010, FR-011         | done     |
 | S-04  | password-reset-flow           | zresetować hasło poprzez wiadomość email                    | F-01          | FR-003                                  | done     |
-| S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | planned  |
+| S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | done     |
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | planned  |
 
 ## Streams
@@ -141,7 +141,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
   - Mechanizm hard-delete po 30 dniach (Supabase cron function vs Cloudflare scheduled worker vs manual runbook). Owner: user. Block: yes — decyduje o feasibility retention windowa i o tym, czy slice trzyma się w budżecie MVP.
   - Zachowanie przy re-signup na ten sam email w oknie 30 dni (blokada vs auto-restore vs nowe konto). Owner: user. Block: yes — decyduje o semantyce uniqueness i UX flow "wracam po tygodniu".
 - **Risk:** Retencja 30 dni oznacza że dane wciąż fizycznie istnieją — RLS musi nadal izolować cudze soft-deleted rows (Privacy NFR); jeśli hard-delete cron zawiedzie po cichu, dane wiszą w nieskończoność (compliance risk bez zewnętrznego sygnału). Ryzyko mitiguje: idempotent hard-delete job z observability alertem gdy licznik soft-deleted starszych niż 30d rośnie; test scenariusz "user B nie widzi rows usera A po soft-delete" analogicznie do gate'u RLS z F-01.
-- **Status:** planned
+- **Status:** done
 
 ### S-06: UX improvements
 
