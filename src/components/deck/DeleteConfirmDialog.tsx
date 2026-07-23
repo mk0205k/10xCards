@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { deleteCard, CardApiError, type CardRow } from "@/lib/api/cards";
+import { m } from "@/paraglide/messages.js";
 
 interface DeleteConfirmDialogProps {
   card: CardRow | null;
@@ -34,7 +35,7 @@ function DeleteConfirmBody({ card, onOpenChange, onDeleted }: DeleteConfirmBodyP
       onDeleted(card.id);
       onOpenChange(false);
     } catch (err) {
-      const message = err instanceof CardApiError ? err.message : "Usuwanie nie powiodło się.";
+      const message = err instanceof CardApiError ? err.message : m.deck_delete_confirm_failed();
       setError(message);
     } finally {
       setDeleting(false);
@@ -44,8 +45,8 @@ function DeleteConfirmBody({ card, onOpenChange, onDeleted }: DeleteConfirmBodyP
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Usunąć tę fiszkę?</DialogTitle>
-        <DialogDescription>Ta operacja jest nieodwracalna i usunie również jej historię powtórek.</DialogDescription>
+        <DialogTitle>{m.deck_delete_confirm_title()}</DialogTitle>
+        <DialogDescription>{m.deck_delete_confirm_body()}</DialogDescription>
       </DialogHeader>
       {error && (
         <div className="rounded-md border border-red-400/40 bg-red-500/10 p-2 text-sm text-red-100" role="alert">
@@ -61,10 +62,10 @@ function DeleteConfirmBody({ card, onOpenChange, onDeleted }: DeleteConfirmBodyP
           }}
           disabled={deleting}
         >
-          Anuluj
+          {m.deck_delete_confirm_cancel()}
         </Button>
         <Button type="button" variant="destructive" onClick={handleConfirm} disabled={deleting}>
-          {deleting ? "Usuwanie…" : "Usuń"}
+          {deleting ? m.deck_delete_confirm_pending() : m.deck_delete_confirm_action()}
         </Button>
       </DialogFooter>
     </>

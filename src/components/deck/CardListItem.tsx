@@ -1,6 +1,7 @@
 import type { CardRow } from "@/lib/api/cards";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages.js";
 
 interface CardListItemProps {
   card: CardRow;
@@ -33,7 +34,7 @@ export default function CardListItem({ card, onEditClick, onDeleteClick }: CardL
         }
       }}
       className="block w-full cursor-pointer rounded-xl text-left focus-visible:ring-2 focus-visible:ring-blue-400/60 focus-visible:outline-none"
-      aria-label={`Edytuj fiszkę: ${card.question}`}
+      aria-label={m.deck_card_edit_aria({ question: card.question })}
     >
       <Card className="transition-colors hover:bg-white/10">
         <div className="flex items-start justify-between gap-3">
@@ -57,9 +58,9 @@ export default function CardListItem({ card, onEditClick, onDeleteClick }: CardL
                 onDeleteClick();
               }}
               className="rounded-md border border-red-400/40 bg-red-500/10 px-2 py-1 text-xs text-red-100 hover:bg-red-500/20"
-              aria-label={`Usuń fiszkę: ${card.question}`}
+              aria-label={m.deck_card_delete_aria({ question: card.question })}
             >
-              Usuń
+              {m.deck_card_delete_button()}
             </button>
           </div>
         )}

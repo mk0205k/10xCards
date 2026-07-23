@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { Button } from "@/components/ui/button";
 import { fetchNext, rateCard, ReviewApiError, type NextResponse, type PreviewMap, type Rating } from "@/lib/api/review";
+import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 
 type Phase = "loading" | "question" | "answer" | "submitting" | "error";
 
@@ -42,22 +44,22 @@ function reducer(state: State, action: Action): State {
 function formatRelativeDate(iso: string, now: Date): string {
   const target = new Date(iso).getTime();
   const diffMs = target - now.getTime();
-  if (diffMs <= 0) return "za chwilę";
+  if (diffMs <= 0) return m.review_when_now();
   const minutes = Math.round(diffMs / 60_000);
-  if (minutes < 60) return `za ${minutes} min`;
+  if (minutes < 60) return m.review_when_minutes({ n: minutes });
   const hours = Math.round(diffMs / 3_600_000);
-  if (hours < 24) return `za ${hours} h`;
+  if (hours < 24) return m.review_when_hours({ n: hours });
   const days = Math.round(diffMs / 86_400_000);
-  if (days === 1) return "jutro";
-  if (days < 7) return `za ${days} dni`;
-  return new Date(iso).toLocaleDateString();
+  if (days === 1) return m.review_when_tomorrow();
+  if (days < 7) return m.review_when_days({ n: days });
+  return new Date(iso).toLocaleDateString(getLocale());
 }
 
 const RATING_ORDER = [
-  { rating: 1 as Rating, key: "again" as const, label: "Again", variant: "destructive" as const },
-  { rating: 2 as Rating, key: "hard" as const, label: "Hard", variant: "outline" as const },
-  { rating: 3 as Rating, key: "good" as const, label: "Good", variant: "default" as const },
-  { rating: 4 as Rating, key: "easy" as const, label: "Easy", variant: "secondary" as const },
+  { rating: 1 as Rating, key: "again" as const, label: m.review_rating_again, variant: "destructive" as const },
+  { rating: 2 as Rating, key: "hard" as const, label: m.review_rating_hard, variant: "outline" as const },
+  { rating: 3 as Rating, key: "good" as const, label: m.review_rating_good, variant: "default" as const },
+  { rating: 4 as Rating, key: "easy" as const, label: m.review_rating_easy, variant: "secondary" as const },
 ];
 
 export default function ReviewSession() {
@@ -68,7 +70,7 @@ export default function ReviewSession() {
       const data = await fetchNext();
       dispatch({ type: "loaded", data });
     } catch (error) {
-      const message = error instanceof ReviewApiError ? error.message : "Nie udało się pobrać kolejnej fiszki";
+      const message = error instanceof ReviewApiError ? error.message : m.review_error_next();
       dispatch({ type: "error", message });
     }
   }, []);
@@ -90,7 +92,7 @@ export default function ReviewSession() {
         await rateCard(card.id, rating);
         await loadNext();
       } catch (error) {
-        const message = error instanceof ReviewApiError ? error.message : "Nie udało się zapisać oceny";
+        const message = error instanceof ReviewApiError ? error.message : m.review_error_save();
         dispatch({ type: "error", message });
       }
     },
@@ -98,13 +100,13 @@ export default function ReviewSession() {
   );
 
   if (state.phase === "loading" && !state.data) {
-    return <SessionShell>Ładowanie…</SessionShell>;
+    return <SessionShell>{m.review_loading()}</SessionShell>;
   }
 
   if (state.phase === "error") {
     return (
       <SessionShell>
-        <p className="text-red-300">{state.errorMessage ?? "Coś poszło nie tak"}</p>
+        <p className="text-red-300">{state.errorMessage ?? m.review_error_generic()}</p>
         <div className="mt-4">
           <Button
             variant="outline"
@@ -112,7 +114,7 @@ export default function ReviewSession() {
               void loadNext();
             }}
           >
-            Spróbuj ponownie
+            {m.review_retry()}
           </Button>
         </div>
       </SessionShell>
@@ -125,7 +127,7 @@ export default function ReviewSession() {
   }
 
   if (!data?.card) {
-    return <SessionShell>Ładowanie…</SessionShell>;
+    return <SessionShell>{m.review_loading()}</SessionShell>;
   }
 
   const { card, preview } = data;
@@ -135,21 +137,21 @@ export default function ReviewSession() {
     <SessionShell>
       <div className="space-y-6">
         <section>
-          <h2 className="mb-2 text-sm tracking-wide text-blue-200/70 uppercase">Pytanie</h2>
+          <h2 className="mb-2 text-sm tracking-wide text-blue-200/70 uppercase">{m.review_question()}</h2>
           <p className="text-lg whitespace-pre-wrap">{card.question}</p>
         </section>
 
         {state.phase === "answer" || submitting ? (
           <>
             <section>
-              <h2 className="mb-2 text-sm tracking-wide text-blue-200/70 uppercase">Odpowiedź</h2>
+              <h2 className="mb-2 text-sm tracking-wide text-blue-200/70 uppercase">{m.review_answer()}</h2>
               <p className="text-lg whitespace-pre-wrap text-white">{card.answer}</p>
             </section>
             <RatingRow preview={preview} submitting={submitting} onRate={onRate} />
           </>
         ) : (
           <Button size="lg" onClick={onReveal} disabled={submitting}>
-            Pokaż odpowiedź
+            {m.review_show_answer()}
           </Button>
         )}
       </div>
@@ -178,7 +180,7 @@ function RatingRow({
           }}
           className="flex-col py-6 text-base"
         >
-          <span>{label}</span>
+          <span>{label()}</span>
           <span className="text-xs opacity-80">→ {preview[key].interval}</span>
         </Button>
       ))}
@@ -191,11 +193,11 @@ function EmptyQueue({ nextDueAt }: { nextDueAt: string | null }) {
   return (
     <SessionShell>
       <div className="space-y-3 text-center">
-        <p className="text-lg">Sesja zakończona 🎉</p>
+        <p className="text-lg">{m.review_session_complete()}</p>
         <p className="text-blue-100/70">
           {nextDueAt === null
-            ? "Brak fiszek w talii."
-            : `Następna karta do powtórki: ${formatRelativeDate(nextDueAt, now)}.`}
+            ? m.review_empty_deck()
+            : m.review_next_card_at({ when: formatRelativeDate(nextDueAt, now) })}
         </p>
       </div>
     </SessionShell>

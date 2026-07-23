@@ -6,6 +6,7 @@ import { createCard, CreateCardError } from "@/lib/api/cards";
 import GenerateForm from "@/components/generate/GenerateForm";
 import ProposalsList from "@/components/generate/ProposalsList";
 import StreamBanner from "@/components/generate/StreamBanner";
+import { m } from "@/paraglide/messages.js";
 
 function findProposal(state: ProposalsState, id: string) {
   return state.proposals.find((p) => p.id === id);
@@ -33,7 +34,7 @@ export default function GeneratePanel() {
       const saved = await createCard({ question, answer, source: "ai" });
       dispatch({ type: "saveSuccess", id, savedCardId: saved.id });
     } catch (error) {
-      const message = error instanceof CreateCardError ? error.message : "Save failed";
+      const message = error instanceof CreateCardError ? error.message : m.generate_save_failed();
       dispatch({ type: "saveError", id, message });
     }
   }, []);

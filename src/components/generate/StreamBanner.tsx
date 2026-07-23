@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { StreamState } from "@/components/generate/proposalsReducer";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   streamState: StreamState;
@@ -13,11 +14,11 @@ export default function StreamBanner({ streamState, errorMessage, onRetry }: Pro
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-red-100">
       <span className="text-sm">
-        Generation interrupted — some proposals may be missing.
+        {m.generate_stream_interrupted()}
         {errorMessage ? <span className="ml-1 text-red-200/70">({errorMessage})</span> : null}
       </span>
       <Button size="sm" variant="outline" onClick={onRetry}>
-        Retry
+        {m.generate_proposal_retry()}
       </Button>
     </div>
   );

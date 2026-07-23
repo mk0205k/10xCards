@@ -417,35 +417,35 @@ Rollback: revert PR-a. Cookie `PARAGLIDE_LOCALE` w przeglądarkach użytkownikó
 
 #### Automated
 
-- [x] 2.1 Build przechodzi: `npm run build`
-- [x] 2.2 Type check przechodzi: `npx astro check`
-- [x] 2.3 Lint przechodzi: `npm run lint`
-- [x] 2.4 Grep na PL diakrytyki w migrowanych plikach zwraca 0 (poza komentarzami)
+- [x] 2.1 Build przechodzi: `npm run build` — 4c5ae65
+- [x] 2.2 Type check przechodzi: `npx astro check` — 4c5ae65
+- [x] 2.3 Lint przechodzi: `npm run lint` — 4c5ae65
+- [x] 2.4 Grep na PL diakrytyki w migrowanych plikach zwraca 0 (poza komentarzami) — 4c5ae65
 
 #### Manual
 
-- [x] 2.5 Wszystkie 9 stron auth renderuje się poprawnie w PL i EN
-- [x] 2.6 Formularze signin/signup/reset-password/update-password działają w obu językach; walidacja client-side pokazuje właściwe komunikaty
-- [x] 2.7 Dialog "Usuń konto" — wszystkie teksty w obu językach, w tym input placeholder i disabled state
-- [x] 2.8 Strona `restore-account` — komunikat w obu językach; data wciąż `pl-PL` (naprawa w Fazie 4)
+- [x] 2.5 Wszystkie 9 stron auth renderuje się poprawnie w PL i EN — 4c5ae65
+- [x] 2.6 Formularze signin/signup/reset-password/update-password działają w obu językach; walidacja client-side pokazuje właściwe komunikaty — 4c5ae65
+- [x] 2.7 Dialog "Usuń konto" — wszystkie teksty w obu językach, w tym input placeholder i disabled state — 4c5ae65
+- [x] 2.8 Strona `restore-account` — komunikat w obu językach; data wciąż `pl-PL` (naprawa w Fazie 4) — 4c5ae65
 
 ### Phase 3: Core features — generate, review, deck + walidacja + dialogi
 
 #### Automated
 
-- [ ] 3.1 Build przechodzi: `npm run build`
-- [ ] 3.2 Type check przechodzi
-- [ ] 3.3 Lint przechodzi
-- [ ] 3.4 Grep dla PL diakrytyków w `src/components/{generate,review,deck}/` i `src/pages/{index,dashboard,generate,review,deck}.astro` zwraca 0 (poza komentarzami)
+- [x] 3.1 Build przechodzi: `npm run build`
+- [x] 3.2 Type check przechodzi
+- [x] 3.3 Lint przechodzi
+- [x] 3.4 Grep dla PL diakrytyków w `src/components/{generate,review,deck}/` i `src/pages/{index,dashboard,generate,review,deck}.astro` zwraca 0 (poza komentarzami)
 
 #### Manual
 
-- [ ] 3.5 Landing (`/`) w obu językach — hero + CTA właściwe
-- [ ] 3.6 Dashboard w obu językach
-- [ ] 3.7 Generate flow: wklejenie, generacja, kandydaci, edycja — wszystko w obu językach
-- [ ] 3.8 Review session: start, 4 przyciski, zakończenie — obie wersje
-- [ ] 3.9 Deck: lista, wyszukiwarka, dodanie, edycja, usunięcie z potwierdzeniem — obie wersje
-- [ ] 3.10 Empty states widoczne w obu językach
+- [x] 3.5 Landing (`/`) w obu językach — hero + CTA właściwe
+- [x] 3.6 Dashboard w obu językach
+- [x] 3.7 Generate flow: wklejenie, generacja, kandydaci, edycja — wszystko w obu językach
+- [x] 3.8 Review session: start, 4 przyciski, zakończenie — obie wersje
+- [x] 3.9 Deck: lista, wyszukiwarka, dodanie, edycja, usunięcie z potwierdzeniem — obie wersje
+- [x] 3.10 Empty states widoczne w obu językach
 
 ### Phase 4: API error codes + client mapping + regression pass
 

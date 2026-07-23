@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Banner from "@/components/Banner.astro";
 import { missingConfigs } from "@/lib/config-status";
 import { getLocale } from "@/paraglide/runtime.js";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   title?: string;
@@ -23,12 +24,12 @@ const { title = "10x Astro Starter" } = Astro.props;
     {
       missingConfigs.map((cfg) => (
         <Banner variant="error">
-          <strong>Uwaga:</strong> {cfg.message}
+          <strong>{m.config_banner_warning_prefix()}</strong> {m[cfg.messageKey]()}
           {cfg.docsUrl && (
             <>
               {" "}
               <a href={cfg.docsUrl} target="_blank" rel="noopener noreferrer">
-                {cfg.docsLabel ?? "Dokumentacja"}
+                {cfg.docsLabelKey ? m[cfg.docsLabelKey]() : m.config_banner_docs_default()}
               </a>
               .
             </>

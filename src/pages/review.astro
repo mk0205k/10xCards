@@ -1,19 +1,20 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import ReviewSession from "@/components/review/ReviewSession";
+import { m } from "@/paraglide/messages.js";
 
 const { user } = Astro.locals;
 ---
 
-<Layout title="Review">
+<Layout title={m.review_page_title()}>
   <div class="bg-cosmic min-h-screen p-4 md:p-8">
     <div class="mx-auto max-w-2xl space-y-6 text-white">
       <header class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
         <h1 class="mb-2 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-          Powtórka
+          {m.review_page_title()}
         </h1>
         <p class="text-sm text-blue-100/70">
-          Signed in as <span class="font-semibold text-white">{user?.email}</span>. Karty zaplanowane na dziś.
+          {m.review_page_intro({ email: user?.email ?? "" })}
         </p>
       </header>
       <ReviewSession client:load />

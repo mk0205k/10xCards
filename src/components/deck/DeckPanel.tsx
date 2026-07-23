@@ -5,6 +5,7 @@ import CardFormDialog, { type CardFormMode } from "@/components/deck/CardFormDia
 import DeleteConfirmDialog from "@/components/deck/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { m } from "@/paraglide/messages.js";
 
 type Phase = "loading" | "ready" | "error";
 
@@ -92,7 +93,7 @@ export default function DeckPanel() {
       })
       .catch((error: unknown) => {
         if (cancelled) return;
-        const message = error instanceof CardApiError ? error.message : "Nie udało się załadować talii.";
+        const message = error instanceof CardApiError ? error.message : m.deck_error();
         dispatch({ type: "loadError", message });
       });
     return () => {
@@ -139,13 +140,13 @@ export default function DeckPanel() {
   );
 
   if (state.phase === "loading") {
-    return <p className="text-sm text-blue-100/60">Ładowanie…</p>;
+    return <p className="text-sm text-blue-100/60">{m.deck_loading()}</p>;
   }
 
   if (state.phase === "error") {
     return (
       <div className="rounded-lg border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
-        {state.error ?? "Wystąpił błąd."}
+        {state.error ?? m.deck_error_generic()}
       </div>
     );
   }
@@ -155,28 +156,26 @@ export default function DeckPanel() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           type="search"
-          placeholder="Szukaj w talii…"
+          placeholder={m.deck_search_placeholder()}
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
           }}
           className="sm:max-w-xs"
-          aria-label="Szukaj w talii"
+          aria-label={m.deck_search_aria()}
         />
         <Button
           onClick={() => {
             dispatch({ type: "openCreate" });
           }}
         >
-          Dodaj fiszkę
+          {m.deck_add_card()}
         </Button>
       </div>
       {state.cards.length === 0 ? (
-        <p className="text-sm text-blue-100/70">
-          Twoja talia jest pusta. Wygeneruj fiszki przez AI albo dodaj ręcznie.
-        </p>
+        <p className="text-sm text-blue-100/70">{m.deck_empty()}</p>
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-blue-100/70">Brak wyników</p>
+        <p className="text-sm text-blue-100/70">{m.deck_search_no_results()}</p>
       ) : (
         <div className="space-y-3">
           {filtered.map((card) => (

@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createCard, updateCard, CardApiError, type CardRow } from "@/lib/api/cards";
+import { m } from "@/paraglide/messages.js";
 
 export type CardFormMode = "create" | "edit";
 
@@ -39,7 +40,7 @@ function CardFormBody({ mode, card, onOpenChange, onSaved }: CardFormBodyProps) 
     const q = question.trim();
     const a = answer.trim();
     if (!q || !a) {
-      setError("Pytanie i odpowiedź nie mogą być puste.");
+      setError(m.deck_form_validation_empty());
       return;
     }
     setError(null);
@@ -52,7 +53,7 @@ function CardFormBody({ mode, card, onOpenChange, onSaved }: CardFormBodyProps) 
       onSaved(saved);
       onOpenChange(false);
     } catch (err) {
-      const message = err instanceof CardApiError ? err.message : "Zapis nie powiódł się.";
+      const message = err instanceof CardApiError ? err.message : m.deck_form_save_failed();
       setError(message);
     } finally {
       setSubmitting(false);
@@ -62,17 +63,15 @@ function CardFormBody({ mode, card, onOpenChange, onSaved }: CardFormBodyProps) 
   return (
     <>
       <DialogHeader>
-        <DialogTitle>{mode === "create" ? "Nowa fiszka" : "Edytuj fiszkę"}</DialogTitle>
+        <DialogTitle>{mode === "create" ? m.deck_dialog_new_title() : m.deck_dialog_edit_title()}</DialogTitle>
         <DialogDescription>
-          {mode === "create"
-            ? "Dodaj fiszkę ręcznie. Trafi na górę Twojej talii."
-            : "Zmiany zapiszą tylko pytanie i odpowiedź; historia powtórek pozostanie nienaruszona."}
+          {mode === "create" ? m.deck_dialog_new_description() : m.deck_dialog_edit_description()}
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <label htmlFor="card-question" className="text-sm font-medium">
-            Pytanie
+            {m.deck_form_question_label()}
           </label>
           <Textarea
             id="card-question"
@@ -87,7 +86,7 @@ function CardFormBody({ mode, card, onOpenChange, onSaved }: CardFormBodyProps) 
         </div>
         <div className="space-y-2">
           <label htmlFor="card-answer" className="text-sm font-medium">
-            Odpowiedź
+            {m.deck_form_answer_label()}
           </label>
           <Textarea
             id="card-answer"
@@ -114,10 +113,10 @@ function CardFormBody({ mode, card, onOpenChange, onSaved }: CardFormBodyProps) 
             }}
             disabled={submitting}
           >
-            Anuluj
+            {m.deck_form_cancel()}
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? "Zapisywanie…" : "Zapisz"}
+            {submitting ? m.deck_form_saving() : m.deck_form_submit()}
           </Button>
         </DialogFooter>
       </form>

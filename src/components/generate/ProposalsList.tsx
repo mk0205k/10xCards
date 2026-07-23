@@ -1,5 +1,6 @@
 import type { Proposal, ProposalDraft, StreamState } from "@/components/generate/proposalsReducer";
 import ProposalCard from "@/components/generate/ProposalCard";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   proposals: Proposal[];
@@ -41,7 +42,7 @@ export default function ProposalsList({
           onEditCancel={onEditCancel}
         />
       ))}
-      {streaming && <p className="text-center text-sm text-white/60">Still generating…</p>}
+      {streaming && <p className="text-center text-sm text-white/60">{m.generate_proposals_streaming()}</p>}
     </div>
   );
 }

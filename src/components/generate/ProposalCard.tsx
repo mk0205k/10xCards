@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import type { Proposal, ProposalDraft } from "@/components/generate/proposalsReducer";
+import { m } from "@/paraglide/messages.js";
 
 interface Props {
   proposal: Proposal;
@@ -28,7 +29,9 @@ export default function ProposalCard({
     return (
       <Card>
         <CardHeader>
-          <label className="text-xs font-medium tracking-wide text-white/60 uppercase">Question</label>
+          <label className="text-xs font-medium tracking-wide text-white/60 uppercase">
+            {m.generate_proposal_question_label()}
+          </label>
           <Textarea
             value={proposal.draft.question}
             onChange={(e) => {
@@ -39,7 +42,9 @@ export default function ProposalCard({
           />
         </CardHeader>
         <CardContent>
-          <label className="text-xs font-medium tracking-wide text-white/60 uppercase">Answer</label>
+          <label className="text-xs font-medium tracking-wide text-white/60 uppercase">
+            {m.generate_proposal_answer_label()}
+          </label>
           <Textarea
             value={proposal.draft.answer}
             onChange={(e) => {
@@ -57,7 +62,7 @@ export default function ProposalCard({
             }}
             disabled={!canSave}
           >
-            Save
+            {m.generate_proposal_save()}
           </Button>
           <Button
             size="sm"
@@ -66,7 +71,7 @@ export default function ProposalCard({
               onEditCancel(proposal.id);
             }}
           >
-            Cancel
+            {m.generate_proposal_cancel()}
           </Button>
         </CardFooter>
       </Card>
@@ -86,7 +91,7 @@ export default function ProposalCard({
       {isSaved ? (
         <CardFooter>
           <span className="inline-flex items-center gap-1 text-sm text-emerald-300">
-            <Check className="size-4" /> Added to deck
+            <Check className="size-4" /> {m.generate_proposal_added()}
           </span>
         </CardFooter>
       ) : (
@@ -99,7 +104,7 @@ export default function ProposalCard({
             disabled={isSaving}
           >
             {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
-            {isSaving ? "Saving..." : "Accept"}
+            {isSaving ? m.generate_proposal_saving() : m.generate_proposal_accept()}
           </Button>
           <Button
             size="sm"
@@ -109,7 +114,7 @@ export default function ProposalCard({
             }}
             disabled={isSaving}
           >
-            Edit
+            {m.generate_proposal_edit()}
           </Button>
           <Button
             size="sm"
@@ -119,7 +124,7 @@ export default function ProposalCard({
             }}
             disabled={isSaving}
           >
-            Reject
+            {m.generate_proposal_reject()}
           </Button>
         </CardFooter>
       )}
@@ -133,7 +138,7 @@ export default function ProposalCard({
               onAccept(proposal.id);
             }}
           >
-            Retry
+            {m.generate_proposal_retry()}
           </Button>
         </div>
       ) : null}
