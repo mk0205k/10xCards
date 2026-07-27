@@ -6,7 +6,7 @@ created: 2026-07-07
 updated: 2026-07-27
 backlog_tracker: github-issues
 backlog_url: https://github.com/mk0205k/10xCards/milestone/1
-prd_version: 1
+prd_version: 2
 main_goal: speed
 top_blocker: time
 ---
@@ -42,6 +42,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | done     |
 | S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
 | S-08  | global-navigation-menu        | z każdej chronionej podstrony przejść do dowolnej innej przez widoczne w Layout menu nawigacyjne (bez wpisywania URL) | F-01, S-07    | — (nawigacyjne UX + i18n coverage)     | done     |
+| S-09  | dashboard-user-panel-metrics  | zobaczyć na `/dashboard` panele z liczbą fiszek (podział AI vs manual), liczbą do powtórki dziś, oraz shortcuty do /generate, /review, /deck | F-01, S-01, S-02, S-03 | US-03, FR-016, FR-017                | ready    |
 
 ## Streams
 
@@ -188,6 +189,22 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Risk:** Brak wspólnego menu to obecnie największy widoczny brak UX — user po zamknięciu S-01…S-05 ma 5 działających widoków, ale porusza się między nimi wpisując URL ręcznie (żaden `href` między chronionymi stronami nie istnieje, sprawdzone `grep`-em). To gate'uje "polish" launchu i podnosi próg wejścia dla persona "dorosły wracający po tygodniu" (PRD §Persona). Ryzyko: menu wpięte w `Layout.astro` widać na **każdej** stronie — regresja układu lub błąd i18n zobaczy każdy użytkownik przy każdym kliknięciu, więc slice wymaga audytu wszystkich 14 podstron w obu językach przed zamknięciem (analogicznie do string-leakage risk z S-07). Nie blokuje walidacji hipotezy — north star S-02 zamknięty — ale bez tego produkt wygląda jak połączone niezależne prototypy zamiast spójnej aplikacji.
 - **Status:** done
 
+### S-09: Panel użytkownika na /dashboard z metrykami talii
+
+- **Outcome:** zalogowany user otwiera `/dashboard` i widzi 3-4 wizualne panele/karty z bieżącym stanem talii: (1) łączna liczba fiszek + podział AI-generated vs ręczne, (2) liczba fiszek zaplanowanych do powtórki dziś, (3) shortcuty do generowania nowych (`/generate`), powtórki (`/review`) i przeglądania talii (`/deck`); każdy panel jest samodzielnym CTA (klik → route). Empty state (talia = 0) pokazuje panele z zerami + wyraźny CTA do `/generate` jako główny punkt startowy.
+- **Change ID:** dashboard-user-panel-metrics
+- **PRD refs:** US-03, FR-016, FR-017 (PRD v2 — Non-Goal "Learning statistics / progress dashboard" zwężony do "gamification and historical analytics"; current-state counts weszły w scope MVP-hardening po zamknięciu S-01…S-08)
+- **Prerequisites:** F-01 (RLS na `cards` + `review_history` — panel liczy user-owned rows), S-01 (musi istnieć źródło "AI-generated" cards do policzenia w podziale), S-02 (musi istnieć `review_history` z next-review dates do policzenia "due today"), S-03 (CRUD dostarczył manual-source cards do drugiej gałęzi podziału)
+- **Parallel with:** — (wszystkie MVP slice'y zamknięte; ta pozycja jest single follow-up)
+- **Blockers:** —
+- **Unknowns:**
+  - Definicja "due today" (fiszki z `next_review <= now()` vs fiszki z `next_review::date = today`). Owner: user. Block: no — decyzja implementacyjna w `/10x-plan`; sensowny default: `next_review <= now()` (obejmuje overdue + today).
+  - Czy panel "AI vs manual" pokazuje liczby (`23 AI / 12 manual`), procenty (`66% AI`), czy oba. Owner: user. Block: no — sensowny default: liczba + procent w podpisie ("23 fiszki AI (66%)").
+  - Cache/perf strategy dla count queries. Owner: TBD. Block: no — na skali `target_scale.users: medium` (per PRD frontmatter) 3 count queries per dashboard load są acceptable bez cache; premature optimization out of scope.
+  - Wygląd paneli (Card z `src/components/ui/card.tsx` istnieje w projekcie — spójny z Deck view; Lucide icons dla wizualnego akcentu podobnie jak w MobileNav). Owner: TBD. Block: no — decyzja UI w `/10x-plan`.
+- **Risk:** Panel dotyka trzech różnych tabel (auth user, `cards`, `review_history`) i musi respektować RLS spójnie z F-01 gate'em — count queries muszą zwracać tylko wiersze usera (per Privacy NFR). Ryzyko: jeśli któraś tabela ma soft-delete flag (per S-05 `account-deletion-30d-retention`), count musi filtrować `deleted_at IS NULL` — inaczej user w oknie retencji widzi swoje "usunięte" fiszki na dashboardzie. Dodatkowy risk: przekierowania w panelach duplikują częściowo global nav (S-08), więc panel-CTA vs top-bar link muszą być rozróżnialne wizualnie (panel = context-aware, np. "23 czekają → Rozpocznij powtórkę"; nav = generic route access).
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                      | Issue | Sugerowany tytuł issue                                                | Ready for `/10x-plan` | Uwagi                                                        |
@@ -201,6 +218,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 | S-06       | ux-improvements                | —     | [S-06] UX improvements (bulk actions, reset session, loading states)  | no                    | Parallel z S-05; wymaga issue w trackerze                    |
 | S-07       | i18n-pl-en-toggle              | —     | [S-07] Internacjonalizacja UI (PL/EN, domyślnie PL)                    | no                    | Parallel z S-06; wymaga issue w trackerze; 3 Open Questions do rozstrzygnięcia w /10x-plan |
 | S-08       | global-navigation-menu         | —     | [S-08] Globalne menu nawigacyjne (Layout + wszystkie chronione widoki) | yes                   | `ready` — F-01 i S-07 zamknięte; wymaga issue w trackerze; 4 drobne Unknowns z sensownymi defaultami dla `/10x-plan` |
+| S-09       | dashboard-user-panel-metrics   | —     | [S-09] Panel użytkownika na /dashboard z metrykami talii (AI/manual split, due today, shortcuts) | yes                   | `ready` — wszystkie prereqs (F-01, S-01, S-02, S-03) zamknięte; wymaga issue w trackerze; PRD v2 dodało US-03 + FR-016/017; 4 Unknowns z sensownymi defaultami |
 
 ## Open Roadmap Questions
 
@@ -218,7 +236,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Natywne aplikacje mobilne** — Why parked: PRD §Non-Goals — tylko web (responsywnie mobile-friendly, bez app-store).
 - **Integracje z platformami edukacyjnymi (Anki, LMS, Google Classroom)** — Why parked: PRD §Non-Goals — produkt self-contained.
 - **Notyfikacje push / email o zaplanowanych powtórkach** — Why parked: PRD §Non-Goals — user pamięta sam; fiszki czekają na jego inicjatywę.
-- **Statystyki uczenia się / dashboard postępów** — Why parked: PRD §Non-Goals — MVP to fiszki + algorytm, nic więcej.
+- **Gamifikacja i historyczne analytics (streaks, badges, XP, wykresy postępu w czasie)** — Why parked: PRD v2 §Non-Goals — dashboard pokazuje current-state counts (FR-016/017), a nie time-series ani mechaniki motywacyjne. Advanced analytics (krzywe retencji, per-topic breakdown) poza MVP.
 - **Multimedia w fiszkach (obrazy, audio, wzory, code blocks)** — Why parked: PRD §Non-Goals — tylko text.
 
 ## Done
