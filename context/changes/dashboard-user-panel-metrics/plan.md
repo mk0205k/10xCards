@@ -337,34 +337,34 @@ Pełny manualny sweep 4 stanów × 2 języki × 2 breakpointy = 16 kombinacji + 
 
 #### Automated
 
-- [x] 2.1 `npm run lint` — 0 errors, 0 nowych warningów
-- [x] 2.2 `npm run prebuild` — parity OK (~199 keys)
-- [x] 2.3 `npm run build` — build przechodzi
-- [x] 2.4 `npx astro check` — brak nowych błędów TS
+- [x] 2.1 `npm run lint` — 0 errors, 0 nowych warningów — 63e4a07
+- [x] 2.2 `npm run prebuild` — parity OK (~199 keys) — 63e4a07
+- [x] 2.3 `npm run build` — build przechodzi — 63e4a07
+- [x] 2.4 `npx astro check` — brak nowych błędów TS — 63e4a07
 
 #### Manual
 
-- [x] 2.5 Empty user (talia=0): 6 Cards renderują się w 3×2 gridzie desktop; Card 4 (`/generate`) accentuated (ring/glow)
-- [x] 2.6 Mixed deck (>0 AI, >0 manual): Card 1 pokazuje total + split z procentem; Card 4 bez accent
-- [x] 2.7 Due-today > 0: Card 2 klikalny jako link do `/review`
-- [x] 2.8 Due-today == 0: Card 2 disabled (opacity-60, brak href)
-- [x] 2.9 Mobile (< 768px): grid zwija się do 1 kolumny; wszystkie 6 Cards klikalne
-- [x] 2.10 PL + EN: wszystkie stringi z i18n, brak leakage
+- [x] 2.5 Empty user (talia=0): 6 Cards renderują się w 3×2 gridzie desktop; Card 4 (`/generate`) accentuated (ring/glow) — 63e4a07
+- [x] 2.6 Mixed deck (>0 AI, >0 manual): Card 1 pokazuje total + split z procentem; Card 4 bez accent — 63e4a07
+- [x] 2.7 Due-today > 0: Card 2 klikalny jako link do `/review` — 63e4a07
+- [x] 2.8 Due-today == 0: Card 2 disabled (opacity-60, brak href) — 63e4a07
+- [x] 2.9 Mobile (< 768px): grid zwija się do 1 kolumny; wszystkie 6 Cards klikalne — 63e4a07
+- [x] 2.10 PL + EN: wszystkie stringi z i18n, brak leakage — 63e4a07
 
 ### Phase 3: QA sweep + i18n parity gate + regression check
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z master)
-- [ ] 3.2 `npm run prebuild` — parity confirmed
-- [ ] 3.3 `npm run build` — Cloudflare Worker bundle się produkuje
-- [ ] 3.4 `npx astro check` — brak nowych TS errorów
+- [x] 3.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z master)
+- [x] 3.2 `npm run prebuild` — parity confirmed
+- [x] 3.3 `npm run build` — Cloudflare Worker bundle się produkuje
+- [x] 3.4 `npx astro check` — brak nowych TS errorów
 
 #### Manual
 
-- [ ] 3.5 16 pozycji QA checklist (4 stany × 2 języki × 2 breakpointy) zaznaczone
-- [ ] 3.6 Zero string leakage
-- [ ] 3.7 Regression: Topbar (S-08) active-state na `/dashboard` działa; aria-current="page" ustawione
-- [ ] 3.8 Regression: sign-out z Topbar prowadzi do `/`; sesja niedostępna
-- [ ] 3.9 Regression: soft-deleted user (S-05) próbujący `/dashboard` jest redirectowany do `/auth/restore-account` (middleware, nie dashboard renderuje 0/0)
-- [ ] 3.10 Wygląd wizualny spójny z Cosmic theme + istniejącymi Cards (ProposalCard, CardListItem)
+- [x] 3.5 16 pozycji QA checklist (4 stany × 2 języki × 2 breakpointy) zaznaczone
+- [x] 3.6 Zero string leakage
+- [x] 3.7 Regression: Topbar (S-08) active-state na `/dashboard` działa; aria-current="page" ustawione
+- [x] 3.8 Regression: sign-out z Topbar prowadzi do `/`; sesja niedostępna
+- [x] 3.9 Regression: soft-deleted user (S-05) próbujący `/dashboard` jest redirectowany do `/auth/restore-account` (middleware, nie dashboard renderuje 0/0)
+- [x] 3.10 Wygląd wizualny spójny z Cosmic theme + istniejącymi Cards (ProposalCard, CardListItem)
