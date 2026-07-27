@@ -344,37 +344,37 @@ Pełny manualny checklist 14 podstron × 2 języki × 2 breakpointy. Automat: li
 
 #### Automated
 
-- [x] 2.1 `npm run lint` przechodzi (w tym `react-compiler/react-compiler` na MobileNav.tsx)
-- [x] 2.2 `npm run prebuild` przechodzi (parytet i18n)
-- [x] 2.3 `npm run build` przechodzi
-- [x] 2.4 `package.json` ma `@radix-ui/react-dialog` (dopisany przez shadcn CLI)
+- [x] 2.1 `npm run lint` przechodzi (w tym `react-compiler/react-compiler` na MobileNav.tsx) — ff7a3e6
+- [x] 2.2 `npm run prebuild` przechodzi (parytet i18n) — ff7a3e6
+- [x] 2.3 `npm run build` przechodzi — ff7a3e6
+- [x] 2.4 `package.json` ma `@radix-ui/react-dialog` (dopisany przez shadcn CLI) — ff7a3e6
 
 #### Manual
 
-- [x] 2.5 `npm run dev` → `/` na < 768px pokazuje hamburger; klik otwiera drawer z linkami
-- [x] 2.6 ESC zamyka drawer; click-outside zamyka drawer
-- [x] 2.7 Focus trap: Tab wewnątrz otwartego drawera nie ucieka do treści strony
-- [x] 2.8 LanguageSwitcher w drawerze działa (przełącza język i drawer się odświeża odpowiednio)
-- [x] 2.9 Na > 768px drawer nie renderuje się, desktop nav widać normalnie
-- [x] 2.10 Zmiana rozmiaru okna przez breakpoint 768px w locie nie powoduje FOUC ani zawieszenia stanu drawera
+- [x] 2.5 `npm run dev` → `/` na < 768px pokazuje hamburger; klik otwiera drawer z linkami — ff7a3e6
+- [x] 2.6 ESC zamyka drawer; click-outside zamyka drawer — ff7a3e6
+- [x] 2.7 Focus trap: Tab wewnątrz otwartego drawera nie ucieka do treści strony — ff7a3e6
+- [x] 2.8 LanguageSwitcher w drawerze działa (przełącza język i drawer się odświeża odpowiednio) — ff7a3e6
+- [x] 2.9 Na > 768px drawer nie renderuje się, desktop nav widać normalnie — ff7a3e6
+- [x] 2.10 Zmiana rozmiaru okna przez breakpoint 768px w locie nie powoduje FOUC ani zawieszenia stanu drawera — ff7a3e6
 
 ### Phase 3: Global mount — przenieś Topbar do Layout.astro
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` przechodzi
-- [ ] 3.2 `npm run prebuild` przechodzi (parytet i18n)
-- [ ] 3.3 `npm run build` przechodzi
-- [ ] 3.4 `grep -rn "import Topbar" src/` zwraca **tylko** `src/layouts/Layout.astro`
+- [x] 3.1 `npm run lint` przechodzi
+- [x] 3.2 `npm run prebuild` przechodzi (parytet i18n)
+- [x] 3.3 `npm run build` przechodzi
+- [x] 3.4 `grep -rn "import Topbar" src/` zwraca **tylko** `src/layouts/Layout.astro`
 
 #### Manual
 
-- [ ] 3.5 Każda z 14 stron pokazuje Topbar na górze (desktop)
-- [ ] 3.6 Landing `/` nie renderuje Topbara dwa razy
-- [ ] 3.7 Anonimowy wariant Topbar pokazuje się na `/` i `/auth/*`; zalogowany wariant na 5 chronionych trasach
-- [ ] 3.8 Active state podświetla dokładnie aktualną stronę na każdej z chronionych tras
-- [ ] 3.9 Kliknięcie każdego z 5 linków w chronionym Topbar prowadzi do właściwej trasy bez błędu 4xx/5xx
-- [ ] 3.10 Hero na landingu wizualnie sensowny bez lokalnego Topbara
+- [x] 3.5 Każda z 14 stron pokazuje Topbar na górze (desktop)
+- [x] 3.6 Landing `/` nie renderuje Topbara dwa razy
+- [x] 3.7 Anonimowy wariant Topbar pokazuje się na `/` i `/auth/*`; zalogowany wariant na 5 chronionych trasach
+- [x] 3.8 Active state podświetla dokładnie aktualną stronę na każdej z chronionych tras
+- [x] 3.9 Kliknięcie każdego z 5 linków w chronionym Topbar prowadzi do właściwej trasy bez błędu 4xx/5xx
+- [x] 3.10 Hero na landingu wizualnie sensowny bez lokalnego Topbara
 
 ### Phase 4: QA sweep + i18n parity gate
 
