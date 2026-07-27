@@ -380,14 +380,14 @@ Pełny manualny checklist 14 podstron × 2 języki × 2 breakpointy. Automat: li
 
 #### Automated
 
-- [x] 4.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z `master`)
-- [x] 4.2 `npm run prebuild` — parytet i18n potwierdzony
-- [x] 4.3 `npm run build` — build przechodzi, Cloudflare Worker bundle się produkuje
+- [x] 4.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z `master`) — 66757f5
+- [x] 4.2 `npm run prebuild` — parytet i18n potwierdzony — 66757f5
+- [x] 4.3 `npm run build` — build przechodzi, Cloudflare Worker bundle się produkuje — 66757f5
 
 #### Manual
 
-- [x] 4.4 Wszystkie 56 pozycji QA checklist (14 route × 2 języki × 2 breakpointy) zaznaczone jako OK
-- [x] 4.5 Zero string leakage (żaden literał PL w EN i odwrotnie)
-- [x] 4.6 Active state precyzyjny na wszystkich 5 chronionych trasach
-- [x] 4.7 Mobile drawer: otwiera, zamyka, focus trap, ESC, click-outside, LanguageSwitcher w drawerze
-- [x] 4.8 Keyboard nav: Tab przez wszystkie linki + hamburger button w spójnej kolejności; Enter nawiguje; Space otwiera drawer
+- [x] 4.4 Wszystkie 56 pozycji QA checklist (14 route × 2 języki × 2 breakpointy) zaznaczone jako OK — 66757f5
+- [x] 4.5 Zero string leakage (żaden literał PL w EN i odwrotnie) — 66757f5
+- [x] 4.6 Active state precyzyjny na wszystkich 5 chronionych trasach — 66757f5
+- [x] 4.7 Mobile drawer: otwiera, zamyka, focus trap, ESC, click-outside, LanguageSwitcher w drawerze — 66757f5
+- [x] 4.8 Keyboard nav: Tab przez wszystkie linki + hamburger button w spójnej kolejności; Enter nawiguje; Space otwiera drawer — 66757f5

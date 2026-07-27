@@ -1,7 +1,7 @@
 ---
 id: global-navigation-menu
 title: Globalne menu nawigacyjne
-status: implementing
+status: implemented
 created: 2026-07-27
 updated: 2026-07-27
 
