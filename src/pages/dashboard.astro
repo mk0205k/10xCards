@@ -8,17 +8,20 @@ import { getDeckStats, type DeckStats } from "@/lib/services/deck-stats";
 import { m } from "@/paraglide/messages.js";
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
+const { user } = Astro.locals;
 
 let stats: DeckStats = { total: 0, ai: 0, manual: 0, dueToday: 0 };
 let loadError = false;
 
-if (supabase) {
+if (supabase && user) {
   try {
-    stats = await getDeckStats(supabase);
+    stats = await getDeckStats(supabase, user.id);
   } catch (error) {
     loadError = true;
     console.error("[/dashboard] getDeckStats failed", error);
   }
+} else {
+  loadError = true;
 }
 
 const isEmpty = stats.total === 0;

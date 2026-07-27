@@ -8,13 +8,13 @@ export interface DeckStats {
   dueToday: number;
 }
 
-export async function getDeckStats(supabase: SupabaseClient<Database>): Promise<DeckStats> {
+export async function getDeckStats(supabase: SupabaseClient<Database>, userId: string): Promise<DeckStats> {
   const nowIso = new Date().toISOString();
 
   const [totalResult, aiResult, dueTodayResult] = await Promise.all([
-    supabase.from("cards").select("*", { count: "exact", head: true }),
-    supabase.from("cards").select("*", { count: "exact", head: true }).eq("source", "ai"),
-    supabase.from("cards").select("*", { count: "exact", head: true }).lte("due", nowIso),
+    supabase.from("cards").select("*", { count: "exact", head: true }).eq("user_id", userId),
+    supabase.from("cards").select("*", { count: "exact", head: true }).eq("user_id", userId).eq("source", "ai"),
+    supabase.from("cards").select("*", { count: "exact", head: true }).eq("user_id", userId).lte("due", nowIso),
   ]);
 
   if (totalResult.error) {
