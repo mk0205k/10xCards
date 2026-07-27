@@ -1,6 +1,9 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "topbar_dashboard": "Dashboard",
+  "topbar_generate": "Generate",
+  "topbar_review": "Review",
+  "topbar_deck": "Deck",
   "topbar_account": "Account",
   "topbar_signout": "Sign out",
   "topbar_signin": "Sign in",

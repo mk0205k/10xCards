@@ -1,8 +1,20 @@
 ---
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages.js";
 
+interface Props {
+  pathname?: string;
+}
+
 const { user } = Astro.locals;
+const { pathname = "" } = Astro.props;
+
+const linkBase = "transition-colors hover:text-purple-100 hover:underline";
+const linkInactive = "text-purple-300";
+const linkActive = "text-purple-100 underline underline-offset-4";
+
+const navLinkClass = (href: string) => cn(linkBase, pathname === href ? linkActive : linkInactive);
 ---
 
 <div
@@ -13,14 +25,23 @@ const { user } = Astro.locals;
       <>
         <span class="text-blue-100/70">{user.email}</span>
         <div class="flex items-center gap-3">
-          <a href="/dashboard" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a href="/dashboard" class={navLinkClass("/dashboard")}>
             {m.topbar_dashboard()}
           </a>
-          <a href="/account" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a href="/generate" class={navLinkClass("/generate")}>
+            {m.topbar_generate()}
+          </a>
+          <a href="/review" class={navLinkClass("/review")}>
+            {m.topbar_review()}
+          </a>
+          <a href="/deck" class={navLinkClass("/deck")}>
+            {m.topbar_deck()}
+          </a>
+          <a href="/account" class={navLinkClass("/account")}>
             {m.topbar_account()}
           </a>
           <form method="POST" action="/api/auth/signout">
-            <button type="submit" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+            <button type="submit" class={cn(linkBase, linkInactive)}>
               {m.topbar_signout()}
             </button>
           </form>
@@ -31,10 +52,10 @@ const { user } = Astro.locals;
       <>
         <span class="text-blue-100/70">{m.topbar_not_signed_in()}</span>
         <div class="flex items-center gap-3">
-          <a href="/auth/signin" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a href="/auth/signin" class={navLinkClass("/auth/signin")}>
             {m.topbar_signin()}
           </a>
-          <a href="/auth/signup" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a href="/auth/signup" class={navLinkClass("/auth/signup")}>
             {m.topbar_signup()}
           </a>
           <LanguageSwitcher client:load />

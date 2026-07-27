@@ -1,6 +1,9 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "topbar_dashboard": "Panel",
+  "topbar_generate": "Generuj",
+  "topbar_review": "Powtórki",
+  "topbar_deck": "Talia",
   "topbar_account": "Konto",
   "topbar_signout": "Wyloguj",
   "topbar_signin": "Zaloguj",
