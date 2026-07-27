@@ -3,7 +3,7 @@ project: 10xCards
 version: 1
 status: draft
 created: 2026-07-07
-updated: 2026-07-23
+updated: 2026-07-27
 backlog_tracker: github-issues
 backlog_url: https://github.com/mk0205k/10xCards/milestone/1
 prd_version: 1
@@ -41,6 +41,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | done     |
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | done     |
 | S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
+| S-08  | global-navigation-menu        | z każdej chronionej podstrony przejść do dowolnej innej przez widoczne w Layout menu nawigacyjne (bez wpisywania URL) | F-01, S-07    | — (nawigacyjne UX + i18n coverage)     | ready    |
 
 ## Streams
 
@@ -171,6 +172,22 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **Risk:** i18n dotyka każdego widoku i wielu komponentów naraz — bez dyscypliny string leakage (kawałki UI po polsku w wersji EN i odwrotnie) będzie ciągłym śladem widocznym dla użytkowników. Ryzyko mitiguje: audyt hardcoded stringów przed startem (grep na literały PL w `.astro`/`.tsx`), lint rule na literały w JSX/Astro, review każdego widoku w obu językach przed zamknięciem. Nie blokuje walidacji hipotezy — north star S-02 już zamknięty — ale bez tego produkt jest de facto polski-only.
 - **Status:** done
 
+### S-08: Globalne menu nawigacyjne
+
+- **Outcome:** zalogowany user widzi na każdej chronionej podstronie (`/dashboard`, `/generate`, `/review`, `/deck`, `/account`) to samo menu nawigacyjne wpięte w `src/layouts/Layout.astro`, z linkami do wszystkich pięciu widoków, aktywną pozycją zaznaczoną wizualnie, przełącznikiem języka (integracja z S-07) oraz przyciskiem wylogowania; menu działa na desktop i mobile (hamburger / collapse); strony auth (`/auth/*`) i landing (`/`) mają wariant "public" (logo + link do signin/signup, bez wewnętrznej nawigacji).
+- **Change ID:** global-navigation-menu
+- **PRD refs:** — (brak twardego FR w PRD v1; UX-hardening podobnie jak S-06/S-07 — konsekwencja domknięcia S-01…S-05, które dostarczyły 5 widoków bez wspólnego szkieletu nawigacji)
+- **Prerequisites:** F-01 (baseline auth i middleware już rozpoznają user context w Layout, potrzebne żeby menu wiedziało co pokazać zalogowanemu vs anonimowemu), S-07 (etykiety menu muszą wejść do `messages/pl.json` + `messages/en.json` przez `m.*()` — bez S-07 menu byłoby hardcoded PL i złamałoby parytet i18n z `scripts/check-i18n-parity.mjs`)
+- **Parallel with:** — (wszystkie pozostałe slice'y `done`; sekwencyjne po S-07)
+- **Blockers:** —
+- **Unknowns:**
+  - Kształt menu na mobile (bottom tab bar vs hamburger drawer vs top bar collapse). Owner: user. Block: no — decyzja implementacyjna w `/10x-plan`, sensowny default: hamburger drawer (shadcn Sheet) na < md, poziomy top bar ≥ md.
+  - Wariant menu na stronach auth (`/auth/signin`, `/auth/signup`, `/auth/reset-password`, `/auth/restore-account`, itp.) — czy pokazywać wersję "public" (logo + minimalne linki) czy całkowicie ukrywać. Owner: user. Block: no — default: minimal public bar (logo → `/`, link "signin" ↔ "signup").
+  - Widoczność menu na landing `/` (`src/pages/index.astro`). Owner: user. Block: no — default: public bar jak w flow auth.
+  - Czy `/account` (settings + delete account) powinno być głównym linkiem w menu, czy schowane pod avatarem/dropdownem "moje konto" razem z sign-out. Owner: user. Block: no — decyzja implementacyjna; sensowny default: dropdown z avatarem, żeby menu główne skupiało się na core flow (generate / review / deck).
+- **Risk:** Brak wspólnego menu to obecnie największy widoczny brak UX — user po zamknięciu S-01…S-05 ma 5 działających widoków, ale porusza się między nimi wpisując URL ręcznie (żaden `href` między chronionymi stronami nie istnieje, sprawdzone `grep`-em). To gate'uje "polish" launchu i podnosi próg wejścia dla persona "dorosły wracający po tygodniu" (PRD §Persona). Ryzyko: menu wpięte w `Layout.astro` widać na **każdej** stronie — regresja układu lub błąd i18n zobaczy każdy użytkownik przy każdym kliknięciu, więc slice wymaga audytu wszystkich 14 podstron w obu językach przed zamknięciem (analogicznie do string-leakage risk z S-07). Nie blokuje walidacji hipotezy — north star S-02 zamknięty — ale bez tego produkt wygląda jak połączone niezależne prototypy zamiast spójnej aplikacji.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                      | Issue | Sugerowany tytuł issue                                                | Ready for `/10x-plan` | Uwagi                                                        |
@@ -183,6 +200,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 | S-05       | account-deletion-30d-retention | —     | [S-05] Usunięcie konta z 30-dniową retencją                           | no                    | Parallel z S-06; wymaga issue w trackerze; 2 Open Questions do rozstrzygnięcia |
 | S-06       | ux-improvements                | —     | [S-06] UX improvements (bulk actions, reset session, loading states)  | no                    | Parallel z S-05; wymaga issue w trackerze                    |
 | S-07       | i18n-pl-en-toggle              | —     | [S-07] Internacjonalizacja UI (PL/EN, domyślnie PL)                    | no                    | Parallel z S-06; wymaga issue w trackerze; 3 Open Questions do rozstrzygnięcia w /10x-plan |
+| S-08       | global-navigation-menu         | —     | [S-08] Globalne menu nawigacyjne (Layout + wszystkie chronione widoki) | yes                   | `ready` — F-01 i S-07 zamknięte; wymaga issue w trackerze; 4 drobne Unknowns z sensownymi defaultami dla `/10x-plan` |
 
 ## Open Roadmap Questions
 
