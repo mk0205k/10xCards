@@ -256,7 +256,7 @@ function SessionShell({ children }: { children: React.ReactNode }) {
 
 function ResetButton({ onReset, disabled }: { onReset: () => void; disabled: boolean }) {
   return (
-    <Button variant="ghost" size="sm" onClick={onReset} disabled={disabled} aria-label={m.review_reset_aria()}>
+    <Button variant="outline" size="sm" onClick={onReset} disabled={disabled} aria-label={m.review_reset_aria()}>
       {m.review_reset_button()}
     </Button>
   );
