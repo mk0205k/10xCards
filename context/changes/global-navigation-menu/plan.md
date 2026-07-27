@@ -362,32 +362,32 @@ Pełny manualny checklist 14 podstron × 2 języki × 2 breakpointy. Automat: li
 
 #### Automated
 
-- [x] 3.1 `npm run lint` przechodzi
-- [x] 3.2 `npm run prebuild` przechodzi (parytet i18n)
-- [x] 3.3 `npm run build` przechodzi
-- [x] 3.4 `grep -rn "import Topbar" src/` zwraca **tylko** `src/layouts/Layout.astro`
+- [x] 3.1 `npm run lint` przechodzi — 62963b9
+- [x] 3.2 `npm run prebuild` przechodzi (parytet i18n) — 62963b9
+- [x] 3.3 `npm run build` przechodzi — 62963b9
+- [x] 3.4 `grep -rn "import Topbar" src/` zwraca **tylko** `src/layouts/Layout.astro` — 62963b9
 
 #### Manual
 
-- [x] 3.5 Każda z 14 stron pokazuje Topbar na górze (desktop)
-- [x] 3.6 Landing `/` nie renderuje Topbara dwa razy
-- [x] 3.7 Anonimowy wariant Topbar pokazuje się na `/` i `/auth/*`; zalogowany wariant na 5 chronionych trasach
-- [x] 3.8 Active state podświetla dokładnie aktualną stronę na każdej z chronionych tras
-- [x] 3.9 Kliknięcie każdego z 5 linków w chronionym Topbar prowadzi do właściwej trasy bez błędu 4xx/5xx
-- [x] 3.10 Hero na landingu wizualnie sensowny bez lokalnego Topbara
+- [x] 3.5 Każda z 14 stron pokazuje Topbar na górze (desktop) — 62963b9
+- [x] 3.6 Landing `/` nie renderuje Topbara dwa razy — 62963b9
+- [x] 3.7 Anonimowy wariant Topbar pokazuje się na `/` i `/auth/*`; zalogowany wariant na 5 chronionych trasach — 62963b9
+- [x] 3.8 Active state podświetla dokładnie aktualną stronę na każdej z chronionych tras — 62963b9
+- [x] 3.9 Kliknięcie każdego z 5 linków w chronionym Topbar prowadzi do właściwej trasy bez błędu 4xx/5xx — 62963b9
+- [x] 3.10 Hero na landingu wizualnie sensowny bez lokalnego Topbara — 62963b9
 
 ### Phase 4: QA sweep + i18n parity gate
 
 #### Automated
 
-- [ ] 4.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z `master`)
-- [ ] 4.2 `npm run prebuild` — parytet i18n potwierdzony
-- [ ] 4.3 `npm run build` — build przechodzi, Cloudflare Worker bundle się produkuje
+- [x] 4.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z `master`)
+- [x] 4.2 `npm run prebuild` — parytet i18n potwierdzony
+- [x] 4.3 `npm run build` — build przechodzi, Cloudflare Worker bundle się produkuje
 
 #### Manual
 
-- [ ] 4.4 Wszystkie 56 pozycji QA checklist (14 route × 2 języki × 2 breakpointy) zaznaczone jako OK
-- [ ] 4.5 Zero string leakage (żaden literał PL w EN i odwrotnie)
-- [ ] 4.6 Active state precyzyjny na wszystkich 5 chronionych trasach
-- [ ] 4.7 Mobile drawer: otwiera, zamyka, focus trap, ESC, click-outside, LanguageSwitcher w drawerze
-- [ ] 4.8 Keyboard nav: Tab przez wszystkie linki + hamburger button w spójnej kolejności; Enter nawiguje; Space otwiera drawer
+- [x] 4.4 Wszystkie 56 pozycji QA checklist (14 route × 2 języki × 2 breakpointy) zaznaczone jako OK
+- [x] 4.5 Zero string leakage (żaden literał PL w EN i odwrotnie)
+- [x] 4.6 Active state precyzyjny na wszystkich 5 chronionych trasach
+- [x] 4.7 Mobile drawer: otwiera, zamyka, focus trap, ESC, click-outside, LanguageSwitcher w drawerze
+- [x] 4.8 Keyboard nav: Tab przez wszystkie linki + hamburger button w spójnej kolejności; Enter nawiguje; Space otwiera drawer
