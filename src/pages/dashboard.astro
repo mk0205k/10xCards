@@ -1,28 +1,149 @@
 ---
+import { Clock, Library, Sparkles, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Layout from "@/layouts/Layout.astro";
+import { createClient } from "@/lib/supabase";
+import { cn } from "@/lib/utils";
+import { getDeckStats, type DeckStats } from "@/lib/services/deck-stats";
 import { m } from "@/paraglide/messages.js";
 
-const { user } = Astro.locals;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let stats: DeckStats = { total: 0, ai: 0, manual: 0, dueToday: 0 };
+let loadError = false;
+
+if (supabase) {
+  try {
+    stats = await getDeckStats(supabase);
+  } catch (error) {
+    loadError = true;
+    console.error("[/dashboard] getDeckStats failed", error);
+  }
+}
+
+const isEmpty = stats.total === 0;
+const aiPercent = stats.total > 0 ? Math.round((stats.ai / stats.total) * 100) : 0;
+
+const cardBase = "border-white/10 bg-white/5 backdrop-blur-xl";
+const ctaBase = "block transition-all hover:bg-white/10 hover:border-white/20";
+const highlightAccent = "ring-2 ring-purple-400/60 shadow-lg shadow-purple-500/25";
 ---
 
 <Layout title={m.dashboard_title()}>
-  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
-      <h1 class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-        {m.dashboard_title()}
-      </h1>
-      <p class="text-blue-100/80">
-        {m.dashboard_welcome({ email: user?.email ?? "" })}
-      </p>
-      <p class="mt-2 text-sm text-blue-100/50">{m.dashboard_auth_only()}</p>
-      <form method="POST" action="/api/auth/signout" class="mt-6">
-        <button
-          type="submit"
-          class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
-        >
-          {m.dashboard_signout()}
-        </button>
-      </form>
+  <div class="bg-cosmic min-h-screen">
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-4 p-4 sm:p-8 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Stat 1: total + AI/manual split -->
+      <Card className={cardBase}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-blue-100/80">
+            <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
+            <span>{m.dashboard_stat_total_label()}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-4xl font-semibold text-white">{stats.total}</p>
+          <p class="mt-2 text-sm text-blue-100/60">
+            {m.dashboard_stat_total_split({ ai: stats.ai, percent: aiPercent, manual: stats.manual })}
+          </p>
+        </CardContent>
+      </Card>
+
+      <!-- Stat 2: due today (link if > 0) -->
+      {
+        stats.dueToday > 0 ? (
+          <a href="/review" class="block">
+            <Card className={cn(cardBase, ctaBase)}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-100/80">
+                  <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                  <span>{m.dashboard_stat_due_today_label()}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p class="text-4xl font-semibold text-white">{stats.dueToday}</p>
+                <p class="mt-2 text-sm text-purple-300">{m.dashboard_stat_due_today_hint()}</p>
+              </CardContent>
+            </Card>
+          </a>
+        ) : (
+          <Card className={cn(cardBase, "opacity-60")}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-100/80">
+                <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                <span>{m.dashboard_stat_due_today_label()}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p class="text-4xl font-semibold text-white">{stats.dueToday}</p>
+            </CardContent>
+          </Card>
+        )
+      }
+
+      <!-- Stat 3: placeholder -->
+      <Card className={cn(cardBase, "opacity-60")}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-blue-100/80">
+            <TrendingUp className="h-5 w-5 text-purple-300" aria-hidden="true" />
+            <span>{m.dashboard_stat_placeholder_label()}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-sm text-blue-100/60">—</p>
+        </CardContent>
+      </Card>
+
+      <!-- CTA 1: /generate (accented if empty) -->
+      <a href="/generate" class="block">
+        <Card className={cn(cardBase, ctaBase, isEmpty && highlightAccent)}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Sparkles className="h-5 w-5 text-purple-300" aria-hidden="true" />
+              <span>{m.dashboard_cta_generate()}</span>
+            </CardTitle>
+          </CardHeader>
+          {
+            isEmpty && (
+              <CardContent>
+                <p class="text-base font-medium text-white">{m.dashboard_empty_headline()}</p>
+                <p class="mt-2 text-sm text-blue-100/70">{m.dashboard_empty_body()}</p>
+              </CardContent>
+            )
+          }
+        </Card>
+      </a>
+
+      <!-- CTA 2: /review -->
+      <a href="/review" class="block">
+        <Card className={cn(cardBase, ctaBase)}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
+              <span>{m.dashboard_cta_review()}</span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      </a>
+
+      <!-- CTA 3: /deck -->
+      <a href="/deck" class="block">
+        <Card className={cn(cardBase, ctaBase)}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
+              <span>{m.dashboard_cta_deck()}</span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      </a>
+
+      {
+        loadError && (
+          <div class="col-span-full rounded-xl border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
+            {m.error_unknown()}
+          </div>
+        )
+      }
     </div>
   </div>
 </Layout>

@@ -325,31 +325,31 @@ Pełny manualny sweep 4 stanów × 2 języki × 2 breakpointy = 16 kombinacji + 
 
 #### Automated
 
-- [x] 1.1 `npm run lint` — 0 errors, 0 nowych warningów
-- [x] 1.2 `npx astro check` — brak nowych błędów TS
-- [x] 1.3 `npm run build` — build przechodzi
+- [x] 1.1 `npm run lint` — 0 errors, 0 nowych warningów — 931f1db
+- [x] 1.2 `npx astro check` — brak nowych błędów TS — 931f1db
+- [x] 1.3 `npm run build` — build przechodzi — 931f1db
 
 #### Manual
 
-- [x] 1.4 Weryfikacja odłożona do Fazy 2 (helper nie jest jeszcze wywoływany)
+- [x] 1.4 Weryfikacja odłożona do Fazy 2 (helper nie jest jeszcze wywoływany) — 931f1db
 
 ### Phase 2: i18n keys + dashboard.astro rewrite
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` — 0 errors, 0 nowych warningów
-- [ ] 2.2 `npm run prebuild` — parity OK (~199 keys)
-- [ ] 2.3 `npm run build` — build przechodzi
-- [ ] 2.4 `npx astro check` — brak nowych błędów TS
+- [x] 2.1 `npm run lint` — 0 errors, 0 nowych warningów
+- [x] 2.2 `npm run prebuild` — parity OK (~199 keys)
+- [x] 2.3 `npm run build` — build przechodzi
+- [x] 2.4 `npx astro check` — brak nowych błędów TS
 
 #### Manual
 
-- [ ] 2.5 Empty user (talia=0): 6 Cards renderują się w 3×2 gridzie desktop; Card 4 (`/generate`) accentuated (ring/glow)
-- [ ] 2.6 Mixed deck (>0 AI, >0 manual): Card 1 pokazuje total + split z procentem; Card 4 bez accent
-- [ ] 2.7 Due-today > 0: Card 2 klikalny jako link do `/review`
-- [ ] 2.8 Due-today == 0: Card 2 disabled (opacity-60, brak href)
-- [ ] 2.9 Mobile (< 768px): grid zwija się do 1 kolumny; wszystkie 6 Cards klikalne
-- [ ] 2.10 PL + EN: wszystkie stringi z i18n, brak leakage
+- [x] 2.5 Empty user (talia=0): 6 Cards renderują się w 3×2 gridzie desktop; Card 4 (`/generate`) accentuated (ring/glow)
+- [x] 2.6 Mixed deck (>0 AI, >0 manual): Card 1 pokazuje total + split z procentem; Card 4 bez accent
+- [x] 2.7 Due-today > 0: Card 2 klikalny jako link do `/review`
+- [x] 2.8 Due-today == 0: Card 2 disabled (opacity-60, brak href)
+- [x] 2.9 Mobile (< 768px): grid zwija się do 1 kolumny; wszystkie 6 Cards klikalne
+- [x] 2.10 PL + EN: wszystkie stringi z i18n, brak leakage
 
 ### Phase 3: QA sweep + i18n parity gate + regression check
 
