@@ -182,6 +182,7 @@
   "deck_card_edit_aria": "Edit card: {question}",
   "deck_card_delete_aria": "Delete card: {question}",
   "deck_card_delete_button": "Delete",
+  "deck_card_edit_button": "Edit",
   "deck_card_source_ai": "AI",
   "deck_card_source_manual": "manual",
   "deck_dialog_new_title": "New card",
