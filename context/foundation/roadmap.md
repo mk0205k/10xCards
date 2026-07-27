@@ -41,7 +41,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-05  | account-deletion-30d-retention | usunąć swoje konto z 30-dniowym oknem retencji (soft-delete, restore w oknie, hard-delete po 30 dniach) | F-01          | — (Privacy / retention)                | done     |
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | done     |
 | S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
-| S-08  | global-navigation-menu        | z każdej chronionej podstrony przejść do dowolnej innej przez widoczne w Layout menu nawigacyjne (bez wpisywania URL) | F-01, S-07    | — (nawigacyjne UX + i18n coverage)     | ready    |
+| S-08  | global-navigation-menu        | z każdej chronionej podstrony przejść do dowolnej innej przez widoczne w Layout menu nawigacyjne (bez wpisywania URL) | F-01, S-07    | — (nawigacyjne UX + i18n coverage)     | done     |
 
 ## Streams
 
@@ -186,7 +186,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
   - Widoczność menu na landing `/` (`src/pages/index.astro`). Owner: user. Block: no — default: public bar jak w flow auth.
   - Czy `/account` (settings + delete account) powinno być głównym linkiem w menu, czy schowane pod avatarem/dropdownem "moje konto" razem z sign-out. Owner: user. Block: no — decyzja implementacyjna; sensowny default: dropdown z avatarem, żeby menu główne skupiało się na core flow (generate / review / deck).
 - **Risk:** Brak wspólnego menu to obecnie największy widoczny brak UX — user po zamknięciu S-01…S-05 ma 5 działających widoków, ale porusza się między nimi wpisując URL ręcznie (żaden `href` między chronionymi stronami nie istnieje, sprawdzone `grep`-em). To gate'uje "polish" launchu i podnosi próg wejścia dla persona "dorosły wracający po tygodniu" (PRD §Persona). Ryzyko: menu wpięte w `Layout.astro` widać na **każdej** stronie — regresja układu lub błąd i18n zobaczy każdy użytkownik przy każdym kliknięciu, więc slice wymaga audytu wszystkich 14 podstron w obu językach przed zamknięciem (analogicznie do string-leakage risk z S-07). Nie blokuje walidacji hipotezy — north star S-02 zamknięty — ale bez tego produkt wygląda jak połączone niezależne prototypy zamiast spójnej aplikacji.
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -231,3 +231,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **S-05: user uruchamia flow "usuń konto", świadomie potwierdza, konto natychmiast staje się niedostępne (brak możliwości logowania, dane niewidoczne w aplikacji), dane (auth user, `cards`, `review_history`) są zachowane w stanie soft-deleted przez 30 dni z możliwością przywrócenia przez wsparcie/self-service, po 30 dniach są nieodwracalnie usuwane (hard delete).** — Archived 2026-07-23 → `context/archive/2026-07-23-account-deletion-30d-retention/`. Lesson: —.
 - **S-07: user widzi interfejs domyślnie po polsku, może przełączyć język na angielski (i z powrotem) w widocznym miejscu w UI, wybór jest trwały między sesjami; wszystkie widoczne teksty w aplikacji (nawigacja, formularze, komunikaty błędów, empty states, dialogi, strony auth, review, deck, delete/restore) są przetłumaczone na oba języki.** — Archived 2026-07-23 → `context/archive/2026-07-23-i18n-pl-en-toggle/`. Lesson: —.
 - **S-06: user może zbiorczo akceptować/odrzucać wiele propozycji AI naraz na ekranie candidate review (bulk actions), zresetować bieżącą sesję powtórki bez porzucania flow, oraz widzi jasne stany ładowania / empty / error w kluczowych operacjach (generacja, review, deck).** — Archived 2026-07-23 → `context/archive/2026-07-23-ux-improvements/`. Lesson: —.
+- **S-08: zalogowany user widzi na każdej chronionej podstronie (`/dashboard`, `/generate`, `/review`, `/deck`, `/account`) to samo menu nawigacyjne wpięte w `src/layouts/Layout.astro`, z linkami do wszystkich pięciu widoków, aktywną pozycją zaznaczoną wizualnie, przełącznikiem języka (integracja z S-07) oraz przyciskiem wylogowania; menu działa na desktop i mobile (hamburger / collapse); strony auth (`/auth/*`) i landing (`/`) mają wariant "public" (logo + link do signin/signup, bez wewnętrznej nawigacji).** — Archived 2026-07-27 → `context/archive/2026-07-27-global-navigation-menu/`. Lesson: —.

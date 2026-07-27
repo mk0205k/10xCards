@@ -1,7 +1,8 @@
 ---
 id: global-navigation-menu
 title: Globalne menu nawigacyjne
-status: impl_reviewed
+status: archived
+archived_at: 2026-07-27T18:42:43Z
 created: 2026-07-27
 updated: 2026-07-27
 
