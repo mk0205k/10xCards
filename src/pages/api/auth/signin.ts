@@ -27,5 +27,5 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(`/auth/signin?error=${ERROR_CODES.UNKNOWN}`);
   }
 
-  return context.redirect("/");
+  return context.redirect("/dashboard");
 };
