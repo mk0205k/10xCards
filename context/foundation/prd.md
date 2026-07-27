@@ -1,8 +1,9 @@
 ---
 project: "10xCards"
-version: 1
+version: 2
 status: draft
 created: 2026-06-10
+updated: 2026-07-27
 context_type: greenfield
 product_type: web-app
 target_scale:
@@ -77,6 +78,14 @@ Success = this flow can be completed in a single session with no errors or dead-
 - **And** the user rates the difficulty on the scale required by the algorithm,
 - **And** the algorithm schedules the next review date for that card based on the rating.
 
+### US-03: Dashboard hub with deck insights
+
+- **Given** a logged-in user (with an empty or populated deck),
+- **When** they open `/dashboard`,
+- **Then** they see current-state deck statistics as visual panels — total flashcard count, split by source (AI-generated vs manual), and count of cards due for review today,
+- **And** each panel includes a shortcut link to the relevant workflow (generate, review, deck browse),
+- **And** an empty deck renders informative empty-state panels (zero counts + strong CTA to `/generate`).
+
 ## Functional Requirements
 
 ### Account & access
@@ -121,6 +130,13 @@ Success = this flow can be completed in a single session with no errors or dead-
 - FR-015: The algorithm updates the review schedule based on the user's rating. Priority: must-have
   > Socratic: Counter-argument considered — none. Per-card scheduling is the essence of spaced repetition; per-deck scheduling degrades learning efficiency. Stays.
 
+### Deck insights & navigation
+
+- FR-016: The `/dashboard` page displays current-state deck statistics — total flashcard count, split by source (AI vs manual), and count of cards due for review today. Priority: must-have
+  > Socratic: Counter-argument considered — "dashboard belongs in Non-Goals; MVP is cards + algorithm". Resolution: MVP core (S-01…S-07) is now shipped and users open `/dashboard` after login expecting more than a welcome message. Current-state counts (not time-series analytics, not gamification) close the "empty landing page" gap and give users a natural entry point. Gamification, streaks, and historical charts remain parked (revised Non-Goals). Stays.
+- FR-017: Dashboard statistics are rendered as visual panels/cards, each with a direct navigation shortcut to the relevant workflow (`/generate`, `/review`, `/deck`). Priority: must-have
+  > Socratic: Counter-argument considered — "duplicates global nav (S-08)". Resolution: global nav gives access to every route; dashboard cards give **context-aware CTAs** tied to the panel's stat ("47 due today → Rozpocznij powtórkę"). Different UX affordance. Stays.
+
 ## Non-Functional Requirements
 
 - **Privacy of user content.** Pasted text and the resulting flashcards do not leak to other users or to publicly available AI training datasets. Measurable: no commits of user content to public fine-tuning destinations; content accessible only to its logged-in owner.
@@ -154,7 +170,7 @@ The MVP consciously does NOT do the following:
 - **Native mobile applications.** Web only. The web app works responsively on mobile, but we do not promise a mobile-optimised UI or app-store presence.
 - **Integrations with external educational platforms.** No third-party flashcard-app sync, no learning-management-system integration, no classroom-platform integration. The product is self-contained.
 - **Push / email notifications for scheduled reviews.** The user remembers session times themselves. No reminder dispatch; cards wait until the user logs in by their own initiative.
-- **Learning statistics / progress dashboard.** No charts, streaks, gamification, or personal-metrics panel. The MVP is cards + the algorithm, nothing more.
+- **Gamification and historical analytics.** No streaks, badges, XP systems, or charts of progress over time. The `/dashboard` shows current-state counts only (FR-016/017: deck size, AI/manual split, due-today) — not time-series data, not motivation-boosting mechanics. Advanced analytics (retention curves, per-topic breakdowns, learning-progress charts) deferred beyond MVP.
 - **Multimedia support in flashcards.** Only text-based question–answer pairs. No images, audio, mathematical formulas, or code blocks with syntax highlighting.
 
 ## Open Questions
