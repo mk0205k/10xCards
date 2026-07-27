@@ -355,16 +355,16 @@ Pełny manualny sweep 4 stanów × 2 języki × 2 breakpointy = 16 kombinacji + 
 
 #### Automated
 
-- [x] 3.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z master)
-- [x] 3.2 `npm run prebuild` — parity confirmed
-- [x] 3.3 `npm run build` — Cloudflare Worker bundle się produkuje
-- [x] 3.4 `npx astro check` — brak nowych TS errorów
+- [x] 3.1 `npm run lint` — zero errorów, zero nowych warningów (baseline z master) — c8e1ea6
+- [x] 3.2 `npm run prebuild` — parity confirmed — c8e1ea6
+- [x] 3.3 `npm run build` — Cloudflare Worker bundle się produkuje — c8e1ea6
+- [x] 3.4 `npx astro check` — brak nowych TS errorów — c8e1ea6
 
 #### Manual
 
-- [x] 3.5 16 pozycji QA checklist (4 stany × 2 języki × 2 breakpointy) zaznaczone
-- [x] 3.6 Zero string leakage
-- [x] 3.7 Regression: Topbar (S-08) active-state na `/dashboard` działa; aria-current="page" ustawione
-- [x] 3.8 Regression: sign-out z Topbar prowadzi do `/`; sesja niedostępna
-- [x] 3.9 Regression: soft-deleted user (S-05) próbujący `/dashboard` jest redirectowany do `/auth/restore-account` (middleware, nie dashboard renderuje 0/0)
-- [x] 3.10 Wygląd wizualny spójny z Cosmic theme + istniejącymi Cards (ProposalCard, CardListItem)
+- [x] 3.5 16 pozycji QA checklist (4 stany × 2 języki × 2 breakpointy) zaznaczone — c8e1ea6
+- [x] 3.6 Zero string leakage — c8e1ea6
+- [x] 3.7 Regression: Topbar (S-08) active-state na `/dashboard` działa; aria-current="page" ustawione — c8e1ea6
+- [x] 3.8 Regression: sign-out z Topbar prowadzi do `/`; sesja niedostępna — c8e1ea6
+- [x] 3.9 Regression: soft-deleted user (S-05) próbujący `/dashboard` jest redirectowany do `/auth/restore-account` (middleware, nie dashboard renderuje 0/0) — c8e1ea6
+- [x] 3.10 Wygląd wizualny spójny z Cosmic theme + istniejącymi Cards (ProposalCard, CardListItem) — c8e1ea6
