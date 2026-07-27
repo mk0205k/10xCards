@@ -1,7 +1,8 @@
 ---
 id: dashboard-user-panel-metrics
 title: Panel użytkownika na /dashboard z metrykami talii
-status: impl_reviewed
+status: archived
+archived_at: 2026-07-27T20:01:01Z
 created: 2026-07-27
 updated: 2026-07-27
 roadmap_ref: S-09

@@ -42,7 +42,7 @@ Klinem produktu (wedge — jedna cecha, która odróżnia produkt od generyczneg
 | S-06  | ux-improvements               | zbiorczo akceptować/odrzucać propozycje AI, zresetować sesję powtórki, widzieć jasne stany ładowania | F-01          | — (S-01/S-02 follow-up)                | done     |
 | S-07  | i18n-pl-en-toggle             | przełączać język UI między polskim (domyślnie) i angielskim; wybór trwały między sesjami | F-01          | — (rozszerzenie zasięgu)               | done     |
 | S-08  | global-navigation-menu        | z każdej chronionej podstrony przejść do dowolnej innej przez widoczne w Layout menu nawigacyjne (bez wpisywania URL) | F-01, S-07    | — (nawigacyjne UX + i18n coverage)     | done     |
-| S-09  | dashboard-user-panel-metrics  | zobaczyć na `/dashboard` panele z liczbą fiszek (podział AI vs manual), liczbą do powtórki dziś, oraz shortcuty do /generate, /review, /deck | F-01, S-01, S-02, S-03 | US-03, FR-016, FR-017                | ready    |
+| S-09  | dashboard-user-panel-metrics  | zobaczyć na `/dashboard` panele z liczbą fiszek (podział AI vs manual), liczbą do powtórki dziś, oraz shortcuty do /generate, /review, /deck | F-01, S-01, S-02, S-03 | US-03, FR-016, FR-017                | done     |
 
 ## Streams
 
@@ -203,7 +203,7 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
   - Cache/perf strategy dla count queries. Owner: TBD. Block: no — na skali `target_scale.users: medium` (per PRD frontmatter) 3 count queries per dashboard load są acceptable bez cache; premature optimization out of scope.
   - Wygląd paneli (Card z `src/components/ui/card.tsx` istnieje w projekcie — spójny z Deck view; Lucide icons dla wizualnego akcentu podobnie jak w MobileNav). Owner: TBD. Block: no — decyzja UI w `/10x-plan`.
 - **Risk:** Panel dotyka trzech różnych tabel (auth user, `cards`, `review_history`) i musi respektować RLS spójnie z F-01 gate'em — count queries muszą zwracać tylko wiersze usera (per Privacy NFR). Ryzyko: jeśli któraś tabela ma soft-delete flag (per S-05 `account-deletion-30d-retention`), count musi filtrować `deleted_at IS NULL` — inaczej user w oknie retencji widzi swoje "usunięte" fiszki na dashboardzie. Dodatkowy risk: przekierowania w panelach duplikują częściowo global nav (S-08), więc panel-CTA vs top-bar link muszą być rozróżnialne wizualnie (panel = context-aware, np. "23 czekają → Rozpocznij powtórkę"; nav = generic route access).
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -250,3 +250,4 @@ Co jest już wpięte w kodzie na dzień `2026-07-07` (auto-badane + potwierdzone
 - **S-07: user widzi interfejs domyślnie po polsku, może przełączyć język na angielski (i z powrotem) w widocznym miejscu w UI, wybór jest trwały między sesjami; wszystkie widoczne teksty w aplikacji (nawigacja, formularze, komunikaty błędów, empty states, dialogi, strony auth, review, deck, delete/restore) są przetłumaczone na oba języki.** — Archived 2026-07-23 → `context/archive/2026-07-23-i18n-pl-en-toggle/`. Lesson: —.
 - **S-06: user może zbiorczo akceptować/odrzucać wiele propozycji AI naraz na ekranie candidate review (bulk actions), zresetować bieżącą sesję powtórki bez porzucania flow, oraz widzi jasne stany ładowania / empty / error w kluczowych operacjach (generacja, review, deck).** — Archived 2026-07-23 → `context/archive/2026-07-23-ux-improvements/`. Lesson: —.
 - **S-08: zalogowany user widzi na każdej chronionej podstronie (`/dashboard`, `/generate`, `/review`, `/deck`, `/account`) to samo menu nawigacyjne wpięte w `src/layouts/Layout.astro`, z linkami do wszystkich pięciu widoków, aktywną pozycją zaznaczoną wizualnie, przełącznikiem języka (integracja z S-07) oraz przyciskiem wylogowania; menu działa na desktop i mobile (hamburger / collapse); strony auth (`/auth/*`) i landing (`/`) mają wariant "public" (logo + link do signin/signup, bez wewnętrznej nawigacji).** — Archived 2026-07-27 → `context/archive/2026-07-27-global-navigation-menu/`. Lesson: —.
+- **S-09: zalogowany user otwiera `/dashboard` i widzi 3-4 wizualne panele/karty z bieżącym stanem talii: (1) łączna liczba fiszek + podział AI-generated vs ręczne, (2) liczba fiszek zaplanowanych do powtórki dziś, (3) shortcuty do generowania nowych (`/generate`), powtórki (`/review`) i przeglądania talii (`/deck`); każdy panel jest samodzielnym CTA (klik → route). Empty state (talia = 0) pokazuje panele z zerami + wyraźny CTA do `/generate` jako główny punkt startowy.** — Archived 2026-07-27 → `context/archive/2026-07-27-dashboard-user-panel-metrics/`. Lesson: —.
