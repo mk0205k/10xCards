@@ -146,6 +146,8 @@ Doinstaluj shadcn `sheet`, zbuduj `MobileNav.tsx` (React island) zawierający ws
 
 **Intent**: React komponent (nie Astro), który wraper Sheet: `<SheetTrigger>` jako hamburger button (ikona SVG lub 3 kreski w CSS — bez Lucide, żeby nie dodawać zależności), `<SheetContent side="right">` z pionową listą linków, sign-out formem i `<LanguageSwitcher />`. Przyjmuje prop `user: { email: string } | null` żeby wiedział, który wariant renderować (analogicznie do Topbar). Przyjmuje `pathname: string` dla active-state (te same klasy co desktop).
 
+> **Review addendum (2026-07-27, /10x-impl-review F1):** Guidance "bez Lucide" oparte było na fałszywym założeniu — `lucide-react@^1.14.0` już był w `package.json` przed Fazą 2, a `src/components/ui/sheet.tsx:2` (shadcn-generated) importuje `XIcon` z tej samej paczki. `MobileNav.tsx` używa `MenuIcon` z `lucide-react` — nie dodaje to nowej zależności, więc uzasadnienie z pierwotnego Contractu nie ma zastosowania. Contract poprawiony: dopuszczalne jest użycie ikon `lucide-react` w komponentach które i tak korzystają z shadcn primitive'ów zaciągających tę paczkę.
+
 **Contract**: `export default function MobileNav({ user, pathname }: MobileNavProps)`. Type `MobileNavProps` deklarowany lokalnie (nie w `src/types.ts` — komponent-lokalny). Brak `useEffect`, brak zewnętrznego stanu — Sheet zarządza swoim open/closed state wewnętrznie. Musi być React-compiler-safe (żadnych mutacji propsów, żadnych `useRef` mutacji podczas renderu) — inaczej lint wywali build. Sign-out form to `<form method="POST" action="/api/auth/signout">` — dokładna kopia z Topbar.astro:22-26.
 
 #### 4. Wpinanie MobileNav w Topbar

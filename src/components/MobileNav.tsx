@@ -17,6 +17,10 @@ function navLinkClass(pathname: string, href: string) {
   return cn(linkBase, "block py-2 text-base", pathname === href ? linkActive : linkInactive);
 }
 
+function navLinkAria(pathname: string, href: string): "page" | undefined {
+  return pathname === href ? "page" : undefined;
+}
+
 export default function MobileNav({ user, pathname }: MobileNavProps) {
   return (
     <Sheet>
@@ -33,20 +37,36 @@ export default function MobileNav({ user, pathname }: MobileNavProps) {
         <nav className="flex flex-col gap-1 px-4 pb-4" aria-label={m.topbar_menu_label()}>
           {user ? (
             <>
-              <span className="pb-2 text-sm text-blue-100/70">{user.email}</span>
-              <a href="/dashboard" className={navLinkClass(pathname, "/dashboard")}>
+              {user.email && <span className="pb-2 text-sm text-blue-100/70">{user.email}</span>}
+              <a
+                href="/dashboard"
+                className={navLinkClass(pathname, "/dashboard")}
+                aria-current={navLinkAria(pathname, "/dashboard")}
+              >
                 {m.topbar_dashboard()}
               </a>
-              <a href="/generate" className={navLinkClass(pathname, "/generate")}>
+              <a
+                href="/generate"
+                className={navLinkClass(pathname, "/generate")}
+                aria-current={navLinkAria(pathname, "/generate")}
+              >
                 {m.topbar_generate()}
               </a>
-              <a href="/review" className={navLinkClass(pathname, "/review")}>
+              <a
+                href="/review"
+                className={navLinkClass(pathname, "/review")}
+                aria-current={navLinkAria(pathname, "/review")}
+              >
                 {m.topbar_review()}
               </a>
-              <a href="/deck" className={navLinkClass(pathname, "/deck")}>
+              <a href="/deck" className={navLinkClass(pathname, "/deck")} aria-current={navLinkAria(pathname, "/deck")}>
                 {m.topbar_deck()}
               </a>
-              <a href="/account" className={navLinkClass(pathname, "/account")}>
+              <a
+                href="/account"
+                className={navLinkClass(pathname, "/account")}
+                aria-current={navLinkAria(pathname, "/account")}
+              >
                 {m.topbar_account()}
               </a>
               <form method="POST" action="/api/auth/signout" className="pt-2">
@@ -58,10 +78,18 @@ export default function MobileNav({ user, pathname }: MobileNavProps) {
           ) : (
             <>
               <span className="pb-2 text-sm text-blue-100/70">{m.topbar_not_signed_in()}</span>
-              <a href="/auth/signin" className={navLinkClass(pathname, "/auth/signin")}>
+              <a
+                href="/auth/signin"
+                className={navLinkClass(pathname, "/auth/signin")}
+                aria-current={navLinkAria(pathname, "/auth/signin")}
+              >
                 {m.topbar_signin()}
               </a>
-              <a href="/auth/signup" className={navLinkClass(pathname, "/auth/signup")}>
+              <a
+                href="/auth/signup"
+                className={navLinkClass(pathname, "/auth/signup")}
+                aria-current={navLinkAria(pathname, "/auth/signup")}
+              >
                 {m.topbar_signup()}
               </a>
             </>

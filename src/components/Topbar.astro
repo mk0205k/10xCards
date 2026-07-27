@@ -5,17 +5,18 @@ import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages.js";
 
 interface Props {
-  pathname?: string;
+  pathname: string;
 }
 
 const { user } = Astro.locals;
-const { pathname = "" } = Astro.props;
+const { pathname } = Astro.props;
 
 const linkBase = "transition-colors hover:text-purple-100 hover:underline";
 const linkInactive = "text-purple-300";
 const linkActive = "text-purple-100 underline underline-offset-4";
 
 const navLinkClass = (href: string) => cn(linkBase, pathname === href ? linkActive : linkInactive);
+const navLinkAria = (href: string) => (pathname === href ? "page" : undefined);
 
 const mobileNavUser = user ? { email: user.email ?? "" } : null;
 ---
@@ -26,24 +27,24 @@ const mobileNavUser = user ? { email: user.email ?? "" } : null;
   {
     user ? (
       <>
-        <span class="text-blue-100/70">{user.email}</span>
+        {user.email && <span class="text-blue-100/70">{user.email}</span>}
         <div class="md:hidden">
-          <MobileNav client:load user={mobileNavUser} pathname={pathname} />
+          <MobileNav client:media="(max-width: 767px)" user={mobileNavUser} pathname={pathname} />
         </div>
         <div class="hidden items-center gap-3 md:flex">
-          <a href="/dashboard" class={navLinkClass("/dashboard")}>
+          <a href="/dashboard" class={navLinkClass("/dashboard")} aria-current={navLinkAria("/dashboard")}>
             {m.topbar_dashboard()}
           </a>
-          <a href="/generate" class={navLinkClass("/generate")}>
+          <a href="/generate" class={navLinkClass("/generate")} aria-current={navLinkAria("/generate")}>
             {m.topbar_generate()}
           </a>
-          <a href="/review" class={navLinkClass("/review")}>
+          <a href="/review" class={navLinkClass("/review")} aria-current={navLinkAria("/review")}>
             {m.topbar_review()}
           </a>
-          <a href="/deck" class={navLinkClass("/deck")}>
+          <a href="/deck" class={navLinkClass("/deck")} aria-current={navLinkAria("/deck")}>
             {m.topbar_deck()}
           </a>
-          <a href="/account" class={navLinkClass("/account")}>
+          <a href="/account" class={navLinkClass("/account")} aria-current={navLinkAria("/account")}>
             {m.topbar_account()}
           </a>
           <form method="POST" action="/api/auth/signout">
@@ -58,13 +59,13 @@ const mobileNavUser = user ? { email: user.email ?? "" } : null;
       <>
         <span class="text-blue-100/70">{m.topbar_not_signed_in()}</span>
         <div class="md:hidden">
-          <MobileNav client:load user={null} pathname={pathname} />
+          <MobileNav client:media="(max-width: 767px)" user={null} pathname={pathname} />
         </div>
         <div class="hidden items-center gap-3 md:flex">
-          <a href="/auth/signin" class={navLinkClass("/auth/signin")}>
+          <a href="/auth/signin" class={navLinkClass("/auth/signin")} aria-current={navLinkAria("/auth/signin")}>
             {m.topbar_signin()}
           </a>
-          <a href="/auth/signup" class={navLinkClass("/auth/signup")}>
+          <a href="/auth/signup" class={navLinkClass("/auth/signup")} aria-current={navLinkAria("/auth/signup")}>
             {m.topbar_signup()}
           </a>
           <LanguageSwitcher client:load />
