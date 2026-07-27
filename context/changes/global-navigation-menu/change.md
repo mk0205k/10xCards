@@ -4,6 +4,7 @@ title: Globalne menu nawigacyjne
 status: implementing
 created: 2026-07-27
 updated: 2026-07-27
+
 roadmap_ref: S-08
 ---
 

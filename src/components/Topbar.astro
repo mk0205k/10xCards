@@ -1,5 +1,6 @@
 ---
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import MobileNav from "@/components/MobileNav";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages.js";
 
@@ -15,6 +16,8 @@ const linkInactive = "text-purple-300";
 const linkActive = "text-purple-100 underline underline-offset-4";
 
 const navLinkClass = (href: string) => cn(linkBase, pathname === href ? linkActive : linkInactive);
+
+const mobileNavUser = user ? { email: user.email ?? "" } : null;
 ---
 
 <div
@@ -24,7 +27,10 @@ const navLinkClass = (href: string) => cn(linkBase, pathname === href ? linkActi
     user ? (
       <>
         <span class="text-blue-100/70">{user.email}</span>
-        <div class="flex items-center gap-3">
+        <div class="md:hidden">
+          <MobileNav client:load user={mobileNavUser} pathname={pathname} />
+        </div>
+        <div class="hidden items-center gap-3 md:flex">
           <a href="/dashboard" class={navLinkClass("/dashboard")}>
             {m.topbar_dashboard()}
           </a>
@@ -51,7 +57,10 @@ const navLinkClass = (href: string) => cn(linkBase, pathname === href ? linkActi
     ) : (
       <>
         <span class="text-blue-100/70">{m.topbar_not_signed_in()}</span>
-        <div class="flex items-center gap-3">
+        <div class="md:hidden">
+          <MobileNav client:load user={null} pathname={pathname} />
+        </div>
+        <div class="hidden items-center gap-3 md:flex">
           <a href="/auth/signin" class={navLinkClass("/auth/signin")}>
             {m.topbar_signin()}
           </a>

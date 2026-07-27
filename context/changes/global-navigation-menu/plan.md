@@ -329,34 +329,34 @@ Pełny manualny checklist 14 podstron × 2 języki × 2 breakpointy. Automat: li
 
 #### Automated
 
-- [x] 1.1 `npm run lint` przechodzi (brak nowych warningów, w tym `react-compiler/react-compiler`)
-- [x] 1.2 `npm run prebuild` przechodzi (parytet i18n zachowany)
-- [x] 1.3 `npm run build` przechodzi (Astro sync + build)
-- [x] 1.4 TypeScript nie zgłasza błędów (`npx astro check` lub równoważne)
+- [x] 1.1 `npm run lint` przechodzi (brak nowych warningów, w tym `react-compiler/react-compiler`) — 50cb6a0
+- [x] 1.2 `npm run prebuild` przechodzi (parytet i18n zachowany) — 50cb6a0
+- [x] 1.3 `npm run build` przechodzi (Astro sync + build) — 50cb6a0
+- [x] 1.4 TypeScript nie zgłasza błędów (`npx astro check` lub równoważne) — 50cb6a0
 
 #### Manual
 
-- [x] 1.5 `npm run dev` → `/` renderuje Topbar w wariancie anonimowym — bez regresji vs. przed zmianą
-- [x] 1.6 Ręczne wywołanie: zalogowany widzi 5 linków (dashboard, generate, review, deck, account) na `/`
-- [x] 1.7 Active state — weryfikacja odłożona do fazy 3 (Topbar musi być w Layout)
+- [x] 1.5 `npm run dev` → `/` renderuje Topbar w wariancie anonimowym — bez regresji vs. przed zmianą — 50cb6a0
+- [x] 1.6 Ręczne wywołanie: zalogowany widzi 5 linków (dashboard, generate, review, deck, account) na `/` — 50cb6a0
+- [x] 1.7 Active state — weryfikacja odłożona do fazy 3 (Topbar musi być w Layout) — 50cb6a0
 
 ### Phase 2: Mobile — hamburger drawer via shadcn Sheet
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` przechodzi (w tym `react-compiler/react-compiler` na MobileNav.tsx)
-- [ ] 2.2 `npm run prebuild` przechodzi (parytet i18n)
-- [ ] 2.3 `npm run build` przechodzi
-- [ ] 2.4 `package.json` ma `@radix-ui/react-dialog` (dopisany przez shadcn CLI)
+- [x] 2.1 `npm run lint` przechodzi (w tym `react-compiler/react-compiler` na MobileNav.tsx)
+- [x] 2.2 `npm run prebuild` przechodzi (parytet i18n)
+- [x] 2.3 `npm run build` przechodzi
+- [x] 2.4 `package.json` ma `@radix-ui/react-dialog` (dopisany przez shadcn CLI)
 
 #### Manual
 
-- [ ] 2.5 `npm run dev` → `/` na < 768px pokazuje hamburger; klik otwiera drawer z linkami
-- [ ] 2.6 ESC zamyka drawer; click-outside zamyka drawer
-- [ ] 2.7 Focus trap: Tab wewnątrz otwartego drawera nie ucieka do treści strony
-- [ ] 2.8 LanguageSwitcher w drawerze działa (przełącza język i drawer się odświeża odpowiednio)
-- [ ] 2.9 Na > 768px drawer nie renderuje się, desktop nav widać normalnie
-- [ ] 2.10 Zmiana rozmiaru okna przez breakpoint 768px w locie nie powoduje FOUC ani zawieszenia stanu drawera
+- [x] 2.5 `npm run dev` → `/` na < 768px pokazuje hamburger; klik otwiera drawer z linkami
+- [x] 2.6 ESC zamyka drawer; click-outside zamyka drawer
+- [x] 2.7 Focus trap: Tab wewnątrz otwartego drawera nie ucieka do treści strony
+- [x] 2.8 LanguageSwitcher w drawerze działa (przełącza język i drawer się odświeża odpowiednio)
+- [x] 2.9 Na > 768px drawer nie renderuje się, desktop nav widać normalnie
+- [x] 2.10 Zmiana rozmiaru okna przez breakpoint 768px w locie nie powoduje FOUC ani zawieszenia stanu drawera
 
 ### Phase 3: Global mount — przenieś Topbar do Layout.astro
 
