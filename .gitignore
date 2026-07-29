@@ -38,7 +38,8 @@ worker-configuration.d.ts
 dist-dry/
 
 # claude code local config
-.claude/
+.claude/*
+!.claude/settings.json
 
 .dev.vars.cloud-backup
 
