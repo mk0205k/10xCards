@@ -379,32 +379,32 @@ Component tests under happy-dom have a per-file setup cost (~50-100ms). Phase 3 
 
 #### Automated
 
-- [x] 2.1 npm test exits 0 with the new endpoint + hook cases passing
-- [x] 2.2 npm run prebuild (i18n parity) passes with both new keys in messages/pl.json and messages/en.json
-- [x] 2.3 npm run lint passes
-- [x] 2.4 npm run build passes
-- [x] 2.5 errorCodeToMessage("GENERATION_FAILED") and errorCodeToMessage("GENERATION_TIMEOUT") return i18n messages
+- [x] 2.1 npm test exits 0 with the new endpoint + hook cases passing — 060a8c6
+- [x] 2.2 npm run prebuild (i18n parity) passes with both new keys in messages/pl.json and messages/en.json — 060a8c6
+- [x] 2.3 npm run lint passes — 060a8c6
+- [x] 2.4 npm run build passes — 060a8c6
+- [x] 2.5 errorCodeToMessage("GENERATION_FAILED") and errorCodeToMessage("GENERATION_TIMEOUT") return i18n messages — 060a8c6
 
 #### Manual
 
-- [x] 2.6 Unsetting OPENROUTER_API_KEY in dev renders localized error_generation_failed on /generate in both PL and EN
-- [x] 2.7 Restoring the key restores the happy path with no regression
-- [x] 2.8 Failed generation returns HTTP 502 with Content-Type application/json and body { "error": "GENERATION_FAILED" }
+- [x] 2.6 Unsetting OPENROUTER_API_KEY in dev renders localized error_generation_failed on /generate in both PL and EN — 060a8c6
+- [x] 2.7 Restoring the key restores the happy path with no regression — 060a8c6
+- [x] 2.8 Failed generation returns HTTP 502 with Content-Type application/json and body { "error": "GENERATION_FAILED" } — 060a8c6
 
 ### Phase 3: Risk #2 component contract
 
 #### Automated
 
-- [ ] 3.1 npm test exits 0 with the five new GeneratePanel cases passing
-- [ ] 3.2 GeneratePanel test suite passes without flakiness across 3 consecutive local runs
-- [ ] 3.3 npm run lint passes
-- [ ] 3.4 npm run build passes
-- [ ] 3.5 No React 19 act() warnings surface in test output
+- [x] 3.1 npm test exits 0 with the five new GeneratePanel cases passing
+- [x] 3.2 GeneratePanel test suite passes without flakiness across 3 consecutive local runs
+- [x] 3.3 npm run lint passes
+- [x] 3.4 npm run build passes
+- [x] 3.5 No React 19 act() warnings surface in test output
 
 #### Manual
 
-- [ ] 3.6 Running the GeneratePanel test file in isolation shows readable case titles
-- [ ] 3.7 Test file assertions target visible UI and outbound fetch payloads, never dispatch spies or snapshots
+- [x] 3.6 Running the GeneratePanel test file in isolation shows readable case titles
+- [x] 3.7 Test file assertions target visible UI and outbound fetch payloads, never dispatch spies or snapshots
 
 ### Phase 4: Cookbook + CI ratchet
 
