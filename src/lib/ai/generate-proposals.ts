@@ -28,9 +28,10 @@ export interface GenerateProposalsParams {
   text: string;
   apiKey: string;
   model: string;
+  abortSignal?: AbortSignal;
 }
 
-export function generateProposals({ text, apiKey, model }: GenerateProposalsParams) {
+export function generateProposals({ text, apiKey, model, abortSignal }: GenerateProposalsParams) {
   const openrouter = createOpenRouter({ apiKey });
 
   return streamText({
@@ -38,5 +39,6 @@ export function generateProposals({ text, apiKey, model }: GenerateProposalsPara
     system: SYSTEM_PROMPT,
     prompt: text,
     output: Output.object({ schema: proposalsSchema }),
+    abortSignal,
   });
 }

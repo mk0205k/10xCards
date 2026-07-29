@@ -364,32 +364,32 @@ Component tests under happy-dom have a per-file setup cost (~50-100ms). Phase 3 
 
 #### Automated
 
-- [x] 1.1 npm install adds @testing-library/react, @testing-library/dom, happy-dom to devDependencies
-- [x] 1.2 npm test exits 0 with 9 existing tests passing under the node project
-- [x] 1.3 npm run lint passes after config change
-- [x] 1.4 npm run build passes after config change
-- [x] 1.5 npx tsc --noEmit (or astro sync && tsc) passes
+- [x] 1.1 npm install adds @testing-library/react, @testing-library/dom, happy-dom to devDependencies — 40c5831
+- [x] 1.2 npm test exits 0 with 9 existing tests passing under the node project — 40c5831
+- [x] 1.3 npm run lint passes after config change — 40c5831
+- [x] 1.4 npm run build passes after config change — 40c5831
+- [x] 1.5 npx tsc --noEmit (or astro sync && tsc) passes — 40c5831
 
 #### Manual
 
-- [x] 1.6 package.json diff contains only the three new devDependencies plus lockfile changes
-- [x] 1.7 vitest.config.ts diff shows two-project split with extends: true on both entries
+- [x] 1.6 package.json diff contains only the three new devDependencies plus lockfile changes — 40c5831
+- [x] 1.7 vitest.config.ts diff shows two-project split with extends: true on both entries — 40c5831
 
 ### Phase 2: Risk #1 hardening + tests
 
 #### Automated
 
-- [ ] 2.1 npm test exits 0 with the new endpoint + hook cases passing
-- [ ] 2.2 npm run prebuild (i18n parity) passes with both new keys in messages/pl.json and messages/en.json
-- [ ] 2.3 npm run lint passes
-- [ ] 2.4 npm run build passes
-- [ ] 2.5 errorCodeToMessage("GENERATION_FAILED") and errorCodeToMessage("GENERATION_TIMEOUT") return i18n messages
+- [x] 2.1 npm test exits 0 with the new endpoint + hook cases passing
+- [x] 2.2 npm run prebuild (i18n parity) passes with both new keys in messages/pl.json and messages/en.json
+- [x] 2.3 npm run lint passes
+- [x] 2.4 npm run build passes
+- [x] 2.5 errorCodeToMessage("GENERATION_FAILED") and errorCodeToMessage("GENERATION_TIMEOUT") return i18n messages
 
 #### Manual
 
-- [ ] 2.6 Unsetting OPENROUTER_API_KEY in dev renders localized error_generation_failed on /generate in both PL and EN
-- [ ] 2.7 Restoring the key restores the happy path with no regression
-- [ ] 2.8 Failed generation returns HTTP 502 with Content-Type application/json and body { "error": "GENERATION_FAILED" }
+- [x] 2.6 Unsetting OPENROUTER_API_KEY in dev renders localized error_generation_failed on /generate in both PL and EN
+- [x] 2.7 Restoring the key restores the happy path with no regression
+- [x] 2.8 Failed generation returns HTTP 502 with Content-Type application/json and body { "error": "GENERATION_FAILED" }
 
 ### Phase 3: Risk #2 component contract
 

@@ -8,6 +8,18 @@ interface PartialProposals {
   proposals?: Partial<ProposalDraft>[];
 }
 
+async function parseErrorBody(response: Response): Promise<string> {
+  try {
+    const body = await response.json();
+    if (body && typeof body === "object" && "error" in body && typeof body.error === "string") {
+      return body.error;
+    }
+  } catch {
+    // Non-JSON body — fall through to UNKNOWN so the UI renders a localized fallback.
+  }
+  return "UNKNOWN";
+}
+
 function extractCompleteProposals(value: unknown): ProposalDraft[] {
   if (!value || typeof value !== "object") return [];
   const items = (value as PartialProposals).proposals;
@@ -52,9 +64,13 @@ export function useProposalStream(dispatch: Dispatch) {
           signal: controller.signal,
         });
 
-        if (!response.ok || !response.body) {
-          const message = `Generation failed (${response.status})`;
-          dispatch({ type: "stream/abort", reason: message });
+        if (!response.ok) {
+          const code = await parseErrorBody(response);
+          dispatch({ type: "stream/abort", reason: code });
+          return;
+        }
+        if (!response.body) {
+          dispatch({ type: "stream/abort", reason: "UNKNOWN" });
           return;
         }
 
@@ -76,9 +92,12 @@ export function useProposalStream(dispatch: Dispatch) {
 
         const { value: finalParsed } = await parsePartialJson(buffer);
         const finalProposals = extractCompleteProposals(finalParsed);
-        if (finalProposals.length !== lastCount) {
-          dispatch({ type: "stream/chunk", proposals: finalProposals });
-        }
+        // Always dispatch the final parsed state — the inner loop's
+        // count-based check misses content growth on an existing proposal
+        // (e.g. the last answer being completed after the last question
+        // arrived). One trailing dispatch guarantees the reducer holds
+        // the fully-formed content the AI SDK actually emitted.
+        dispatch({ type: "stream/chunk", proposals: finalProposals });
         dispatch({ type: "stream/done" });
       } catch (error) {
         if (controller.signal.aborted) {

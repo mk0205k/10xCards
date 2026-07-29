@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
 import { defaultScheduler, hydrateCard, serializeCardForRpc, serializeLogForRpc } from "@/lib/review/scheduler";
+import type { Json } from "@/db/database.types";
 
 export const prerender = false;
 
@@ -71,12 +72,16 @@ export const POST: APIRoute = async (context) => {
   const card = hydrateCard(row);
   const { card: updated, log } = defaultScheduler.next(card, now, parsed.data.rating);
 
+  // The RPC payload types (RpcCardPayload, RpcLogPayload) are structural but
+  // lack a `[key: string]` index signature that Supabase's generated `Json`
+  // union expects. Cast at the boundary — the runtime shape is JSON-serialisable
+  // by construction (see serialize* functions in @/lib/review/scheduler).
   const { data: rpcData, error: rpcError } = await supabase.rpc("commit_review", {
     p_card_id: paramsParsed.data.card_id,
     p_rating: parsed.data.rating,
     p_now: now.toISOString(),
-    p_updated_card: serializeCardForRpc(updated),
-    p_log: serializeLogForRpc(log),
+    p_updated_card: serializeCardForRpc(updated) as unknown as Json,
+    p_log: serializeLogForRpc(log) as unknown as Json,
   });
 
   if (rpcError) {

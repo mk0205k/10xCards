@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import type { StreamState } from "@/components/generate/proposalsReducer";
 import { m } from "@/paraglide/messages.js";
+import { errorCodeToMessage } from "@/lib/error-messages";
 
 interface Props {
   streamState: StreamState;
@@ -12,6 +13,8 @@ interface Props {
 export default function StreamBanner({ streamState, errorMessage, onRetry }: Props) {
   if (streamState !== "aborted") return null;
 
+  const localized = errorCodeToMessage(errorMessage);
+
   return (
     <Alert
       variant="error"
@@ -21,8 +24,7 @@ export default function StreamBanner({ streamState, errorMessage, onRetry }: Pro
         </Button>
       }
     >
-      {m.generate_stream_interrupted()}
-      {errorMessage ? <span className="ml-1 text-red-200/70">({errorMessage})</span> : null}
+      {localized ?? m.generate_stream_interrupted()}
     </Alert>
   );
 }

@@ -106,11 +106,48 @@ describe("POST /api/generate", () => {
     generateProposalsMock.mockReturnValue(stubStreamResult());
     const res = await POST(buildContext({ user: { id: "u1" }, body: { text: "hello world" } }));
     expect(res.status).toBe(200);
-    expect(generateProposalsMock).toHaveBeenCalledWith({
-      text: "hello world",
-      apiKey: "test-key",
-      model: "test/model",
-    });
+    expect(generateProposalsMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        text: "hello world",
+        apiKey: "test-key",
+        model: "test/model",
+      }),
+    );
+    const firstArg = generateProposalsMock.mock.calls[0]?.[0] as { abortSignal?: unknown } | undefined;
+    expect(firstArg?.abortSignal).toBeInstanceOf(AbortSignal);
     expect(await res.text()).toBe("data-stream");
+  });
+
+  it("returns 502 with GENERATION_FAILED when generateProposals throws synchronously", async () => {
+    generateProposalsMock.mockImplementation(() => {
+      throw new Error("provider unavailable");
+    });
+    const res = await POST(buildContext({ user: { id: "u1" }, body: { text: "hello world" } }));
+    expect(res.status).toBe(502);
+    expect(res.headers.get("content-type")).toContain("application/json");
+    expect(await res.json()).toEqual({ error: "GENERATION_FAILED" });
+  });
+
+  it("returns 504 with GENERATION_TIMEOUT when generateProposals throws an AbortError (timeout)", async () => {
+    generateProposalsMock.mockImplementation(() => {
+      const err = new Error("The operation timed out");
+      err.name = "TimeoutError";
+      throw err;
+    });
+    const res = await POST(buildContext({ user: { id: "u1" }, body: { text: "hello world" } }));
+    expect(res.status).toBe(504);
+    expect(res.headers.get("content-type")).toContain("application/json");
+    expect(await res.json()).toEqual({ error: "GENERATION_TIMEOUT" });
+  });
+
+  it("also treats AbortError name as timeout (polyfill parity)", async () => {
+    generateProposalsMock.mockImplementation(() => {
+      const err = new Error("aborted");
+      err.name = "AbortError";
+      throw err;
+    });
+    const res = await POST(buildContext({ user: { id: "u1" }, body: { text: "hello world" } }));
+    expect(res.status).toBe(504);
+    expect(await res.json()).toEqual({ error: "GENERATION_TIMEOUT" });
   });
 });

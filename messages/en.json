@@ -217,5 +217,7 @@
   "error_reset_too_many_attempts": "Too many attempts — try again in an hour.",
   "error_account_delete_failed": "Failed to delete account. Please try again.",
   "error_account_restore_failed": "Failed to restore account. Please try again.",
-  "error_email_required": "Email is required."
+  "error_email_required": "Email is required.",
+  "error_generation_failed": "Failed to generate flashcards. Please try again in a moment.",
+  "error_generation_timeout": "Flashcard generation took too long. Shorten the pasted text or try again."
 }

@@ -217,5 +217,7 @@
   "error_reset_too_many_attempts": "Za dużo prób — spróbuj ponownie za godzinę.",
   "error_account_delete_failed": "Nie udało się usunąć konta. Spróbuj ponownie.",
   "error_account_restore_failed": "Nie udało się przywrócić konta. Spróbuj ponownie.",
-  "error_email_required": "Email jest wymagany."
+  "error_email_required": "Email jest wymagany.",
+  "error_generation_failed": "Nie udało się wygenerować fiszek. Spróbuj ponownie za chwilę.",
+  "error_generation_timeout": "Generowanie fiszek trwało zbyt długo. Skróć wklejony tekst lub spróbuj ponownie."
 }

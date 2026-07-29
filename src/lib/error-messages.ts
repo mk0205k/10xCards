@@ -12,6 +12,8 @@ export const ERROR_CODES = {
   ACCOUNT_RESTORE_FAILED: "ACCOUNT_RESTORE_FAILED",
   ACCOUNT_PENDING_DELETION: "ACCOUNT_PENDING_DELETION",
   EMAIL_REQUIRED: "EMAIL_REQUIRED",
+  GENERATION_FAILED: "GENERATION_FAILED",
+  GENERATION_TIMEOUT: "GENERATION_TIMEOUT",
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
@@ -28,6 +30,8 @@ const RESOLVERS: Record<ErrorCode, () => string> = {
   ACCOUNT_RESTORE_FAILED: m.error_account_restore_failed,
   ACCOUNT_PENDING_DELETION: m.auth_signup_pending_deletion,
   EMAIL_REQUIRED: m.error_email_required,
+  GENERATION_FAILED: m.error_generation_failed,
+  GENERATION_TIMEOUT: m.error_generation_timeout,
 };
 
 function isKnownCode(input: string): input is ErrorCode {
