@@ -55,12 +55,12 @@ describe("POST /api/auth/signup", () => {
     signUpMock.mockReset();
   });
 
-  it("redirects to signup with account_pending_deletion when email is in retention window", async () => {
+  it("redirects to signup with ACCOUNT_PENDING_DELETION when email is in retention window", async () => {
     rpcMock.mockResolvedValueOnce({ data: true, error: null });
 
     const res = await POST(buildContext({ email: "soft@test.local", password: "password123" }));
 
-    expect(res.headers.get("location")).toBe("/auth/signup?error=account_pending_deletion");
+    expect(res.headers.get("location")).toBe("/auth/signup?error=ACCOUNT_PENDING_DELETION");
     expect(rpcMock).toHaveBeenCalledWith("email_pending_deletion", { p_email: "soft@test.local" });
     expect(signUpMock).not.toHaveBeenCalled();
   });
@@ -85,12 +85,12 @@ describe("POST /api/auth/signup", () => {
     expect(res.headers.get("location")).toBe("/auth/confirm-email");
   });
 
-  it("redirects to signup with signUp error message when signUp fails", async () => {
+  it("redirects to signup with UNKNOWN when signUp fails (vendor detail collapsed via error-messages registry)", async () => {
     rpcMock.mockResolvedValueOnce({ data: false, error: null });
     signUpMock.mockResolvedValueOnce({ error: { message: "email already in use" } });
 
     const res = await POST(buildContext({ email: "dup@test.local", password: "password123" }));
 
-    expect(res.headers.get("location")).toBe(`/auth/signup?error=${encodeURIComponent("email already in use")}`);
+    expect(res.headers.get("location")).toBe("/auth/signup?error=UNKNOWN");
   });
 });
