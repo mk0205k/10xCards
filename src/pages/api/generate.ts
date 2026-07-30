@@ -50,8 +50,43 @@ export const POST: APIRoute = async (context) => {
       apiKey: OPENROUTER_API_KEY,
       model: OPENROUTER_MODEL,
       abortSignal: AbortSignal.timeout(GENERATION_TIMEOUT_MS),
+      onError: ({ error }) => {
+        console.error("[/api/generate] SDK mid-stream error", {
+          user_id: context.locals.user?.id,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      },
     });
-    return createTextStreamResponse({ stream: toTextStream({ stream: result.stream }) });
+    // Guard the pipe: response headers are already sent by the time the SDK
+    // stream is iterated, so a mid-stream provider error / abort cannot be
+    // turned into a 502 — but it CAN escape as an unhandled rejection and
+    // corrupt the workerd isolate. Wrap the byte stream in a controlled
+    // ReadableStream that catches downstream errors, logs, and closes
+    // cleanly. Client-side truncation detection is deferred (see plan §
+    // "What We're NOT Doing").
+    const textStream = toTextStream({ stream: result.stream });
+    const guarded = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        const reader = textStream.getReader();
+        try {
+          let chunk = await reader.read();
+          while (!chunk.done) {
+            controller.enqueue(chunk.value);
+            chunk = await reader.read();
+          }
+          controller.close();
+        } catch (err) {
+          console.error("[/api/generate] mid-stream iteration failed", {
+            user_id: context.locals.user?.id,
+            message: err instanceof Error ? err.message : String(err),
+          });
+          controller.close();
+        } finally {
+          reader.releaseLock();
+        }
+      },
+    });
+    return createTextStreamResponse({ stream: guarded });
   } catch (err) {
     if (isTimeoutError(err)) {
       console.error("[/api/generate] provider call timed out", { user_id: context.locals.user.id });

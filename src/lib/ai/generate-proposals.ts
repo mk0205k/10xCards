@@ -29,9 +29,10 @@ export interface GenerateProposalsParams {
   apiKey: string;
   model: string;
   abortSignal?: AbortSignal;
+  onError?: (event: { error: unknown }) => void;
 }
 
-export function generateProposals({ text, apiKey, model, abortSignal }: GenerateProposalsParams) {
+export function generateProposals({ text, apiKey, model, abortSignal, onError }: GenerateProposalsParams) {
   const openrouter = createOpenRouter({ apiKey });
 
   return streamText({
@@ -40,5 +41,6 @@ export function generateProposals({ text, apiKey, model, abortSignal }: Generate
     prompt: text,
     output: Output.object({ schema: proposalsSchema }),
     abortSignal,
+    onError,
   });
 }

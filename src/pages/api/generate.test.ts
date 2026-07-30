@@ -150,4 +150,26 @@ describe("POST /api/generate", () => {
     expect(res.status).toBe(504);
     expect(await res.json()).toEqual({ error: "GENERATION_TIMEOUT" });
   });
+
+  it("closes the response body cleanly when the SDK stream errors mid-iteration", async () => {
+    // Response headers are already sent by the time result.stream is iterated,
+    // so a mid-stream provider error cannot become a 502. The guarded pipe
+    // should catch the reader error, log it, and close the stream — the client
+    // observes a 200 with a truncated body, never an unhandled rejection.
+    generateProposalsMock.mockReturnValue({
+      stream: new ReadableStream({
+        start(controller) {
+          controller.enqueue({ type: "text-delta", id: "0", text: "partial " });
+          queueMicrotask(() => {
+            controller.error(new Error("provider dropped connection"));
+          });
+        },
+      }),
+    });
+    const res = await POST(buildContext({ user: { id: "u1" }, body: { text: "hello world" } }));
+    expect(res.status).toBe(200);
+    // Consuming the body must not throw — the guarded ReadableStream must have
+    // absorbed the mid-stream error and closed the response cleanly.
+    await expect(res.text()).resolves.toEqual(expect.any(String));
+  });
 });
