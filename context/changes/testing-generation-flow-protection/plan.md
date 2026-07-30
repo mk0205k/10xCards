@@ -395,23 +395,23 @@ Component tests under happy-dom have a per-file setup cost (~50-100ms). Phase 3 
 
 #### Automated
 
-- [x] 3.1 npm test exits 0 with the five new GeneratePanel cases passing
-- [x] 3.2 GeneratePanel test suite passes without flakiness across 3 consecutive local runs
-- [x] 3.3 npm run lint passes
-- [x] 3.4 npm run build passes
-- [x] 3.5 No React 19 act() warnings surface in test output
+- [x] 3.1 npm test exits 0 with the five new GeneratePanel cases passing — e79ad6f
+- [x] 3.2 GeneratePanel test suite passes without flakiness across 3 consecutive local runs — e79ad6f
+- [x] 3.3 npm run lint passes — e79ad6f
+- [x] 3.4 npm run build passes — e79ad6f
+- [x] 3.5 No React 19 act() warnings surface in test output — e79ad6f
 
 #### Manual
 
-- [x] 3.6 Running the GeneratePanel test file in isolation shows readable case titles
-- [x] 3.7 Test file assertions target visible UI and outbound fetch payloads, never dispatch spies or snapshots
+- [x] 3.6 Running the GeneratePanel test file in isolation shows readable case titles — e79ad6f
+- [x] 3.7 Test file assertions target visible UI and outbound fetch payloads, never dispatch spies or snapshots — e79ad6f
 
 ### Phase 4: Cookbook + CI ratchet
 
 #### Automated
 
-- [ ] 4.1 npm test exits 0
-- [ ] 4.2 npm run prebuild && npm run lint && npm run build all exit 0
+- [x] 4.1 npm test exits 0
+- [x] 4.2 npm run prebuild && npm run lint && npm run build all exit 0
 - [ ] 4.3 CI run on a pushed branch passes with the new npm test step visible in the run log
 
 #### Manual
