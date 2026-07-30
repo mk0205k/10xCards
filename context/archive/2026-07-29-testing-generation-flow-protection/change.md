@@ -1,10 +1,10 @@
 ---
 change_id: testing-generation-flow-protection
 title: Generation-flow protection (endpoint + UI)
-status: impl_reviewed
+status: archived
 created: 2026-07-29
 updated: 2026-07-30
-archived_at: null
+archived_at: 2026-07-30T07:23:00Z
 ---
 
 ## Notes
