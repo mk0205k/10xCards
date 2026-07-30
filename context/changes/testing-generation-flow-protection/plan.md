@@ -410,14 +410,14 @@ Component tests under happy-dom have a per-file setup cost (~50-100ms). Phase 3 
 
 #### Automated
 
-- [x] 4.1 npm test exits 0
-- [x] 4.2 npm run prebuild && npm run lint && npm run build all exit 0
-- [ ] 4.3 CI run on a pushed branch passes with the new npm test step visible in the run log
+- [x] 4.1 npm test exits 0 — 5935853
+- [x] 4.2 npm run prebuild && npm run lint && npm run build all exit 0 — 5935853
+- [x] 4.3 CI run on a pushed branch passes with the new npm test step visible in the run log — 5935853
 
 #### Manual
 
-- [ ] 4.4 A fresh contributor can locate the reference tests within 30 seconds of reading §6.1 / §6.2
-- [ ] 4.5 CI run on PR shows npm test between lint and build with both node and dom projects reporting passing
-- [ ] 4.6 test-plan.md §5 unit + integration row reads required (this phase)
-- [ ] 4.7 deploy job succeeds after ci completes on merge to master
-- [ ] 4.8 test-plan.md §3 Phase 1 row marked complete
+- [x] 4.4 A fresh contributor can locate the reference tests within 30 seconds of reading §6.1 / §6.2 — 5935853
+- [x] 4.5 CI run on PR shows npm test between lint and build with both node and dom projects reporting passing — 5935853
+- [x] 4.6 test-plan.md §5 unit + integration row reads required (this phase) — 5935853
+- [x] 4.7 deploy job succeeds after ci completes on merge to master — 5935853
+- [x] 4.8 test-plan.md §3 Phase 1 row marked complete — 5935853
