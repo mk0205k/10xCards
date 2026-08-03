@@ -55,6 +55,19 @@ npm run dev
 - `npm run lint` - Run ESLint with type-checked rules
 - `npm run lint:fix` - Auto-fix ESLint issues
 - `npm run format` - Run Prettier
+- `npm run test:e2e` - Run Playwright E2E tests
+- `npm run test:e2e:ui` - Run Playwright in interactive UI mode
+
+## E2E tests
+
+Playwright drives the north-star smoke test (`e2e/north-star.spec.ts`). One-time setup:
+
+1. Start local Supabase: `npx supabase start`.
+2. Create the dedicated e2e user via `/auth/signup` — email `e2e-north-star@local.test` (see `@.env.e2e.example`).
+3. Copy `.env.e2e.example` to `.env.e2e` and fill `E2E_USER_PASSWORD`. `.env.e2e` is gitignored.
+4. `npm run test:e2e` — Playwright boots (or reuses) the dev server, runs `@playwright/setup/auth.setup.ts` to capture a session into `playwright/.auth/user.json`, then executes the specs.
+
+The dev server started by `webServer` sets `OPENROUTER_MOCK=1` so tests never hit the real OpenRouter API.
 
 ## Project Structure
 

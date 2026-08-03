@@ -19,6 +19,7 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.e2e
 
 # cloudflare
 .dev.vars
@@ -45,3 +46,11 @@ dist-dry/
 
 # bash crash dumps
 *.stackdump
+
+playwright/.auth/
+
+# playwright test artifacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
