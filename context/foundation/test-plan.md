@@ -62,7 +62,7 @@ Each row is a discrete rollout phase that will open its own change folder via `/
 | 2 | RLS + auth two-user integration | Prove that a second-user attack (row-level select AND write-side) is blocked in code that runs against a real Supabase — normal auth path AND soft-delete retention window | #3, #6 (write-side prep) | integration (real local Supabase, two-user seed) | not started | — |
 | 3 | Middleware / route-gate coverage | Prove every protected route rejects unauth'd and soft-deleted users, and lock a pattern so any new route added later can be caught | #4 | integration (Astro middleware with mocked auth context) | not started | — |
 | 4 | AI-cost cap + deck-mutation validation | Prove the AI-cost cap rejects at the boundary; prove deck-management inputs are validated; lock edit-vs-schedule semantics per PRD Open Q3 | #5, #6 | integration + unit (validators) | not started | — |
-| 5 (deferred) | North-star e2e smoke | One deep guard covering signin → paste → generate → accept → review — proves the islands compose correctly end-to-end after the cheap nets are in place | cross-cutting (#1, #2, #4) | e2e (Playwright — deferred: install + MCP not yet in place) | not started | — |
+| 5 | North-star e2e smoke | One deep guard covering signin → paste → generate → accept → review — proves the islands compose correctly end-to-end after the cheap nets are in place | cross-cutting (#1, #2, #4) | e2e (Playwright — installed locally 2026-08-03) | change opened | `context/changes/testing-north-star-e2e-smoke/` |
 
 **Status vocabulary** (fixed — parser literals): `not started` → `change opened` → `researched` → `planned` → `implementing` → `complete`.
 
@@ -78,7 +78,7 @@ The classic test base for this project. AI-native tools (if any) carry a `checke
 | API mocking (network edge) | none installed yet | — | MSW or a simple fetch fixture will land in Phase 1 for OpenRouter response-variant coverage. |
 | component testing | none installed yet | — | @testing-library/react + happy-dom land in Phase 1 to unlock Risk #2. |
 | integration DB | local Docker Supabase | matches `supabase/config.toml` | Per `.dev.vars` (local as of 2026-07-23). Tests must never hit hosted / paused free-tier Supabase. Two-user seed pattern lands in Phase 2. |
-| e2e | Playwright | — | Not installed. Land or defer in Phase 5. |
+| e2e | Playwright | 1.62.1 | Installed 2026-08-03 (uncommitted: `playwright.config.ts`, `e2e/seed.spec.ts`, `.playwright-cli/`). `test:e2e` / `test:e2e:ui` scripts wired. Formalize + first north-star spec land in Phase 5. |
 | accessibility | none scheduled | — | Not in initial rollout; UI look-and-feel exclusion covers most of the visual axis (§7). |
 | (optional) AI-native | none scheduled — see negative space (§7) | n/a | Q5 excluded infrastructure over-investment; classic layer covers named risks. Re-evaluate at `--refresh`. |
 
@@ -88,7 +88,7 @@ The classic test base for this project. AI-native tools (if any) carry a `checke
 
 - Docs: **Context7 MCP** (`mcp__context7__query-docs`, `mcp__context7__resolve-library-id`) — available; use per rollout phase to ground Astro 6 middleware / Vitest 4 env config / @testing-library/react / Supabase RLS test setup / ts-fsrs / OpenRouter response contract; checked: 2026-07-29
 - Search: **Exa MCP** (`mcp__exa__web_search_exa`, `mcp__exa__web_fetch_exa`) — available; validate current AI-native tool status and framework changelogs when Context7 doesn't cover; checked: 2026-07-29
-- Runtime/browser: **no Playwright MCP** in current session — must be enabled (or Playwright installed locally) before Phase 5 can run; checked: 2026-07-29
+- Runtime/browser: **Playwright installed locally** (v1.62.1) as of 2026-08-03 — satisfies the Phase 5 gate; no Playwright MCP in current session, so `/10x-e2e` will drive via the Playwright CLI (browser-driven path); checked: 2026-08-03
 - Provider/platform: **no GitHub/Cloudflare/Supabase MCPs** in current session — `gh` CLI available via Bash; Cloudflare Observability MCP mentioned in `infrastructure.md` is not exposed here; checked: 2026-07-29
 
 Use docs MCPs for current framework/library APIs and setup details. Use search MCPs for discovery or current status only, then prefer official docs as the evidence. Do not use MCP docs/search to infer code failure anchors; those belong in per-phase `/10x-research`.
@@ -170,7 +170,7 @@ Exclusions agreed during the rollout (Phase 2 interview, Q5). Future contributor
 ## 8. Freshness Ledger
 
 - Strategy (§1–§5) last reviewed: 2026-07-29
-- Stack versions last verified: 2026-07-29
+- Stack versions last verified: 2026-08-03 (Playwright 1.62.1 landed; other rows unchanged)
 - AI-native tool references last verified: 2026-07-29
 
 Refresh (`/10x-test-plan --refresh`) when:
