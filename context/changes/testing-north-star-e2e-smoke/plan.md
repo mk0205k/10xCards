@@ -417,28 +417,28 @@ Fill `test-plan.md §6.6` with the north-star cookbook entry (location, run comm
 
 #### Automated
 
-- [x] 1.1 `npx playwright test --list` shows the `setup` project and `chromium` project depends on it
-- [x] 1.2 `npm run lint` passes on new/modified TS files
-- [x] 1.3 `npx astro sync && npm run build` still succeeds (config typecheck)
+- [x] 1.1 `npx playwright test --list` shows the `setup` project and `chromium` project depends on it — dcee8c6
+- [x] 1.2 `npm run lint` passes on new/modified TS files — dcee8c6
+- [x] 1.3 `npx astro sync && npm run build` still succeeds (config typecheck) — dcee8c6
 
 #### Manual
 
-- [x] 1.4 Cold-checkout flow produces `playwright/.auth/user.json` on first `--project=setup` run
-- [x] 1.5 Subsequent `npm run test:e2e` reuses the running dev server (no port collision)
-- [x] 1.6 `webServer.env.OPENROUTER_MOCK=1` reaches the dev process (verified via a temporary console log)
+- [x] 1.4 Cold-checkout flow produces `playwright/.auth/user.json` on first `--project=setup` run — dcee8c6
+- [x] 1.5 Subsequent `npm run test:e2e` reuses the running dev server (no port collision) — dcee8c6
+- [x] 1.6 `webServer.env.OPENROUTER_MOCK=1` reaches the dev process (verified via a temporary console log) — dcee8c6
 
 ### Phase 2: Server-side OpenRouter mock via env-var branch
 
 #### Automated
 
-- [ ] 2.1 `npm test -- generate-proposals` runs both tests green
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npx astro sync && npm run build` succeeds (env schema addition picked up)
+- [x] 2.1 `npm test -- generate-proposals` runs both tests green
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npx astro sync && npm run build` succeeds (env schema addition picked up)
 
 #### Manual
 
-- [ ] 2.4 With `OPENROUTER_MOCK=1` in `.dev.vars`, `/api/generate` returns mock proposals via browser
-- [ ] 2.5 With `OPENROUTER_MOCK` unset (or `=0`), real OpenRouter call still fires
+- [x] 2.4 With `OPENROUTER_MOCK=1` in `.dev.vars`, `/api/generate` returns mock proposals via browser
+- [x] 2.5 With `OPENROUTER_MOCK` unset (or `=0`), real OpenRouter call still fires
 
 ### Phase 3: E2E quality levers (rules + seed exemplar)
 

@@ -1,6 +1,8 @@
 import { streamText, Output } from "ai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { OPENROUTER_MOCK } from "astro:env/server";
 import { z } from "zod";
+import { DEFAULT_MOCK_PROPOSALS, makeMockGenerateResult } from "./generate-proposals-mock";
 
 export const proposalSchema = z.object({
   question: z.string().min(1),
@@ -33,6 +35,10 @@ export interface GenerateProposalsParams {
 }
 
 export function generateProposals({ text, apiKey, model, abortSignal, onError }: GenerateProposalsParams) {
+  if (OPENROUTER_MOCK === "1") {
+    return makeMockGenerateResult(DEFAULT_MOCK_PROPOSALS);
+  }
+
   const openrouter = createOpenRouter({ apiKey });
 
   return streamText({

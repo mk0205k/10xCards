@@ -41,6 +41,7 @@ export default defineConfig({
         access: "public",
         default: "google/gemini-2.5-flash",
       }),
+      OPENROUTER_MOCK: envField.string({ context: "server", access: "secret", optional: true }),
       PUBLIC_SITE_URL: envField.string({ context: "server", access: "public", optional: false }),
     },
   },
