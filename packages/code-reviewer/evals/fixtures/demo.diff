@@ -1,0 +1,42 @@
+diff --git a/src/routes/users.ts b/src/routes/users.ts
+index 8a1c2f4..3b7e9d2 100644
+--- a/src/routes/users.ts
++++ b/src/routes/users.ts
+@@ -1,6 +1,7 @@
+ import { Router } from "express";
+ import { db } from "../db.js";
+ import { requireAuth } from "../middleware/auth.js";
++import { logger } from "../logger.js";
+
+ export const usersRouter = Router();
+
+@@ -18,3 +19,26 @@ usersRouter.get("/:id", requireAuth, async (req, res) => {
+   const [user] = await db.query("SELECT id, email, name FROM users WHERE id = $1", [req.params.id]);
+   res.json(user ?? null);
+ });
++
++// New: admin-only search by email fragment.
++usersRouter.get("/search", async (req, res) => {
++  const q = req.query.q as string;
++  logger.info(`user search q=${q} token=${req.headers.authorization}`);
++
++  const sql = `SELECT id, email, name, password_hash FROM users WHERE email LIKE '%${q}%'`;
++  const rows = await db.query(sql);
++
++  const results = [];
++  for (let i = 0; i < rows.length; i++) {
++    for (let j = 0; j < rows.length; j++) {
++      if (rows[i].id === rows[j].id) {
++        results.push(rows[i]);
++        break;
++      }
++    }
++  }
++
++  res.json(results);
++});
++
+diff --git a/src/routes/users.test.ts b/src/routes/users.test.ts
+index e69de29..e69de29 100644
+--- a/src/routes/users.test.ts
++++ b/src/routes/users.test.ts

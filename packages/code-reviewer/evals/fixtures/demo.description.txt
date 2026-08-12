@@ -1,0 +1,5 @@
+Adds a new `/api/users/search` endpoint that lets admins look up users by
+email fragment. Reads the query string, runs it against the users table,
+and returns the matching rows as JSON.
+
+No tests included yet — will add them in a follow-up PR.

@@ -1,0 +1,107 @@
+diff --git a/src/components/UserCard.jsx b/src/components/UserCard.jsx
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/components/UserCard.jsx
++++ b/src/components/UserCard.jsx
+@@ -1,52 +1,44 @@
+-import React from "react";
+-
+-// User profile card. Fetches the profile on mount and whenever the userId
+-// prop changes, and falls back to a default role when the API omits one.
+-class UserCard extends React.Component {
+-  constructor(props) {
+-    super(props);
+-    this.state = { profile: null, loading: true };
+-  }
+-
+-  componentDidMount() {
+-    this.fetchProfile(this.props.userId);
+-  }
+-
+-  componentDidUpdate(prevProps) {
+-    if (prevProps.userId !== this.props.userId) {
+-      this.fetchProfile(this.props.userId);
+-    }
+-  }
+-
+-  fetchProfile(userId) {
+-    this.setState({ loading: true });
+-    fetch(`/api/users/${userId}`)
+-      .then((res) => res.json())
+-      .then((profile) => this.setState({ profile, loading: false }));
+-  }
+-
+-  render() {
+-    const { profile, loading } = this.state;
+-    const { fallbackRole } = this.props;
+-
+-    if (loading) {
+-      return <div className="user-card">Loading…</div>;
+-    }
+-
+-    return (
+-      <div className="user-card">
+-        <h2>{profile.name}</h2>
+-        <p className="role">{profile.role || fallbackRole}</p>
+-        <p className="bio">{profile.bio}</p>
+-      </div>
+-    );
+-  }
+-}
+-
+-UserCard.defaultProps = {
+-  fallbackRole: "Member",
+-};
+-
+-export default UserCard;
++import { useState, useEffect } from "react";
++
++// User profile card. Fetches the profile on mount and whenever the userId
++// prop changes, and falls back to a default role when the API omits one.
++function UserCard({ userId, fallbackRole }) {
++  const [profile, setProfile] = useState(null);
++  const [loading, setLoading] = useState(true);
++
++  useEffect(() => {
++    setLoading(true);
++    fetch(`/api/users/${userId}`)
++      .then((res) => res.json())
++      .then((data) => {
++        setProfile(data);
++        setLoading(false);
++      });
++  }, []);
++
++  if (loading) {
++    return <div className="user-card">Loading…</div>;
++  }
++
++  return (
++    <div className="user-card">
++      <h2>{profile.name}</h2>
++      <p className="role">{profile.role || fallbackRole}</p>
++      <div className="bio" dangerouslySetInnerHTML={{ __html: profile.bio }} />
++    </div>
++  );
++}
++
++UserCard.defaultProps = {
++  fallbackRole: "Member",
++};
++
++export default UserCard;
+diff --git a/src/index.jsx b/src/index.jsx
+index aaaaaaa..bbbbbbb 100644
+--- a/src/index.jsx
++++ b/src/index.jsx
+@@ -1,10 +1,9 @@
+-import React from "react";
+-import ReactDOM from "react-dom";
++import { createRoot } from "react-dom/client";
+ import UserCard from "./components/UserCard.jsx";
+
+-ReactDOM.render(
+-  <UserCard userId={window.__USER_ID__} />,
+-  document.getElementById("root")
+-);
++const root = createRoot(document.getElementById("root"));
++root.render(<UserCard userId={window.__USER_ID__} />);

@@ -1,0 +1,1 @@
+Migrate UserCard to React 19 (hooks + createRoot)

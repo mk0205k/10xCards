@@ -1,0 +1,32 @@
+{
+  "name": "@10x/code-reviewer",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered code reviewer built on the Vercel AI SDK + OpenRouter.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/cli.ts",
+    "start": "tsx src/cli.ts",
+    "review:local": "PR_NUMBER=123 tsx evals/run-local.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval": "PROMPTFOO_DISABLE_TEMPLATING=true promptfoo eval -c evals/promptfooconfig.yaml --no-cache",
+    "eval:view": "promptfoo view"
+  },
+  "dependencies": {
+    "@openrouter/ai-sdk-provider": "^2.9.1",
+    "ai": "^6.0.201",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "promptfoo": "^0.121.15",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.6"
+  }
+}

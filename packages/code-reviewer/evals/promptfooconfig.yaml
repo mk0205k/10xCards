@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Review models sweep over a flawed React 16→19 migration"
+
+prompts:
+  - "{{diff}}"
+
+providers:
+  - id: file://./reviewProvider.ts
+    label: "glm-5.1"
+    config:
+      model: z-ai/glm-5.1
+  - id: file://./reviewProvider.ts
+    label: "deepseek-v4-flash"
+    config:
+      model: deepseek/deepseek-v4-flash
+  - id: file://./reviewProvider.ts
+    label: "sonnet-4.6"
+    config:
+      model: anthropic/claude-sonnet-4.6
+defaultTest:
+  options:
+    provider: openrouter:anthropic/claude-sonnet-4.5
+
+tests:
+  - description: "React 16→19 UserCard migration with three planted flaws (XSS, stale-closure effect, defaultProps)"
+    vars:
+      # PR metadata + diff are extracted to fixtures/ so this eval and the local
+      # launcher (evals/run-local.ts) read the exact same inputs from one source.
+      title: file://fixtures/react-migration.title.txt
+      description: file://fixtures/react-migration.description.txt
+      diff: file://fixtures/react-migration.diff
+      expected_verdict: file://fixtures/react-migration.expected-verdict.txt
+    assert:
+      - type: is-json
+      - type: javascript
+        value: file://asserts/reviewFails.ts
+      - type: llm-rubric
+        value: >
+          The review identifies the cross-site scripting (XSS) vulnerability
+          introduced by `dangerouslySetInnerHTML={{ __html: profile.bio }}`, AND
+          conveys that the injected `bio` is untrusted / user-controlled data
+          (e.g. fetched from the API, attacker-settable). PASS only if it names
+          the dangerouslySetInnerHTML sink and the untrusted input. A generic
+          "watch out for security" with no specific sink does NOT pass.
+      - type: llm-rubric
+        value: >
+          The review identifies that the `useEffect` has an empty dependency
+          array `[]` while its body reads the `userId` prop, so the component
+          will NOT refetch when `userId` changes — a regression from the old
+          componentDidUpdate behavior. PASS only if it ties the empty/missing
+          dependency to the lost refetch-on-userId-change. A generic "check your
+          hook dependencies" with no mention of the missing refetch does NOT pass.
+      - type: llm-rubric
+        value: >
+          The review flags that `defaultProps` on a function component is
+          ignored/removed in React 19, so the `fallbackRole` default no longer
+          applies (a breaking change on the target version), and ideally
+          recommends a default parameter instead. PASS if it conveys the default
+          is lost / the pattern is wrong for React 19. Merely praising the
+          defaultProps block, or omitting it entirely, does NOT pass.

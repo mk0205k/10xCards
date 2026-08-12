@@ -1,0 +1,300 @@
+# .github/workflows/impl-review.yml
+#
+# Drop this into a consumer repo that uses the /10x-plan → /10x-implement flow.
+# Requires an ANTHROPIC_API_KEY secret. The default GITHUB_TOKEN is extended
+# with `contents: write` (commit the review file back), `pull-requests: write`
+# (post the summary comment + inline review comments), and `statuses: write`
+# (publish the verdict commit status).
+#
+# Adjust the `setup` step to match the project's toolchain — the CI skill's
+# Test Coverage agent runs the plan's `pnpm test` / `pytest` / etc. commands,
+# so the toolchain must be installed before Claude runs.
+#
+# Monorepo-ready: the skill discovers plans under context/changes/ at the
+# repo root OR any workspace subtree, derives the review path from the plan's
+# own folder, and the "Validate" / "Check review verdict" steps below already
+# search every subtree. For a large monorepo you can optionally scope Claude's
+# review to changed workspaces — add an `nx affected` / `turbo` step and feed
+# the affected list into the prompt's Context block. That's an additive
+# optimization, not required for correctness.
+#
+# The skill is sourced from `.claude/skills/10x-impl-review-ci/`, which
+# `@przeprogramowani/10x-toolkit`'s install step (or your equivalent
+# vendoring) populates. If you vendor the skill elsewhere, adjust the
+# `Stage impl-review-ci skill` step's archive path.
+
+name: Impl Review
+
+on:
+  pull_request:
+    # `labeled` / `unlabeled` lets the verdict-check step re-evaluate the
+    # `impl-review-override` gate without re-running the full review. The
+    # guard step below skips the expensive claude-code-action step on
+    # label-only events; the cheap verdict check still runs.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions: {}
+
+jobs:
+  impl-review:
+    # Gate on the `impl-review` label so plan/test/docs PRs don't trigger
+    # review. Apply via `gh pr edit <PR> --add-label impl-review` (or
+    # `gh pr create --label impl-review`). Drop the label predicate if you
+    # want every PR reviewed.
+    #
+    # `head.repo.full_name == github.repository` blocks fork PRs — they
+    # can't safely receive commits-back or use repo secrets.
+    if: contains(github.event.pull_request.labels.*.name, 'impl-review') && github.event.pull_request.head.repo.full_name == github.repository
+    concurrency:
+      group: impl-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      # Required for POSTing the "impl-review-ci/verdict" commit status
+      # to the bot's SHA from the "Check review verdict" step.
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 lets the skill compute origin/BASE...HEAD and
+          # inspect plan-file history across the PR's merge-base.
+          fetch-depth: 0
+          # Check out the PR head so Claude can commit the review back.
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      # Adjust this block to your toolchain. The skill runs the plan's
+      # Automated Verification commands (tests, lint, build, typecheck),
+      # so the toolchain must be installed before Claude runs.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Skip Claude run on bot commits and label-only events
+        id: guard
+        env:
+          EVENT_ACTION: ${{ github.event.action }}
+        run: |
+          AUTHOR=$(git log -1 --format='%an')
+          SUBJECT=$(git log -1 --format='%s')
+          # Is there a prior Claude review commit on this branch? If not, we
+          # must run even on a labeled/unlabeled event — otherwise opening a
+          # PR with `gh pr create --label X` (which dispatches `opened` plus
+          # `labeled` in quick succession and concurrency kills `opened`)
+          # means the first-ever review never happens.
+          PRIOR_CLAUDE=$(git log --author='claude\[bot\]' -1 --format='%H' 2>/dev/null || true)
+          if [[ "$AUTHOR" == "claude[bot]" || "$SUBJECT" == *"[skip ci]"* ]]; then
+            # HEAD is the bot's own commit — don't recurse.
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$EVENT_ACTION" == "labeled" || "$EVENT_ACTION" == "unlabeled" ]] && [[ -n "$PRIOR_CLAUDE" ]]; then
+            # Label toggled after a prior review — nothing new to analyze;
+            # the verdict step (if: always) will re-evaluate gating labels.
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Stage impl-review-ci skill (user-level)
+        if: steps.guard.outputs.skip != 'true'
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          # Stage the skill into the USER-level ~/.claude/skills/, not the
+          # project-level .claude/skills/. claude-code-action@v1 treats the
+          # PR head as untrusted: it moves the repo's .claude/ to .claude-pr/
+          # and restores a fresh .claude/ from the PR's BASE branch. The
+          # user-level skills dir lives outside the repo tree, so the
+          # action's sensitive-path handling can't reach it.
+          #
+          # Source from origin/<base-ref> so the skill state matches what
+          # this PR is being reviewed against, and so PRs branched off
+          # before the skill was vendored still get it.
+          git fetch origin "$BASE_REF" --depth=1 2>&1 | tail -1
+          mkdir -p "$HOME/.claude/skills"
+          git archive "origin/$BASE_REF" .claude/skills/10x-impl-review-ci \
+            | tar -x --strip-components=2 -C "$HOME/.claude/skills/"
+
+      - name: Run impl-review (CI)
+        if: steps.guard.outputs.skip != 'true'
+        uses: anthropics/claude-code-action@v1
+        env:
+          # Exposed to the skill's Bash steps for `gh pr comment` / `gh pr view`.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          # Belt-and-suspenders: claude-code-action@v1 reads ANTHROPIC_API_KEY
+          # from the process env, not only from the `anthropic_api_key` input.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Tool allowlist and turn limit go through claude_args in v1 —
+          # there are no longer top-level `allowed_tools` / `max_turns` inputs.
+          # Include `mcp__github_inline_comment__create_inline_comment` so the
+          # skill can post inline review comments anchored to changed lines.
+          claude_args: |
+            --model claude-opus-4-7
+            --max-turns 60
+            --allowedTools Read,Write,Glob,Grep,Bash,Agent,TaskCreate,TaskUpdate,TaskList,TaskGet,mcp__github_inline_comment__create_inline_comment
+          prompt: |
+            /10x-impl-review-ci
+
+            You are running in CI (GitHub Actions) on a pull request.
+            Execute the 10x-impl-review-ci skill to review this PR against
+            its plan, commit the review report to the branch, and post a
+            summary PR comment.
+
+            Context:
+              PR:       #${{ github.event.pull_request.number }}
+              Base:     ${{ github.event.pull_request.base.ref }}
+              Head:     ${{ github.event.pull_request.head.ref }}
+              Run URL:  ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Plan discovery is automatic (PR diff + optional `Plan: ...`
+            override in the PR body). If no plan is detected, post the
+            neutral "no plan" comment and exit cleanly — do not fail
+            the workflow.
+
+      - name: Validate Claude's commit (skip-ci + output contract)
+        # `if: always()` so this re-evaluates the latest tip regardless of
+        # whether the Claude step ran — catches off-contract bot commits
+        # observed on follow-up runs that would otherwise pass silently.
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          # Fetch the true branch tip — our local clone predates any
+          # commit the Claude step pushed during this run.
+          git fetch origin "$HEAD_REF" --depth=2 2>&1 | tail -1
+          TIP=$(git rev-parse FETCH_HEAD)
+          AUTHOR=$(git log -1 --format='%an' FETCH_HEAD)
+          SUBJECT=$(git log -1 --format='%s' FETCH_HEAD)
+          echo "Branch tip: sha=${TIP:0:10} author=\"$AUTHOR\" subject=\"$SUBJECT\""
+
+          # Only validate commits authored by the bot; human commits
+          # aren't subject to these checks.
+          if [[ "$AUTHOR" != "claude[bot]" ]]; then
+            echo "Tip is not a bot commit — nothing to validate."
+            exit 0
+          fi
+
+          FAILED=0
+
+          # Check 1: [skip ci] marker — without it, the push retriggers
+          # this workflow on the bot's own HEAD and we risk a loop.
+          if [[ "$SUBJECT" != *"[skip ci]"* ]]; then
+            echo "::error title=Missing [skip ci] marker::Bot commit \"$SUBJECT\" lacks [skip ci]. The skill must include the marker to prevent workflow recursion."
+            FAILED=1
+          fi
+
+          # Check 2: output-contract marker — every review file must
+          # start with `<!-- IMPL-REVIEW-REPORT -->` so downstream triage
+          # tooling can route the file. Catch model drift loudly so the
+          # PR Check goes red instead of silently landing an off-contract
+          # report.
+          REVIEW_FILE=$(git show --name-only --format= FETCH_HEAD \
+            | grep -E '(^|/)context/changes/[^/]+/reviews/impl-review.*\.md$' \
+            | head -1)
+          if [ -n "$REVIEW_FILE" ]; then
+            FIRST_LINE=$(git show "FETCH_HEAD:$REVIEW_FILE" | head -1)
+            if [[ "$FIRST_LINE" != "<!-- IMPL-REVIEW-REPORT -->" ]]; then
+              echo "::error title=Skill output contract violated::Review file $REVIEW_FILE does not start with the <!-- IMPL-REVIEW-REPORT --> marker. First line was: \"$FIRST_LINE\". Model likely discovered the skill but improvised the output format."
+              FAILED=1
+            fi
+          else
+            echo "::warning::Bot commit added no file matching context/changes/*/reviews/impl-review*.md. Skill may have written to a non-canonical path (check for .claude-pr/, .github/, or repo-root stray files)."
+          fi
+
+          exit $FAILED
+
+      - name: Check review verdict
+        # `if: always()` ensures this runs even when the Claude step was
+        # skipped (label-only re-trigger or bot commit) — the committed
+        # report from the prior commit on this branch is still the source
+        # of truth, and re-evaluating the override label is the whole
+        # point of the label-triggered re-run.
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Why a manual commit status instead of the GHA-auto check?
+          # The skill commits the review with [skip ci], so no workflow
+          # triggers on the bot commit — which is the PR's current HEAD.
+          # GHA's auto-created check-run is attached to the *pre-bot*
+          # commit, invisible in the PR's Checks UI. We POST a status
+          # directly to the bot's SHA so the PR UI reflects reality.
+          #
+          # The context string is stable across runs ("impl-review-ci/verdict"),
+          # so later runs *update* the same status rather than spawning new
+          # ones — which is what we want for the label-toggle re-evaluate flow.
+          HEAD_SHA=$(git rev-parse HEAD)
+          STATUS_CONTEXT="impl-review-ci/verdict"
+
+          post_status() {
+            local state="$1" description="$2"
+            gh api --method POST "repos/{owner}/{repo}/statuses/${HEAD_SHA}" \
+              -f state="$state" \
+              -f context="$STATUS_CONTEXT" \
+              -f description="$description" \
+              -f target_url="$RUN_URL" > /dev/null
+          }
+
+          # Monorepo-aware: search any context/changes/*/reviews/ subtree.
+          # mtime ordering picks the newest across plain `impl-review.md`
+          # and `impl-review-phase-N.md` variants.
+          REVIEW_FILE=$(find . -type f -path '*/context/changes/*/reviews/impl-review*.md' 2>/dev/null \
+                          | xargs ls -t 2>/dev/null | head -1)
+          if [ -z "$REVIEW_FILE" ] || [ ! -f "$REVIEW_FILE" ]; then
+            echo "No review file on this branch — nothing to gate on. Passing."
+            # Deliberately skip posting a status here: no review means no
+            # gate. If a prior run left a status on the same SHA, leave it.
+            exit 0
+          fi
+
+          VERDICT=$(grep -m1 -E '^\- \*\*Verdict\*\*:' "$REVIEW_FILE" \
+            | grep -oE 'APPROVED|NEEDS ATTENTION|REJECTED' \
+            | head -1)
+
+          echo "Review file: $REVIEW_FILE"
+          echo "Verdict: ${VERDICT:-<unknown>}"
+          echo "Status target SHA: $HEAD_SHA"
+
+          if [ "$VERDICT" = "APPROVED" ]; then
+            post_status success "Verdict: APPROVED"
+            exit 0
+          fi
+
+          if [ "$VERDICT" = "NEEDS ATTENTION" ]; then
+            # Informational, not blocking. Status is green but the
+            # description flags that reviewers should engage.
+            post_status success "Verdict: NEEDS ATTENTION (reviewer triage recommended)"
+            exit 0
+          fi
+
+          if [ "$VERDICT" != "REJECTED" ]; then
+            # Unparseable — don't fail, but make the ambiguity visible.
+            # Keep under GitHub's 140-char status description limit.
+            post_status success "Verdict unparseable; non-blocking (see logs)"
+            exit 0
+          fi
+
+          HAS_OVERRIDE=$(gh pr view "$PR_NUMBER" --json labels \
+            --jq '.labels[] | select(.name == "impl-review-override") | .name')
+
+          if [ -n "$HAS_OVERRIDE" ]; then
+            echo "::notice::Verdict is REJECTED but 'impl-review-override' label is present — bypassing gate."
+            post_status success "REJECTED bypassed by 'impl-review-override' label"
+            exit 0
+          fi
+
+          post_status failure "REJECTED — add 'impl-review-override' label to bypass"
+          echo "::error title=Implementation review rejected::Verdict is REJECTED. Review the findings in the PR comments, then add the 'impl-review-override' label to the PR to bypass this gate."
+          exit 1

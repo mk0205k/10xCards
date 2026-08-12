@@ -1,0 +1,3 @@
+Modernize the UserCard profile component: convert the class component to a function component with hooks, and switch the mount site from ReactDOM.render to createRoot. Behavior should be unchanged.
+
+Plan: /context/changes/bento-grid/plan.md
