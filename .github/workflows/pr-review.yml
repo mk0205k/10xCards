@@ -1,0 +1,77 @@
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [master]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: pr-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: AI code review (advisory)
+    if: >-
+      !github.event.pull_request.draft &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base ref
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: git fetch --no-tags --depth=100 origin "$BASE_REF"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/code-reviewer/package-lock.json
+
+      - name: Install reviewer dependencies
+        working-directory: packages/code-reviewer
+        run: npm ci
+
+      - name: Run AI code review
+        id: review
+        continue-on-error: true
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_DESCRIPTION: ${{ github.event.pull_request.body }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+
+          DIFF="$(git diff --no-color "origin/${BASE_REF}...HEAD" -- . \
+            ':(exclude)**/package-lock.json' \
+            ':(exclude)src/paraglide/**' \
+            ':(exclude)messages/*.json' \
+            ':(exclude)worker-configuration.d.ts')"
+
+          LINE_COUNT="$(printf '%s\n' "$DIFF" | wc -l)"
+          if [ "$LINE_COUNT" -gt 3000 ]; then
+            DIFF="$(printf '%s\n' "$DIFF" | head -n 3000)"
+            export DIFF_TRUNCATED=true
+          fi
+
+          printf '%s\n' "$DIFF" | (cd packages/code-reviewer && npx tsx src/cli.ts)
+
+      - name: Advisory outcome (informational)
+        if: always()
+        run: |
+          echo "Reviewer step outcome: ${{ steps.review.outcome }}"
+          echo "This job is advisory-only in v1 — it never blocks the required ci check."

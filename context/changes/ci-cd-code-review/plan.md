@@ -355,7 +355,7 @@ No data migration. No deprecation of any existing behavior. The new workflow is 
 
 #### Automated
 
-- [x] 1.1 `gh secret list` includes `OPENROUTER_API_KEY`
+- [x] 1.1 `gh secret list` includes `OPENROUTER_API_KEY` — eda5e3e
 - [x] 1.2 `cd packages/code-reviewer && npm ci` completes without error on Node 22
 - [x] 1.3 Local dry-run exits 0 within 3 minutes and prints a JSON object with a `verdict` key
 
@@ -368,17 +368,17 @@ No data migration. No deprecation of any existing behavior. The new workflow is 
 
 #### Automated
 
-- [ ] 2.1 `.github/workflows/pr-review.yml` exists at the exact path
+- [x] 2.1 `.github/workflows/pr-review.yml` exists at the exact path
 - [ ] 2.2 `gh workflow list` shows `PR Review` after push
-- [ ] 2.3 `actionlint .github/workflows/pr-review.yml` reports zero errors
+- [x] 2.3 `actionlint .github/workflows/pr-review.yml` reports zero errors
 - [ ] 2.4 `gh run list --workflow=pr-review.yml --limit 1` returns an entry within a minute of the trigger
 
 #### Manual
 
-- [ ] 2.5 No `${{ ... }}` interpolation of `pull_request.title` or `.body` inside any `run:` script
-- [ ] 2.6 Job `if:` contains both the draft check and the fork check
-- [ ] 2.7 `permissions:` at workflow level contains only `pull-requests: write` and `contents: read`
-- [ ] 2.8 `timeout-minutes: 10` present on the `review` job
+- [x] 2.5 No `${{ ... }}` interpolation of `pull_request.title` or `.body` inside any `run:` script
+- [x] 2.6 Job `if:` contains both the draft check and the fork check
+- [x] 2.7 `permissions:` at workflow level contains only `pull-requests: write` and `contents: read`
+- [x] 2.8 `timeout-minutes: 10` present on the `review` job
 
 ### Phase 3: Live Smoke Test on a Trivial PR
 
