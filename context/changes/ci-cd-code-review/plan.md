@@ -369,9 +369,9 @@ No data migration. No deprecation of any existing behavior. The new workflow is 
 #### Automated
 
 - [x] 2.1 `.github/workflows/pr-review.yml` exists at the exact path
-- [ ] 2.2 `gh workflow list` shows `PR Review` after push
+- [x] 2.2 `gh workflow list` shows `PR Review` after push
 - [x] 2.3 `actionlint .github/workflows/pr-review.yml` reports zero errors
-- [ ] 2.4 `gh run list --workflow=pr-review.yml --limit 1` returns an entry within a minute of the trigger
+- [x] 2.4 `gh run list --workflow=pr-review.yml --limit 1` returns an entry within a minute of the trigger
 
 #### Manual
 
@@ -384,13 +384,13 @@ No data migration. No deprecation of any existing behavior. The new workflow is 
 
 #### Automated
 
-- [ ] 3.1 `gh run list --workflow=pr-review.yml` returns at least one `pull_request` run with `conclusion: success`
-- [ ] 3.2 `gh pr view <smoke-pr> --json comments` returns a `github-actions[bot]` comment containing `Pass` or `Fail`
+- [x] 3.1 `gh run list --workflow=pr-review.yml` returns at least one `pull_request` run with `conclusion: success`
+- [x] 3.2 `gh pr view <smoke-pr> --json comments` returns a `github-actions[bot]` comment containing `Pass` or `Fail`
 
 #### Manual
 
-- [ ] 3.3 Reviewer comment renders correctly on `github.com` (table, badge, no escape artifacts)
-- [ ] 3.4 `ci` job remains required and green on the smoke-test PR; reviewer job is present as non-required
-- [ ] 3.5 Workflow rerun produces a second comment (confirming append-only v1 is behaving as designed)
-- [ ] 3.6 OpenRouter dashboard shows one review-shaped call per PR event
-- [ ] 3.7 Rollback line added under `## Notes` in `context/changes/ci-cd-code-review/change.md`
+- [x] 3.3 Reviewer comment renders correctly on `github.com` (table, badge, no escape artifacts)
+- [x] 3.4 `ci` job remains required and green on the smoke-test PR; reviewer job is present as non-required
+- [x] 3.5 Workflow rerun produces a second comment (confirming append-only v1 is behaving as designed)
+- [x] 3.6 OpenRouter dashboard shows one review-shaped call per PR event
+- [x] 3.7 Rollback line added under `## Notes` in `context/changes/ci-cd-code-review/change.md`
