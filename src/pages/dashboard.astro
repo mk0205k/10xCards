@@ -1,61 +1,81 @@
 ---
-import { Clock, Library, Sparkles, TrendingUp } from "lucide-react";
+import { Clock, Library, Sparkles, TrendingUp, Rocket } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Layout from "@/layouts/Layout.astro";
 import { createClient } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import { getDeckStats, type DeckStats } from "@/lib/services/deck-stats";
+import { getDeckStats } from "@/lib/services/deck-stats";
 import { m } from "@/paraglide/messages.js";
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 const { user } = Astro.locals;
 
-let stats: DeckStats = { total: 0, ai: 0, manual: 0, dueToday: 0 };
+console.log("Dashboard loaded for", user?.email, "id=", user?.id);
+
+let stats: any = { total: 0, ai: 0, manual: 0, dueToday: 0 };
 let loadError = false;
 
 if (supabase && user) {
   try {
     stats = await getDeckStats(supabase, user.id);
-  } catch (error) {
-    loadError = true;
-    console.error("[/dashboard] getDeckStats failed", error);
+  } catch (e) {
+    // ignore, dashboard should always render
   }
-} else {
-  loadError = true;
 }
 
 const isEmpty = stats.total === 0;
 const aiPercent = stats.total > 0 ? Math.round((stats.ai / stats.total) * 100) : 0;
 
+const today = new Date().toLocaleDateString("pl-PL", { dateStyle: "full" });
+
 const cardBase = "border-white/10 bg-white/5 backdrop-blur-xl";
 const ctaBase = "block transition-all hover:bg-white/10 hover:border-white/20";
 const highlightAccent = "ring-2 ring-purple-400/60 shadow-lg shadow-purple-500/25";
+const generateCardClass = cardBase + " " + ctaBase + (isEmpty ? " " + highlightAccent : "");
 ---
 
-<Layout title={m.dashboard_title()}>
+<Layout title="Panel użytkownika">
   <div class="bg-cosmic min-h-screen">
-    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-4 p-4 sm:p-8 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Stat 1: total + AI/manual split -->
-      <Card className={cardBase}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-100/80">
-            <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
-            <span>{m.dashboard_stat_total_label()}</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p class="text-4xl font-semibold text-white">{stats.total}</p>
-          <p class="mt-2 text-sm text-blue-100/60">
-            {m.dashboard_stat_total_split({ ai: stats.ai, percent: aiPercent, manual: stats.manual })}
-          </p>
-        </CardContent>
-      </Card>
+    <div class="mx-auto max-w-6xl p-4 sm:p-8">
+      <p class="mb-6 text-sm text-blue-100/70">
+        Witaj, {user?.email}! Dzisiaj jest {today}.
+      </p>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Stat 1: total + AI/manual split -->
+        <Card className={cardBase}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-blue-100/80">
+              <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
+              <span>{m.dashboard_stat_total_label()}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p class="text-4xl font-semibold text-white">{stats.total}</p>
+            <p class="mt-2 text-sm text-blue-100/60">
+              {m.dashboard_stat_total_split({ ai: stats.ai, percent: aiPercent, manual: stats.manual })}
+            </p>
+          </CardContent>
+        </Card>
 
-      <!-- Stat 2: due today (link if > 0) -->
-      {
-        stats.dueToday > 0 ? (
-          <a href="/review" class="block">
-            <Card className={cn(cardBase, ctaBase)}>
+        <!-- Stat 2: due today (link if > 0) -->
+        {
+          stats.dueToday > 0 ? (
+            <a href="/review" class="block">
+              <Card className={cn(cardBase, ctaBase)}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-100/80">
+                    <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                    <span>{m.dashboard_stat_due_today_label()}</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p class="text-4xl font-semibold text-white">{stats.dueToday}</p>
+                  <p class="mt-2 text-sm text-purple-300">Do powtórki dzisiaj!</p>
+                </CardContent>
+              </Card>
+            </a>
+          ) : (
+            <Card className={cn(cardBase, "opacity-60")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-blue-100/80">
                   <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
@@ -64,89 +84,70 @@ const highlightAccent = "ring-2 ring-purple-400/60 shadow-lg shadow-purple-500/2
               </CardHeader>
               <CardContent>
                 <p class="text-4xl font-semibold text-white">{stats.dueToday}</p>
-                <p class="mt-2 text-sm text-purple-300">{m.dashboard_stat_due_today_hint()}</p>
               </CardContent>
             </Card>
-          </a>
-        ) : (
-          <Card className={cn(cardBase, "opacity-60")}>
+          )
+        }
+
+        <!-- Stat 3: placeholder -->
+        <Card className={cn(cardBase, "opacity-60")}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-blue-100/80">
+              <TrendingUp className="h-5 w-5 text-purple-300" aria-hidden="true" />
+              <span>{m.dashboard_stat_placeholder_label()}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-blue-100/60">—</p>
+          </CardContent>
+        </Card>
+
+        <!-- CTA 1: /generate (accented if empty) -->
+        <a href="/generate" class="block">
+          <Card className={generateCardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-100/80">
-                <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
-                <span>{m.dashboard_stat_due_today_label()}</span>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Sparkles className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                <span>{m.dashboard_cta_generate()}</span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p class="text-4xl font-semibold text-white">{stats.dueToday}</p>
-            </CardContent>
+            {
+              isEmpty && (
+                <CardContent>
+                  <p class="text-base font-medium text-white">Zacznij tworzyć fiszki</p>
+                  <p class="mt-2 text-sm text-blue-100/70">
+                    Kliknij tutaj, aby wygenerować pierwszą talię z pomocą AI.
+                  </p>
+                </CardContent>
+              )
+            }
           </Card>
-        )
-      }
+        </a>
 
-      <!-- Stat 3: placeholder -->
-      <Card className={cn(cardBase, "opacity-60")}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-100/80">
-            <TrendingUp className="h-5 w-5 text-purple-300" aria-hidden="true" />
-            <span>{m.dashboard_stat_placeholder_label()}</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p class="text-sm text-blue-100/60">—</p>
-        </CardContent>
-      </Card>
+        <!-- CTA 2: /review -->
+        <a href="/review" class="block">
+          <Card className={cn(cardBase, ctaBase)}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                <span>{m.dashboard_cta_review()}</span>
+              </CardTitle>
+            </CardHeader>
+          </Card>
+        </a>
 
-      <!-- CTA 1: /generate (accented if empty) -->
-      <a href="/generate" class="block">
-        <Card className={cn(cardBase, ctaBase, isEmpty && highlightAccent)}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Sparkles className="h-5 w-5 text-purple-300" aria-hidden="true" />
-              <span>{m.dashboard_cta_generate()}</span>
-            </CardTitle>
-          </CardHeader>
-          {
-            isEmpty && (
-              <CardContent>
-                <p class="text-base font-medium text-white">{m.dashboard_empty_headline()}</p>
-                <p class="mt-2 text-sm text-blue-100/70">{m.dashboard_empty_body()}</p>
-              </CardContent>
-            )
-          }
-        </Card>
-      </a>
-
-      <!-- CTA 2: /review -->
-      <a href="/review" class="block">
-        <Card className={cn(cardBase, ctaBase)}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Clock className="h-5 w-5 text-purple-300" aria-hidden="true" />
-              <span>{m.dashboard_cta_review()}</span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </a>
-
-      <!-- CTA 3: /deck -->
-      <a href="/deck" class="block">
-        <Card className={cn(cardBase, ctaBase)}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
-              <span>{m.dashboard_cta_deck()}</span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </a>
-
-      {
-        loadError && (
-          <div class="col-span-full rounded-xl border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
-            {m.error_unknown()}
-          </div>
-        )
-      }
+        <!-- CTA 3: /deck -->
+        <a href="/deck" class="block">
+          <Card className={cn(cardBase, ctaBase)}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Library className="h-5 w-5 text-purple-300" aria-hidden="true" />
+                <span>{m.dashboard_cta_deck()}</span>
+              </CardTitle>
+            </CardHeader>
+          </Card>
+        </a>
+      </div>
     </div>
   </div>
 </Layout>
