@@ -41,7 +41,7 @@ jobs:
 
       - name: Install reviewer dependencies
         working-directory: packages/code-reviewer
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run AI code review
         id: review
